@@ -613,26 +613,38 @@ _（第 6-11 节将在下半部分继续。）_
 
 ### 6.1 安装插件
 
-**本地开发模式**（推荐初次体验）：
+Course Workshop 基于开放的 SKILL.md 插件规范，可在任何支持该规范的 AI 运行时上使用。以下以通用方式说明安装步骤，具体命令请参考你所使用平台的文档。
 
-```bash
-cd your-kindergarten-project/
+**方式一：本地加载（推荐初次体验）**
 
-claude --plugin-dir ./workshop-core \
-       --plugin-dir ./workshop-designer \
-       --plugin-dir ./workshop-insight \
-       --plugin-dir ./workshop-quality \
-       --plugin-dir ./workshop-resource
+将 5 个插件目录作为本地插件加载到你的 AI 运行时：
+
+```
+加载插件目录：
+  ./workshop-core
+  ./workshop-designer
+  ./workshop-insight
+  ./workshop-quality
+  ./workshop-resource
 ```
 
-**Marketplace 安装**（正式使用）：
+不同平台的加载方式示例：
 
-```bash
-claude plugin marketplace add github:VanLengs/course-workshop-plugins
-claude plugin install workshop-core@course-workshop-plugins
-claude plugin install workshop-designer@course-workshop-plugins
-# 按需安装其他插件
+| 平台 | 加载命令 |
+|------|---------|
+| Claude Code | `claude --plugin-dir ./workshop-core --plugin-dir ./workshop-designer ...` |
+| 其他兼容运行时 | 参考该平台的插件加载文档 |
+
+**方式二：从 Marketplace 安装**
+
+如果你使用的平台支持 Marketplace 机制，可以直接安装：
+
 ```
+1. 添加插件仓库: course-workshop-plugins (github:VanLengs/course-workshop-plugins)
+2. 安装所需插件: workshop-core, workshop-designer, ...
+```
+
+> **提示**：Course Workshop 的所有技能定义遵循开放规范（Markdown + YAML frontmatter），不依赖任何特定 AI 平台的私有指令。切换平台时，插件文件无需修改。
 
 ### 6.2 初始化工作区
 
