@@ -1,0 +1,11 @@
+{
+  "name": "course-workshop-plugins",
+  "description": "PBL course design toolkit for kindergarten curriculum directors — from theme analysis to classroom-ready proposals",
+  "plugins": [
+    { "name": "workshop-core", "source": "../workshop-core" },
+    { "name": "workshop-designer", "source": "../workshop-designer" },
+    { "name": "workshop-insight", "source": "../workshop-insight" },
+    { "name": "workshop-quality", "source": "../workshop-quality" },
+    { "name": "workshop-resource", "source": "../workshop-resource" }
+  ]
+}
