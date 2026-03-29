@@ -302,8 +302,125 @@ def summarize_status(root: Path) -> dict[str, Any]:
         "knowledge_base": summarize_kb(root),
         "planning": planning,
         "projects": projects,
+        "hil": summarize_hil(projects),
         "archives": summarize_archives(root),
     }
+
+
+def summarize_hil(projects: list[dict[str, Any]]) -> dict[str, Any]:
+    counts = {
+        "awaiting_review": 0,
+        "changes_requested": 0,
+        "approved": 0,
+        "not_started": 0,
+        "missing": 0,
+    }
+    waiting: list[dict[str, Any]] = []
+    for project in projects:
+        hil = project.get("hil")
+        if not hil:
+            counts["missing"] += 1
+            continue
+        status = hil.get("status", "missing")
+        counts[status] = counts.get(status, 0) + 1
+        if status in {"awaiting_review", "changes_requested"}:
+            waiting.append(
+                {
+                    "name": project["name"],
+                    "phase": project.get("phase"),
+                    "checkpoint": hil.get("checkpoint"),
+                    "status": status,
+                }
+            )
+    return {
+        "counts": counts,
+        "attention": waiting,
+    }
+
+
+def format_plan_refs(plan_refs: dict[str, Any]) -> str:
+    parts = []
+    for key in ["semester", "month", "week"]:
+        value = plan_refs.get(key)
+        if value:
+            parts.append(f"{key}:{value}")
+    return ", ".join(parts) if parts else "-"
+
+
+def format_project_row(project: dict[str, Any]) -> str:
+    hil = project.get("hil") or {}
+    hil_text = "-"
+    if hil:
+        hil_text = f"{hil.get('checkpoint', '?')} [{hil.get('status', '?')}]"
+    deliverables = ", ".join(project.get("deliverables", [])) or "-"
+    methodology = project.get("methodology") or "-"
+    return (
+        f"- {project['name']} | phase={project.get('phase')} | hil={hil_text} | "
+        f"method={methodology} | skills={project.get('skills_done')}/{project.get('skills_total')} | "
+        f"deliverables={deliverables} | plans={format_plan_refs(project.get('plan_refs', {}))}"
+    )
+
+
+def format_planning_row(plan: dict[str, Any]) -> str:
+    linked = len(plan.get("linked_projects", []))
+    return (
+        f"- {plan['name']} | level={plan.get('plan_level') or '-'} | "
+        f"phase={plan.get('phase')} | linked_projects={linked}"
+    )
+
+
+def render_status_dashboard(root: Path) -> str:
+    summary = summarize_status(root)
+    kb = summary["knowledge_base"]
+    hil = summary["hil"]
+    lines = [
+        "Workshop Status",
+        "===============",
+        "",
+        f"Runtime Root: {summary['runtime_root']}",
+        f"Default Methodology: {summary.get('default_methodology') or '-'}",
+        "",
+        "Knowledge Base",
+        (
+            f"- textbooks={kb['textbooks']} | philosophy={kb['philosophy']} | "
+            f"lesson-plans={kb['lesson-plans']} | research-records={kb['research-records']} | "
+            f"calendars={kb['calendars']}"
+        ),
+        "",
+        "HIL Overview",
+        (
+            f"- awaiting_review={hil['counts']['awaiting_review']} | "
+            f"changes_requested={hil['counts']['changes_requested']} | "
+            f"approved={hil['counts']['approved']} | "
+            f"not_started={hil['counts']['not_started']} | "
+            f"missing={hil['counts']['missing']}"
+        ),
+    ]
+    if hil["attention"]:
+        lines.extend(["- attention:"])
+        for item in hil["attention"]:
+            lines.append(
+                f"  - {item['name']} | phase={item['phase']} | checkpoint={item['checkpoint']} | status={item['status']}"
+            )
+    lines.extend(["", "Planning"])
+    if summary["planning"]:
+        for plan in summary["planning"]:
+            lines.append(format_planning_row(plan))
+    else:
+        lines.append("- none")
+    lines.extend(["", "Projects"])
+    if summary["projects"]:
+        for project in summary["projects"]:
+            lines.append(format_project_row(project))
+    else:
+        lines.append("- none")
+    lines.extend(["", "Recent Archives"])
+    if summary["archives"]:
+        for archive in summary["archives"]:
+            lines.append(f"- {archive['name']} -> {archive.get('shipped_to') or '-'}")
+    else:
+        lines.append("- none")
+    return "\n".join(lines)
 
 
 def validate_project(root: Path, name: str, required_phase: str | None) -> dict[str, Any]:
@@ -656,6 +773,11 @@ def cmd_summarize_status(args: argparse.Namespace) -> None:
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
+def cmd_render_status(args: argparse.Namespace) -> None:
+    root = find_runtime_root(args.root)
+    print(render_status_dashboard(root))
+
+
 def cmd_promote_project(args: argparse.Namespace) -> None:
     root = find_runtime_root(args.root)
     result = promote_project(root, args.workspace, args.overwrite)
@@ -753,6 +875,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     summarize_status_cmd = sub.add_parser("summarize-status")
     summarize_status_cmd.set_defaults(func=cmd_summarize_status)
+
+    render_status_cmd = sub.add_parser("render-status")
+    render_status_cmd.set_defaults(func=cmd_render_status)
 
     promote_project_cmd = sub.add_parser("promote-project")
     promote_project_cmd.add_argument("workspace")

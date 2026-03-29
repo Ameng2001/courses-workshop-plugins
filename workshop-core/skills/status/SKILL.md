@@ -28,13 +28,20 @@ This returns a structured summary containing:
 - knowledge base counts
 - planning workspaces
 - project workspaces
+- HIL overview and attention queue
 - recent archives
+
+For the user-facing dashboard, run:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py render-status
+```
 
 If no active workspaces exist, show "No active work".
 
 ### Step 4: Display dashboard
 
-Format as a table:
+Display the rendered dashboard. It should include:
 
 ```
 Workshop Status
@@ -66,6 +73,10 @@ Recently Shipped (.workshop/archive/)
   2026-03-18-color-lab      → courses/color-lab
 ```
 
+HIL must be visible:
+- global counts for `awaiting_review`, `changes_requested`, `approved`
+- which projects currently need human attention
+
 ### Step 5: Suggest next actions
 
 Based on current state, suggest what to do next:
@@ -85,4 +96,5 @@ Based on current state, suggest what to do next:
 - Project workspaces are the primary unit of work; planning records are displayed as shared context
 - `status.json.type` is authoritative when present; filename heuristics are fallback only
 - `workspace_status.py summarize-status` is the canonical aggregation path for this dashboard
+- `workspace_status.py render-status` is the canonical text dashboard for direct display
 - `workspace_status.py` reads only `.workshop/`
