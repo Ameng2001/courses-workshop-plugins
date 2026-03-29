@@ -9,6 +9,8 @@ user-invocable: true
 
 Initialize `.workshop/` in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable templates. This directory is git-tracked — it holds runtime project workspaces, planning records, custom experts, and knowledge assets. `studio/` remains reserved for Astra Studio plugin development.
 
+`init` is a bootstrap command only. It creates the runtime skeleton and the minimal config file. It does not replace `config` or `onboarding`.
+
 The target users are kindergarten curriculum directors (课研主任) and classroom teachers (一线教师) who design and deliver courses.
 
 ## Pre-check
@@ -49,7 +51,7 @@ The target users are kindergarten curriculum directors (课研主任) and classr
 
 Create `.gitkeep` files as empty files — they ensure git tracks the empty directories.
 
-### Step 2: Write config.yaml
+### Step 2: Write minimal config.yaml
 
 Write the following content verbatim to `.workshop/config.yaml`:
 
@@ -68,6 +70,32 @@ defaults:
   governance:
     approval_required: true
     approver_role: curriculum-director
+
+models:
+  planning: gpt-5
+  review: gpt-5
+  resource_check: gpt-5-mini
+
+publishing:
+  default_target:
+    kind: local
+    path: courses
+
+runtime:
+  projects_dir: .workshop/projects
+  plans_dir: .workshop/plans
+  kb_dir: .workshop/kb
+  archive_dir: .workshop/archive
+
+experts:
+  custom_dir: .workshop/agents/custom
+  shared_dir: experts
+
+remote:
+  cos:
+    enabled: false
+    bucket: ""
+    base_path: ""
 
 # Lifecycle phases for project workspaces
 # Each active project in .workshop/projects/ progresses through these phases
@@ -99,6 +127,8 @@ This directory is git-tracked — commit it to share with your team.
 
 ### Step 4: Suggest next steps
 
+- "Run `/workshop-core:config show` to inspect runtime settings"
+- "Run `/workshop-core:onboarding` for first-use guidance"
 - "Run `/workshop-templates:template-list` to see available teaching methodologies"
 - "Run `/workshop-templates:template-select <id>` to choose a methodology"
 - "Run `/workshop-kb:kb-import <path>` to import school-specific materials"
@@ -114,6 +144,7 @@ This directory is git-tracked — commit it to share with your team.
 - `.workshop/agents/custom/` stores school- or project-specific experts and has the highest override priority at runtime
 - `workshop-*/agents/` remains available for plugin-local experts that should not be promoted to platform-wide shared use
 - `studio/roles/` stores plugin-design-only workflow roles such as product manager or solution architect
+- `init` should stay small and stable; use `/workshop-core:config` for settings and `/workshop-core:onboarding` for first-use guidance
 - The default unit of work is a course-theme project workspace with `brief.md`, `status.json`, and one or more deliverables
 - A single project workspace may contain both `proposal.md` and `lesson-plan.md`
 - Semester/month/week planning remains a global asset layer and should be referenced by projects instead of duplicated when possible
