@@ -96,6 +96,12 @@ Present the scaffold overview. Wait for approval.
 
 Write to `studio/changes/{workspace}/lesson-scaffold.md`.
 
+Update `studio/changes/{workspace}/status.json`:
+- Preserve all existing fields
+- Set `skills.lesson-scaffold = "done"`
+- If `phase` is missing, initialize it to `planning`
+- If `lesson-objective.md` and `lesson-scaffold.md` both exist, `phase` may remain `planning`
+
 Suggest next steps:
 > **下一步:**
 > - `/workshop-lesson:lesson-detail` — 为每个环节编写具体话术和材料清单

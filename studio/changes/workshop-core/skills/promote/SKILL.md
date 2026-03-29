@@ -35,31 +35,33 @@ Where `target_collection` is the path from status.json (e.g., `courses/nature` o
 
 If the target directory already exists, ask the user whether to overwrite.
 
-### Step 2: Build production plugin structure
+### Step 2: Build production proposal structure
 
-Create the target directory with standard Claude Code plugin layout:
+Create the target directory by copying the finalized course proposal artifacts:
 
 ```
-{target}/{proposal-name}/
-├── .claude-plugin/
-│   └── plugin.json         # finalized from plugin.json.draft
-├── skills/
-│   └── {skill-name}/
-│       ├── SKILL.md         # from studio/changes/{name}/skills/{skill}/SKILL.md
-│       ├── scripts/         # copy if present
-│       └── references/      # copy if present
-├── commands/                # copy if present
-├── hooks/                   # copy if present
-└── .mcp.json                # copy if present
+{target_collection}/{proposal-name}/
+├── proposal.md                 # final assembled proposal
+├── quality-report.md           # copy if present
+├── review-comments.md          # copy if present
+├── resource-plan.md            # copy if present
+├── resource-check-report.md    # copy if present
+├── theme-analysis.md           # copy if present
+├── prior-knowledge.md          # copy if present
+├── competency-mapping.md       # copy if present
+├── driving-question.md
+├── network-map.md
+├── inquiry-clues.md
+└── activities/
+    ├── clue-1.md
+    ├── clue-2.md
+    └── clue-3.md
 ```
 
-When copying `plugin.json.draft` to `plugin.json`:
-- Remove the `.draft` suffix
-- Ensure `name`, `version`, `description` are present
-- Set `skills` to `"./skills/"`
-- Add `"commands": "./commands/"` if a commands/ directory exists
-- Add `"hooks": "./hooks/hooks.json"` if a hooks/ directory exists
-- Add `"mcpServers": "./.mcp.json"` if a .mcp.json file exists
+Rules:
+- `proposal.md` is required for promote; if missing, stop and tell the user to run `/workshop-designer:proposal-generate`
+- Copy supporting artifacts when present so the shipped proposal keeps its review and planning context
+- Do not transform the proposal into a plugin package; this skill ships course deliverables, not SKILL.md plugins
 
 ### Step 3: Update domain workspace
 
@@ -68,7 +70,7 @@ If the proposal's `status.json` contains a `domain` field:
 2. Remove the proposal name from the domain's `plugins` list
 3. Write the updated status.json back
 
-This keeps the domain workspace's plugin list accurate.
+This keeps the domain workspace's proposal list accurate.
 
 ### Step 4: Archive development record
 

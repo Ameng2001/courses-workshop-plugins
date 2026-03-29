@@ -287,8 +287,8 @@ Create or update `status.json`:
   "type": "plugin",
   "plugin": "{workspace}",
   "domain": "course-workshop",
-  "target_collection": "plugins",
-  "phase": "insight",
+  "target_collection": "courses",
+  "phase": "planning",
   "created_at": "{ISO-8601}",
   "skills": {
     "theme-analysis": "done"

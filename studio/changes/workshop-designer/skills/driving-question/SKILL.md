@@ -228,7 +228,7 @@ Create or update `status.json`:
   "type": "plugin",
   "plugin": "{workspace}",
   "domain": "course-workshop",
-  "target_collection": "plugins",
+  "target_collection": "courses",
   "phase": "planning",
   "created_at": "{ISO-8601}",
   "skills": {

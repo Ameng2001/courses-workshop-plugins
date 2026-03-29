@@ -325,12 +325,17 @@ Create or update `status.json`:
 
 ```json
 {
-  "type": "plugin",
-  "plugin": "{workspace}",
-  "domain": "course-workshop",
-  "target_collection": "plugins",
-  "phase": "insight",
+  "type": "project",
+  "project": "{workspace}",
+  "theme": "{Theme Chinese} / {Theme English}",
+  "target_collection": "courses",
+  "phase": "planning",
   "created_at": "{ISO-8601}",
+  "plan_refs": {
+    "semester": null,
+    "month": null,
+    "week": null
+  },
   "skills": {
     "competency-mapping": "done"
   }

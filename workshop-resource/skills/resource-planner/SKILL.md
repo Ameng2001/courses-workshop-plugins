@@ -24,6 +24,7 @@ Optional:
 ## Outputs
 
 Write `resource-plan.md` in the same workspace directory.
+Also update `status.json` in the same workspace when present.
 
 ## Resource Categories
 
@@ -83,6 +84,11 @@ Digital content including videos, songs, images, and interactive resources.
 5. **Enforce specificity** -- reject vague resource names
 6. **Generate PBL Box summary** -- aggregate order across all activities
 7. **Write output** -- save resource-plan.md
+
+After writing `resource-plan.md`, update `status.json`:
+- Preserve all existing fields
+- Set `skills.resource-planner = "done"`
+- Keep `phase` unchanged unless it is missing, in which case initialize it from existing project state
 
 ## Step 1: Read Activities
 

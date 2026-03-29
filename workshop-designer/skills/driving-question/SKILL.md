@@ -225,12 +225,17 @@ Create or update `status.json`:
 
 ```json
 {
-  "type": "plugin",
-  "plugin": "{workspace}",
-  "domain": "course-workshop",
-  "target_collection": "plugins",
+  "type": "project",
+  "project": "{workspace}",
+  "theme": "{monthly theme}",
+  "target_collection": "courses",
   "phase": "planning",
   "created_at": "{ISO-8601}",
+  "plan_refs": {
+    "semester": null,
+    "month": null,
+    "week": null
+  },
   "skills": {
     "driving-question": "done"
   }

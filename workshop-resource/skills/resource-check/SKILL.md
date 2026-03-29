@@ -25,6 +25,7 @@ Optional:
 ## Outputs
 
 Write `resource-check-report.md` in the same workspace directory.
+Also update `status.json` in the same workspace when present.
 
 ## Workflow
 
@@ -32,6 +33,11 @@ Write `resource-check-report.md` in the same workspace directory.
 2. **Run 5 checks** -- execute each validation rule
 3. **Compile report** -- assemble results
 4. **Present and save** -- show summary, write report
+
+After writing `resource-check-report.md`, update `status.json`:
+- Preserve all existing fields
+- Set `skills.resource-check = "done"`
+- Keep `phase` at `reviewing` when proposal or lesson deliverables already exist
 
 ## Step 1: Read All Inputs
 

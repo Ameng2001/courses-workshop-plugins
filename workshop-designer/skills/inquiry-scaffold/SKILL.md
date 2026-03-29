@@ -166,6 +166,11 @@ Clue 1 → Clue 2 → Clue 3:
 - Psychologist: {feedback}
 ```
 
+Update `studio/changes/{workspace}/status.json`:
+- Preserve all existing fields
+- Set `skills.inquiry-scaffold = "done"`
+- If `driving-question.md`, `network-map.md`, and `inquiry-clues.md` all exist, set `phase` to `designing`
+
 Tell the user: "Inquiry scaffold complete. Run `/workshop-designer:activity-design {workspace}` to design activities for each clue."
 
 ## Out of Scope

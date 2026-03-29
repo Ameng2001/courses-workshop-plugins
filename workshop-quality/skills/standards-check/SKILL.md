@@ -24,6 +24,7 @@ Required artifacts (at least one must exist):
 ## Outputs
 
 Write `quality-report.md` in the same workspace directory.
+Also update `status.json` in the same workspace when present.
 
 ## Workflow
 
@@ -32,6 +33,11 @@ Write `quality-report.md` in the same workspace directory.
 3. **Optional expert verification** -- age-appropriateness cross-check
 4. **Compile report** -- assemble results into structured output
 5. **Present and save** -- show summary to user, write full report
+
+After writing `quality-report.md`, update `status.json`:
+- Preserve all existing fields
+- Set `skills.standards-check = "done"`
+- Keep `phase` at `reviewing`
 
 ## Step 1: Locate Artifacts
 
