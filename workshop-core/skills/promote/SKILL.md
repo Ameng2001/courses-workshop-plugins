@@ -37,63 +37,30 @@ If pre-conditions fail, print a clear message about what needs to happen first a
 
 ## Promote Steps
 
-### Step 1: Determine target
+### Step 1: Execute Promote
 
-```
-{target_collection}/{project-name}/
-```
+Run:
 
-Where `target_collection` is the path from status.json (e.g., `courses/nature` or just `courses`).
-
-If the target directory already exists, ask the user whether to overwrite.
-
-### Step 2: Build production deliverable structure
-
-Create the target directory by copying the finalized course deliverables:
-
-```
-{target_collection}/{project-name}/
-├── proposal.md                 # copy if present
-├── lesson-plan.md              # copy if present
-├── quality-report.md           # copy if present
-├── review-comments.md          # copy if present
-├── resource-plan.md            # copy if present
-├── resource-check-report.md    # copy if present
-├── theme-analysis.md           # copy if present
-├── prior-knowledge.md          # copy if present
-├── competency-mapping.md       # copy if present
-├── driving-question.md
-├── network-map.md
-├── inquiry-clues.md
-└── activities/
-    ├── clue-1.md
-    ├── clue-2.md
-    └── clue-3.md
+```bash
+python3 workshop-core/scripts/workspace_status.py promote-project {workspace}
 ```
 
-Rules:
-- At least one final deliverable must exist: `proposal.md` or `lesson-plan.md`
-- If neither exists, stop and tell the user to run `/workshop-designer:proposal-generate` or `/workshop-lesson:lesson-generate`
-- Copy supporting artifacts when present so the shipped project keeps its review and planning context
-- Do not transform the project into a plugin package; this skill ships course deliverables, not SKILL.md plugins
+This performs the full promote flow:
+- resolve `target_collection`
+- copy final deliverables into `{target_collection}/{project-name}/`
+- copy supporting artifacts when present
+- remove the project from any legacy domain workspace metadata
+- move the source workspace into `studio/archive/{YYYY-MM-DD}-{name}/`
+- update archived `status.json` with:
+  - `phase = "shipped"`
+  - `shipped_at`
+  - `shipped_to`
 
-### Step 3: Update domain workspace
+If the target directory already exists, ask the user whether to rerun with overwrite:
 
-If the project's `status.json` contains a legacy `domain` field:
-1. Read `studio/changes/{domain}/status.json`
-2. Remove the project name from the domain's `plugins` list
-3. Write the updated status.json back
-
-This keeps the legacy domain workspace metadata accurate.
-
-### Step 4: Archive development record
-
-Move `studio/changes/{name}/` to `studio/archive/{YYYY-MM-DD}-{name}/`
-
-Update the archived `status.json`:
-- Set `phase` to `shipped`
-- Add `shipped_at` timestamp (ISO 8601 format)
-- Add `shipped_to` path (the target directory)
+```bash
+python3 workshop-core/scripts/workspace_status.py promote-project {workspace} --overwrite
+```
 
 ### Step 5: Report
 

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -67,6 +68,17 @@ def read_default_methodology(root: Path) -> str | None:
         if stripped.startswith("methodology:"):
             return stripped.split(":", 1)[1].strip()
     return None
+
+
+def read_default_target_collection(root: Path) -> str:
+    config = root / "studio" / "config.yaml"
+    if not config.exists():
+        return "courses"
+    for line in config.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("target_collection:"):
+            return stripped.split(":", 1)[1].strip()
+    return "courses"
 
 
 def write_status(path: Path, data: dict[str, Any]) -> None:
@@ -229,7 +241,6 @@ def summarize_status(root: Path) -> dict[str, Any]:
 
 
 def validate_project(root: Path, name: str, required_phase: str | None) -> dict[str, Any]:
-    ws_path = workspace_dir(root, name)
     data = load_status(status_path(root, name))
     if not data:
         raise SystemExit(f"Missing status.json for workspace: {name}")
@@ -265,6 +276,94 @@ def validate_project(root: Path, name: str, required_phase: str | None) -> dict[
             "resource_check_report": deliverables["resource_check_report"],
         },
         "ready": len(missing_skills) == 0,
+    }
+
+
+def copy_if_exists(src: Path, dst: Path) -> None:
+    if not src.exists():
+        return
+    if src.is_dir():
+        shutil.copytree(src, dst, dirs_exist_ok=True)
+    else:
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dst)
+
+
+def update_legacy_domain(root: Path, project_name: str, project_status: dict[str, Any]) -> None:
+    domain = project_status.get("domain")
+    if not domain:
+        return
+    domain_status_file = status_path(root, domain)
+    domain_status = load_status(domain_status_file)
+    if not domain_status:
+        return
+    plugins = domain_status.get("plugins")
+    if isinstance(plugins, list) and project_name in plugins:
+        domain_status["plugins"] = [item for item in plugins if item != project_name]
+        write_status(domain_status_file, domain_status)
+
+
+def promote_project(root: Path, name: str, overwrite: bool) -> dict[str, Any]:
+    validation = validate_project(root, name, "approved")
+    if not validation["ready"]:
+        raise SystemExit(
+            f"Workspace '{name}' is missing required skills: {', '.join(validation['missing_skills'])}"
+        )
+
+    project_status_file = status_path(root, name)
+    project_status = load_status(project_status_file)
+    source = workspace_dir(root, name)
+    target_collection = project_status.get("target_collection") or read_default_target_collection(root)
+    target = (root / target_collection / name).resolve()
+
+    if target.exists():
+        if not overwrite:
+            raise SystemExit(f"Target already exists: {target}")
+        if target.is_dir():
+            shutil.rmtree(target)
+        else:
+            target.unlink()
+
+    target.mkdir(parents=True, exist_ok=True)
+
+    files_to_copy = [
+        "proposal.md",
+        "lesson-plan.md",
+        "quality-report.md",
+        "review-comments.md",
+        "resource-plan.md",
+        "resource-check-report.md",
+        "theme-analysis.md",
+        "prior-knowledge.md",
+        "competency-mapping.md",
+        "driving-question.md",
+        "network-map.md",
+        "inquiry-clues.md",
+    ]
+    for filename in files_to_copy:
+        copy_if_exists(source / filename, target / filename)
+    copy_if_exists(source / "activities", target / "activities")
+
+    update_legacy_domain(root, name, project_status)
+
+    archive_name = f"{datetime.now().astimezone().date().isoformat()}-{name}"
+    archive_target = archive_dir(root) / archive_name
+    if archive_target.exists():
+        raise SystemExit(f"Archive target already exists: {archive_target}")
+    archive_target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(source), str(archive_target))
+
+    archived_status_file = archive_target / "status.json"
+    archived_status = load_status(archived_status_file)
+    archived_status["phase"] = "shipped"
+    archived_status["shipped_at"] = iso_now()
+    archived_status["shipped_to"] = str(target.relative_to(root))
+    write_status(archived_status_file, archived_status)
+
+    return {
+        "workspace": name,
+        "target": str(target.relative_to(root)),
+        "archive": str(archive_target.relative_to(root)),
     }
 
 
@@ -403,6 +502,12 @@ def cmd_summarize_status(args: argparse.Namespace) -> None:
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
+def cmd_promote_project(args: argparse.Namespace) -> None:
+    root = find_studio_root(args.root)
+    result = promote_project(root, args.workspace, args.overwrite)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Workspace status helper")
     parser.add_argument("--root", help="Project root containing studio/", default=None)
@@ -466,6 +571,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     summarize_status_cmd = sub.add_parser("summarize-status")
     summarize_status_cmd.set_defaults(func=cmd_summarize_status)
+
+    promote_project_cmd = sub.add_parser("promote-project")
+    promote_project_cmd.add_argument("workspace")
+    promote_project_cmd.add_argument("--overwrite", action="store_true")
+    promote_project_cmd.set_defaults(func=cmd_promote_project)
 
     return parser
 
