@@ -13,17 +13,19 @@ Split a driving question into 3 progressive inquiry clues that form the backbone
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Primary role**: Always load `early-childhood-curriculum-expert.md` (leads scaffold design)
-2. **Secondary role**: Always load `child-development-psychologist.md` (validates 4C mapping)
-3. **Scan project experts**: Glob `studio/agents/*.md` — load any additional custom experts
-4. **Match by relevance**: Select experts relevant to the theme
+1. **Required expert**: Resolve `early-childhood-curriculum-expert.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-designer/agents/`
+2. **Required expert**: Resolve `child-development-psychologist.md` using the same scope order
+3. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+4. **Optional shared experts**: Glob `experts/*.md`
+5. **Optional plugin-local experts**: Glob `workshop-designer/agents/*.md`
+6. **Match by relevance**: Select additional experts relevant to the theme
 
 ## Pre-check
 
-1. Verify `studio/` exists.
-2. Read `studio/changes/$ARGUMENTS/driving-question.md` — required.
-3. Read `studio/changes/$ARGUMENTS/network-map.md` — required. If missing, tell the user to run `/workshop-designer:network-map` first.
-4. Read `studio/changes/$ARGUMENTS/competency-mapping.md` — optional, enriches 4C mapping.
+1. Verify `.workshop/` exists.
+2. Read `.workshop/projects/$ARGUMENTS/driving-question.md` — required.
+3. Read `.workshop/projects/$ARGUMENTS/network-map.md` — required. If missing, tell the user to run `/workshop-designer:network-map` first.
+4. Read `.workshop/projects/$ARGUMENTS/competency-mapping.md` — optional, enriches 4C mapping.
 
 ## Step 1: Analyze Network Map
 
@@ -125,7 +127,7 @@ Incorporate corrections before presenting to the user.
 
 ## Step 8: Write Output
 
-Write `studio/changes/{workspace}/inquiry-clues.md`:
+Write `.workshop/projects/{workspace}/inquiry-clues.md`:
 
 ```markdown
 # Inquiry Clues: {Theme}
@@ -166,10 +168,13 @@ Clue 1 → Clue 2 → Clue 3:
 - Psychologist: {feedback}
 ```
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.inquiry-scaffold = "done"`
-- If `driving-question.md`, `network-map.md`, and `inquiry-clues.md` all exist, set `phase` to `designing`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} inquiry-scaffold \
+  --phase designing
+```
 
 Tell the user: "Inquiry scaffold complete. Run `/workshop-designer:activity-design {workspace}` to design activities for each clue."
 

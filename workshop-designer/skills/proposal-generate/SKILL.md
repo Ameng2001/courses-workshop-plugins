@@ -11,8 +11,8 @@ Compile all PBL design artifacts into a complete proposal document following the
 
 ## Pre-check
 
-1. Verify `studio/` exists.
-2. Read from `studio/changes/$ARGUMENTS/`:
+1. Verify `.workshop/` exists.
+2. Read from `.workshop/projects/$ARGUMENTS/`:
    - **Required**: `driving-question.md`, `network-map.md`, `inquiry-clues.md`, `activities/clue-1.md`, `activities/clue-2.md`, `activities/clue-3.md`
    - **Optional**: `theme-analysis.md` (from workshop-insight), `prior-knowledge.md`, `competency-mapping.md`, `resource-plan.md` (from workshop-resource)
 3. If required files are missing, tell the user which skills to run first.
@@ -109,13 +109,15 @@ Content:
 
 ### Step 7: Write Output
 
-Write `studio/changes/{workspace}/proposal.md` with the complete 5-section document.
+Write `.workshop/projects/{workspace}/proposal.md` with the complete 5-section document.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.proposal-generate = "done"`
-- Set `phase` to `reviewing`
-- Ensure `type` remains `project`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} proposal-generate \
+  --phase reviewing
+```
 
 Present summary to user:
 

@@ -9,7 +9,13 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 - Templates are output-scoped defaults, not project-wide locks.
 - Semester/month/week planning is a global asset layer; projects should reference relevant plan slices instead of copying full plans.
 - `workshop-*` directories are the source of truth for implementation.
-- `studio/changes/*` contains active project workspaces and shared planning records tracked in git.
+- `.workshop/` is the course runtime root for projects, plans, knowledge assets, and archives.
+- `studio/` remains the Astra Studio plugin-development workspace.
+- `experts/` is the single source of truth for reusable domain experts.
+- Runtime agent scope is layered:
+  - `.workshop/agents/custom/`
+  - `experts/`
+  - `workshop-*/agents/`
 
 ## Repository Structure
 
@@ -23,7 +29,9 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 ├── workshop-planner/      # Hierarchical curriculum planning (semester → month → week) — 3 skills
 ├── workshop-kb/           # School knowledge base (import, index, query) — 3 skills
 ├── workshop-templates/    # Teaching methodology template registry (list, select) — 2 skills
-└── studio/                # Project workspaces and shared planning records (git-tracked)
+├── experts/               # Shared domain experts
+├── studio/                # Astra Studio plugin-development workspace
+└── .workshop/             # Course runtime workspaces (projects, plans, kb, archive)
 ```
 
 ## Plugin Dependencies
@@ -84,7 +92,12 @@ semester-plan → month-plan → week-plan
 
 ## Domain Experts
 
-3 built-in agents in each plugin's `agents/` directory:
+Runtime expert sources are layered:
+- `.workshop/agents/custom/` — highest priority, school/project-specific experts
+- `experts/` — reusable domain experts shared across studio and runtime
+- `workshop-*/agents/` — plugin-local experts for specialized behavior
+
+Shared runtime experts typically include:
 - **early-childhood-curriculum-expert** — PBL methodology, curriculum standards, age-appropriateness
 - **child-development-psychologist** — developmental stages, 4C mapping, prior knowledge
 - **instructional-designer** — activity feasibility, resource planning, teacher instructions
@@ -92,9 +105,9 @@ semester-plan → month-plan → week-plan
 ## Planning vs Project Workspaces
 
 - Project workspaces are the default unit of collaboration and delivery.
-- Planning records are shared assets that may live alongside projects during the current transition.
+- Planning records are shared assets under `.workshop/plans/`.
 - Do not treat planner outputs as the canonical home for course deliverables.
-- Do not duplicate implementation content into `studio/changes/*`; edit plugin files under `workshop-*` directly.
+- Do not duplicate runtime content into `studio/`; edit plugin files under `workshop-*` and store course runtime state under `.workshop/`.
 
 ## Development Workflow
 

@@ -11,9 +11,9 @@ Move a project workspace from `reviewing` to `approved` after verifying that its
 
 ## Pre-check
 
-1. Verify `studio/` exists.
+1. Verify `.workshop/` exists.
 2. Resolve the workspace name from `$ARGUMENTS`.
-3. Read `studio/changes/{workspace}/status.json`.
+3. Read `.workshop/projects/{workspace}/status.json`.
 4. Confirm `type == "project"`.
 5. Confirm `phase == "reviewing"` or explain why approval is premature.
 6. Check deliverables:
@@ -32,16 +32,18 @@ Move a project workspace from `reviewing` to `approved` after verifying that its
 
 ## Step 1: Summarize Approval Readiness
 
-Display:
+Run:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py validate-project {workspace} --required-phase reviewing
+```
+
+Display the validation result:
 
 - Current phase
 - Deliverables present
 - Required skills and whether each is `done` or `approved`
-- Any optional review files present:
-  - `quality-report.md`
-  - `review-comments.md`
-  - `resource-plan.md`
-  - `resource-check-report.md`
+- Any optional review files present
 
 If anything required is missing, stop and tell the user exactly what to complete first.
 

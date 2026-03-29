@@ -1,5 +1,5 @@
-# Workshop Studio Configuration
-# Schema: course-workshop — Multi-methodology course design workspace
+# Course Workshop Runtime Configuration
+# Schema: course-workshop — Multi-methodology course runtime
 
 schema: course-workshop
 
@@ -14,7 +14,7 @@ defaults:
     approver_role: curriculum-director
 
 # Lifecycle phases for project workspaces
-# Each active project in studio/changes/ progresses through these phases
+# Each active project in .workshop/projects/ progresses through these phases
 lifecycle:
   phases:
     - planning      # Ideation, theme exploration, domain analysis

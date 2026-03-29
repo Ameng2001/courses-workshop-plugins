@@ -13,23 +13,25 @@ Assess what children of a given age group typically already know, can do, and ha
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Primary role**: Always load `child-development-psychologist.md` (leads developmental accuracy review)
-2. **Scan project experts**: Glob `studio/agents/*.md` — load all custom experts
-3. **Match by relevance**: Select experts relevant to the monthly theme (e.g., nutrition expert for food themes)
-4. **Skip template**: Do not load `_domain-expert-template.md`
+1. **Required expert**: Resolve `child-development-psychologist.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-insight/agents/`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-insight/agents/*.md`
+5. **Match by relevance**: Select experts relevant to the monthly theme
+6. **Skip template**: Do not load `_domain-expert-template.md`
 
-The primary role verifies that the prior knowledge entries match developmental norms. Domain experts contribute theme-specific knowledge about what children typically experience.
+The required expert verifies that the prior knowledge entries match developmental norms. Additional experts contribute theme-specific knowledge about what children typically experience.
 
 ## Pre-check
 
-1. Verify `studio/` exists. If not, tell the user to run `/workshop-core:init` first.
+1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
 2. Determine the workspace path:
-   - If `$ARGUMENTS` contains a workspace name, use `studio/changes/$ARGUMENTS/`
+   - If `$ARGUMENTS` contains a workspace name, use `.workshop/projects/$ARGUMENTS/`
    - Otherwise, derive from the theme name (lowercase, kebab-case, 2-3 words)
 3. Check for optional enrichment files:
-   - `studio/changes/{workspace}/theme-analysis.md` — if present, read it to extract domain coverage and theme context
+   - `.workshop/projects/{workspace}/theme-analysis.md` — if present, read it to extract domain coverage and theme context
    - If theme-analysis.md exists, summarize: "已读取主题分析，主题覆盖{N}个《指南》领域，将基于此分析评估前期经验。"
-4. Check if `studio/changes/{workspace}/prior-knowledge.md` already exists:
+4. Check if `.workshop/projects/{workspace}/prior-knowledge.md` already exists:
    - If yes, read it and ask: "已有前期经验评估文档，是否需要重新生成或在此基础上修改？"
 
 ## Step 1: Gather Context
@@ -169,7 +171,7 @@ After completing the assessment for the target age group, add a **comparative ta
 Use the Agent tool to have the `child-development-psychologist` review the complete assessment.
 
 Give the expert subagent:
-- The agent definition from `studio/agents/child-development-psychologist.md`
+- The agent definition from `experts/child-development-psychologist.md`
 - The full three-dimensional assessment with all entries
 - The age-band comparison table
 - The monthly theme and target age group
@@ -243,7 +245,7 @@ Wait for user confirmation. If the user wants changes, iterate.
 Once confirmed, create the workspace (if not exists) and write:
 
 ```
-studio/changes/{workspace}/
+.workshop/projects/{workspace}/
 └── prior-knowledge.md
 ```
 

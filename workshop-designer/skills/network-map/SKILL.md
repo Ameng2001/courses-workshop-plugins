@@ -11,8 +11,8 @@ Build a structured thematic network diagram that expands a driving question into
 
 ## Pre-check
 
-1. Verify `studio/` exists.
-2. Read `studio/changes/$ARGUMENTS/driving-question.md`. If missing, tell the user to run `/workshop-designer:driving-question` first.
+1. Verify `.workshop/` exists.
+2. Read `.workshop/projects/$ARGUMENTS/driving-question.md`. If missing, tell the user to run `/workshop-designer:driving-question` first.
 3. Read the driving question, age group, and exploration dimensions from the file.
 
 ## Step 1: Extract Exploration Dimensions
@@ -117,7 +117,7 @@ Present the network map to the user:
 
 ## Step 7: Write Output
 
-Write `studio/changes/{workspace}/network-map.md`:
+Write `.workshop/projects/{workspace}/network-map.md`:
 
 ```markdown
 # Network Map: {Theme}
@@ -158,11 +158,13 @@ Write `studio/changes/{workspace}/network-map.md`:
 - Domain coverage: {N}/5
 ```
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- If no status file exists, create one using project defaults
-- Set `skills.network-map = "done"`
-- Keep `phase` at `planning` unless later PBL design artifacts already exist
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} network-map \
+  --phase planning
+```
 
 Tell the user: "Network map complete. Run `/workshop-designer:inquiry-scaffold {workspace}` to split into 3 inquiry clues."
 

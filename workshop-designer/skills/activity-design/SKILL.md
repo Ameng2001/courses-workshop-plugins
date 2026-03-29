@@ -13,20 +13,22 @@ Design a complete activity sequence for one or all inquiry clues. Each activity 
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Primary role**: Always load `instructional-designer.md` (leads activity design)
-2. **Secondary role**: Always load `child-development-psychologist.md` (validates age-appropriateness)
-3. **Scan project experts**: Glob `studio/agents/*.md` — load any additional custom experts
-4. **Match by relevance**: Select experts relevant to the theme
+1. **Required expert**: Resolve `instructional-designer.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-designer/agents/`
+2. **Required expert**: Resolve `child-development-psychologist.md` using the same scope order
+3. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+4. **Optional shared experts**: Glob `experts/*.md`
+5. **Optional plugin-local experts**: Glob `workshop-designer/agents/*.md`
+6. **Match by relevance**: Select additional experts relevant to the theme
 
 ## Pre-check
 
-1. Verify `studio/` exists.
+1. Verify `.workshop/` exists.
 2. Parse `$ARGUMENTS`: expect `{workspace}` or `{workspace} {clue-number|all}`
    - If clue number specified (1, 2, or 3): design that single clue
    - If "all" or no clue number: design all 3 clues in sequence
-3. Read `studio/changes/{workspace}/inquiry-clues.md` — required. If missing, tell the user to run `/workshop-designer:inquiry-scaffold` first.
-4. Read `studio/changes/{workspace}/network-map.md` — optional, for additional context.
-5. Read `studio/changes/{workspace}/driving-question.md` — for overall project context.
+3. Read `.workshop/projects/{workspace}/inquiry-clues.md` — required. If missing, tell the user to run `/workshop-designer:inquiry-scaffold` first.
+4. Read `.workshop/projects/{workspace}/network-map.md` — optional, for additional context.
+5. Read `.workshop/projects/{workspace}/driving-question.md` — for overall project context.
 
 ## Step 1: Plan Activity Count
 
@@ -179,7 +181,7 @@ Present the complete activity table for the clue(s). Ask:
 
 ## Step 8: Write Output
 
-For each clue, write `studio/changes/{workspace}/activities/clue-{N}.md`:
+For each clue, write `.workshop/projects/{workspace}/activities/clue-{N}.md`:
 
 ```markdown
 # Clue {N}: {Key Question Chinese}
@@ -212,10 +214,13 @@ For each clue, write `studio/changes/{workspace}/activities/clue-{N}.md`:
 
 Create the `activities/` directory if it doesn't exist.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.activity-design = "done"` when all requested clue files are written
-- Set `phase` to `designing`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} activity-design \
+  --phase designing
+```
 
 If all 3 clues are designed, tell the user: "All activities designed. Run `/workshop-designer:proposal-generate {workspace}` to compile the complete PBL proposal."
 

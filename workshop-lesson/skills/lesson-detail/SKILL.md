@@ -11,15 +11,17 @@ Flesh out each teaching step with concrete teacher scripts (话术), material li
 
 ## Expert Discovery
 
-1. **Primary role**: Load `instructional-designer.md` (classroom feasibility, teacher scripts)
-2. **Secondary role**: Load `child-development-psychologist.md` (age-appropriate language)
-3. **Scan project experts**: Glob `studio/agents/*.md`
+1. **Required expert**: Resolve `instructional-designer.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-lesson/agents/`
+2. **Required expert**: Resolve `child-development-psychologist.md` using the same scope order
+3. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+4. **Optional shared experts**: Glob `experts/*.md`
+5. **Optional plugin-local experts**: Glob `workshop-lesson/agents/*.md`
 
 ## Pre-check
 
-1. Read `studio/changes/{workspace}/lesson-scaffold.md` — required input
+1. Read `.workshop/projects/{workspace}/lesson-scaffold.md` — required input
    - If not found: "请先运行 `/workshop-lesson:lesson-scaffold` 设计教学环节结构"
-2. Read `studio/changes/{workspace}/lesson-objective.md` for objectives
+2. Read `.workshop/projects/{workspace}/lesson-objective.md` for objectives
 3. Read coding spec from template: `workshop-templates/references/templates/five-step/coding-spec.md`
 
 ## Step 1: Detail Each Step
@@ -98,12 +100,15 @@ Invoke instructional designer to check:
 
 Present the detailed lesson. Wait for approval.
 
-Write to `studio/changes/{workspace}/lesson-detail.md`.
+Write to `.workshop/projects/{workspace}/lesson-detail.md`.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.lesson-detail = "done"`
-- If `lesson-objective.md`, `lesson-scaffold.md`, and `lesson-detail.md` all exist, set `phase` to `designing`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} lesson-detail \
+  --phase designing
+```
 
 Suggest next steps:
 > **下一步:**

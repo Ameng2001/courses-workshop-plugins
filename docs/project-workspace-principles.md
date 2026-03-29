@@ -15,7 +15,10 @@
 5. Semester, month, and week plans are global reusable assets. Projects should reference them rather than copy full plans.
 6. Planning and course design have weak dependency: either may start first, but they should be linkable once both exist.
 7. `workshop-*` directories are the only source of truth for runtime implementation.
-8. `studio/changes/*` is for git-tracked project workspaces and shared planning records, not duplicate plugin implementations.
+8. `.workshop/` is the runtime home for course projects, planning records, knowledge assets, and archives.
+9. `studio/` remains the Astra Studio plugin-development workspace and must not be used as the runtime home for course projects.
+10. Runtime experts use layered scope: `.workshop/agents/custom` → `experts/` → `workshop-*/agents`.
+11. `studio/roles/` is reserved for plugin-design-only workflow roles and is not part of runtime expert loading.
 
 ## Practical Consequences
 
@@ -24,9 +27,14 @@
 - `workshop-kb` provides shared school knowledge context.
 - `workshop-templates` decides the pipeline and output format for the next deliverable.
 - `workshop-designer`, `workshop-lesson`, `workshop-resource`, `workshop-quality`, and `workshop-insight` operate as project capabilities.
+- Runtime storage should prefer:
+  - `.workshop/projects/`
+  - `.workshop/plans/`
+  - `.workshop/agents/custom/`
+  - `experts/`
+  - `.workshop/kb/`
+  - `.workshop/archive/`
 
 ## Non-Goals
 
-- This principle does not require an immediate directory restructure.
-- This principle does not require planner outputs to move to a new storage path yet.
 - This principle does not make a plugin the primary user-facing object.

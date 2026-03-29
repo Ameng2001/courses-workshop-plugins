@@ -40,4 +40,4 @@ PBL 预案采用华美五节结构输出：
 - Markdown 格式
 - 表格使用标准 Markdown 表格语法
 - 文件名：`proposal.md`
-- 存储位置：`studio/changes/{workspace}/proposal.md`
+- 存储位置：`.workshop/projects/{workspace}/proposal.md`

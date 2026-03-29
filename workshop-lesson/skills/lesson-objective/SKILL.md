@@ -11,17 +11,19 @@ Generate clear, observable learning objectives for a single lesson, aligned with
 
 ## Expert Discovery
 
-1. **Primary role**: Load `child-development-psychologist.md` (age-appropriate objectives)
-2. **Secondary role**: Load `early-childhood-curriculum-expert.md` (standards alignment)
-3. **Scan project experts**: Glob `studio/agents/*.md`
+1. **Required expert**: Resolve `child-development-psychologist.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-lesson/agents/`
+2. **Required expert**: Resolve `early-childhood-curriculum-expert.md` using the same scope order
+3. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+4. **Optional shared experts**: Glob `experts/*.md`
+5. **Optional plugin-local experts**: Glob `workshop-lesson/agents/*.md`
 
 ## Pre-check
 
-1. Verify `studio/` exists
-2. Read active template from workspace config (`studio/changes/{workspace}/config.yaml`)
+1. Verify `.workshop/` exists
+2. Read active template from workspace config (`.workshop/projects/{workspace}/config.yaml`)
    - If no template set, default to `five-step`
 3. Check knowledge base for related lesson plans:
-   - Glob `studio/kb/lesson-plans/*.md` — read frontmatter for matching themes
+   - Glob `.workshop/kb/lesson-plans/*.md` — read frontmatter for matching themes
    - If found, use past objectives as reference (not copy)
 
 ## Step 1: Gather Context
@@ -84,30 +86,16 @@ Invoke child development psychologist to validate:
 
 Present the objectives. Wait for approval.
 
-Write to `studio/changes/{workspace}/lesson-objective.md`.
+Write to `.workshop/projects/{workspace}/lesson-objective.md`.
 
-Create or update `status.json` in the same workspace:
+Update workspace status with:
 
-```json
-{
-  "type": "project",
-  "project": "{workspace}",
-  "theme": "{lesson topic}",
-  "target_collection": "courses",
-  "phase": "planning",
-  "created_at": "{ISO-8601}",
-  "plan_refs": {
-    "semester": null,
-    "month": null,
-    "week": null
-  },
-  "skills": {
-    "lesson-objective": "done"
-  }
-}
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} lesson-objective \
+  --theme "{lesson topic}" \
+  --phase planning
 ```
-
-If the file already exists, preserve existing metadata and merge the new skill status.
 
 Suggest next steps:
 > **下一步:**

@@ -11,14 +11,16 @@ Break a monthly theme from the semester calendar into weekly sub-themes with met
 
 ## Expert Discovery
 
-1. **Primary role**: Load `early-childhood-curriculum-expert.md`
-2. **Scan project experts**: Glob `studio/agents/*.md`
+1. **Required expert**: Resolve `early-childhood-curriculum-expert.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-planner/agents/`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-planner/agents/*.md`
 
 ## Pre-check
 
-1. Verify `studio/` exists
-2. Look for `studio/changes/{workspace}/semester-plan.md` — if present, read it to get the month's theme, age group, and allocated methodology
-3. Check knowledge base for related materials: `studio/kb/lesson-plans/*.md` with matching theme tags
+1. Verify `.workshop/` exists
+2. Look for `.workshop/plans/{workspace}/semester-plan.md` — if present, read it to get the month's theme, age group, and allocated methodology
+3. Check knowledge base for related materials: `.workshop/kb/lesson-plans/*.md` with matching theme tags
 
 ## Step 1: Gather Context
 
@@ -69,24 +71,15 @@ Present the monthly plan. Wait for approval. If changes requested, adjust.
 
 ## Step 5: Write Output
 
-Write to `studio/changes/{workspace}/month-plan.md`.
+Write to `.workshop/plans/{workspace}/month-plan.md`.
 
-Update `studio/changes/{workspace}/config.yaml` with the month's methodology setting if the user specifies a preference.
-Create or update `studio/changes/{workspace}/status.json`:
-- Set `type = "planning"`
-- Set `plan_level = "month"`
-- Preserve `plan_name`, `created_at`, and `linked_projects` if already present
-- If no file exists, initialize:
+Update `.workshop/plans/{workspace}/config.yaml` with the month's methodology setting if the user specifies a preference.
+Update planning status with:
 
-```json
-{
-  "type": "planning",
-  "plan_level": "month",
-  "plan_name": "{workspace}",
-  "phase": "planning",
-  "created_at": "{ISO-8601}",
-  "linked_projects": []
-}
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-planning \
+  {workspace} \
+  --plan-level month
 ```
 
 Suggest next steps:

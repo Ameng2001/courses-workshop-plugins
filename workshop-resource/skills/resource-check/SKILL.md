@@ -12,7 +12,7 @@ Validate resource lists for completeness, specificity, correct categorization, a
 ## Inputs
 
 Accept one of:
-- A workspace path via `$ARGUMENTS` (e.g., `studio/changes/workshop-design/`)
+- A workspace path via `$ARGUMENTS` (e.g., `.workshop/projects/spring-flowers/`)
 - If no path given, scan the current working directory
 
 Required artifacts:
@@ -34,10 +34,13 @@ Also update `status.json` in the same workspace when present.
 3. **Compile report** -- assemble results
 4. **Present and save** -- show summary, write report
 
-After writing `resource-check-report.md`, update `status.json`:
-- Preserve all existing fields
-- Set `skills.resource-check = "done"`
-- Keep `phase` at `reviewing` when proposal or lesson deliverables already exist
+After writing `resource-check-report.md`, update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} resource-check \
+  --phase reviewing
+```
 
 ## Step 1: Read All Inputs
 

@@ -11,14 +11,16 @@ Design the five-step teaching structure for a single lesson. Each step gets a ti
 
 ## Expert Discovery
 
-1. **Primary role**: Load `instructional-designer.md` (teaching flow, time management)
-2. **Secondary role**: Load `early-childhood-curriculum-expert.md` (pedagogy alignment)
-3. **Scan project experts**: Glob `studio/agents/*.md`
+1. **Required expert**: Resolve `instructional-designer.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-lesson/agents/`
+2. **Required expert**: Resolve `early-childhood-curriculum-expert.md` using the same scope order
+3. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+4. **Optional shared experts**: Glob `experts/*.md`
+5. **Optional plugin-local experts**: Glob `workshop-lesson/agents/*.md`
 
 ## Pre-check
 
-1. Verify `studio/` exists
-2. Read `studio/changes/{workspace}/lesson-objective.md` — if present, use objectives as the design anchor
+1. Verify `.workshop/` exists
+2. Read `.workshop/projects/{workspace}/lesson-objective.md` — if present, use objectives as the design anchor
    - If not present, warn: "建议先运行 `/workshop-lesson:lesson-objective` 设定教学目标" but proceed if user insists
 3. Read the five-step methodology guide from `workshop-templates/references/templates/five-step/methodology-guide.md`
 4. Read age-appropriate time allocation from the methodology guide
@@ -94,13 +96,15 @@ Invoke instructional designer to check:
 
 Present the scaffold overview. Wait for approval.
 
-Write to `studio/changes/{workspace}/lesson-scaffold.md`.
+Write to `.workshop/projects/{workspace}/lesson-scaffold.md`.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.lesson-scaffold = "done"`
-- If `phase` is missing, initialize it to `planning`
-- If `lesson-objective.md` and `lesson-scaffold.md` both exist, `phase` may remain `planning`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} lesson-scaffold \
+  --phase planning
+```
 
 Suggest next steps:
 > **下一步:**
