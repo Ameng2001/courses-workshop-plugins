@@ -473,6 +473,31 @@ def copy_if_exists(src: Path, dst: Path) -> None:
         shutil.copy2(src, dst)
 
 
+def release_bundle_files(root: Path, name: str) -> tuple[list[str], list[str]]:
+    deliverables = deliverables_for_workspace(root, name)
+    files_to_copy: list[str] = []
+    directories_to_copy: list[str] = []
+
+    if deliverables["proposal"]:
+        files_to_copy.append("proposal.md")
+        # PBL activities are part of the final release bundle when present.
+        directories_to_copy.append("activities")
+
+    if deliverables["lesson"]:
+        files_to_copy.append("lesson-plan.md")
+
+    for optional_file, exists in [
+        ("quality-report.md", deliverables["quality_report"]),
+        ("review-comments.md", deliverables["review_comments"]),
+        ("resource-plan.md", deliverables["resource_plan"]),
+        ("resource-check-report.md", deliverables["resource_check_report"]),
+    ]:
+        if exists:
+            files_to_copy.append(optional_file)
+
+    return files_to_copy, directories_to_copy
+
+
 def promote_project(root: Path, name: str, overwrite: bool) -> dict[str, Any]:
     validation = validate_project(root, name, "approved")
     if not validation["ready"]:
@@ -505,23 +530,11 @@ def promote_project(root: Path, name: str, overwrite: bool) -> dict[str, Any]:
 
     target.mkdir(parents=True, exist_ok=True)
 
-    files_to_copy = [
-        "proposal.md",
-        "lesson-plan.md",
-        "quality-report.md",
-        "review-comments.md",
-        "resource-plan.md",
-        "resource-check-report.md",
-        "theme-analysis.md",
-        "prior-knowledge.md",
-        "competency-mapping.md",
-        "driving-question.md",
-        "network-map.md",
-        "inquiry-clues.md",
-    ]
+    files_to_copy, directories_to_copy = release_bundle_files(root, name)
     for filename in files_to_copy:
         copy_if_exists(source / filename, target / filename)
-    copy_if_exists(source / "activities", target / "activities")
+    for directory in directories_to_copy:
+        copy_if_exists(source / directory, target / directory)
 
     archive_name = f"{datetime.now().astimezone().date().isoformat()}-{name}"
     archive_target = archive_dir(root) / archive_name

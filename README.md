@@ -148,7 +148,8 @@ PBL 项目：
 │   ├── agents/
 │   │   └── custom/         # 园所/项目自定义专家
 │   ├── kb/                 # 校本知识库内容
-│   └── archive/            # 已归档课程交付物
+│   └── archive/            # 已归档课程完整历史
+├── courses/                # 已发布课程 release bundles
 ├── experts/                # 共享领域专家单一事实源
 ├── studio/
 │   ├── roles/              # Astra Studio 专用流程角色
@@ -159,6 +160,7 @@ PBL 项目：
 `studio/` 与 `.workshop/` 职责不同：
 - `studio/` 用于 Astra Studio 的 plugin / skill 研发
 - `.workshop/` 用于真实课程项目、计划、知识库与归档运行时
+- `courses/` 用于最终课程 release bundle，不保存完整设计过程
 
 agent 作用域也分层：
 - `experts/` 是共享领域专家的单一事实源
