@@ -1,15 +1,15 @@
 ---
 name: init
-description: Initialize a course workshop workspace in the current project for PBL course development. Use when starting course design in a new repo, when someone says "set up workshop", or when the workspace is missing. Creates a git-tracked workspace.
+description: Initialize a course workshop workspace in the current project for multi-methodology course development (PBL, Five-Step, etc.). Use when starting course design in a new repo, when someone says "set up workshop", or when the workspace is missing. Creates a git-tracked workspace with knowledge base support.
 allowed-tools: Read, Write, Bash, Glob
 user-invocable: true
 ---
 
 # Workshop Init
 
-Initialize `studio/` directory in the current project for PBL (Project-Based Learning) course development. This directory is git-tracked — it holds course design documentation (briefs, proposals, status) that has version control value.
+Initialize `studio/` directory in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable templates. This directory is git-tracked — it holds course design documentation (briefs, proposals, status) that has version control value.
 
-The target user is a kindergarten curriculum director (课研主任) who manages course design workflows from ideation through approval and shipping.
+The target users are kindergarten curriculum directors (课研主任) and classroom teachers (一线教师) who design and deliver courses.
 
 ## Pre-check
 
@@ -29,6 +29,17 @@ studio/
 │   └── .gitkeep
 ├── agents/              # custom domain expert definitions (override built-ins)
 │   └── .gitkeep
+├── kb/                  # school-specific knowledge base (managed by workshop-kb)
+│   ├── textbooks/       # 区编教材
+│   │   └── .gitkeep
+│   ├── philosophy/      # 园本理念
+│   │   └── .gitkeep
+│   ├── lesson-plans/    # 历年教案
+│   │   └── .gitkeep
+│   ├── research-records/ # 教研记录
+│   │   └── .gitkeep
+│   └── calendars/       # 学期主题日历
+│       └── .gitkeep
 └── archive/             # completed and archived proposal records
     └── .gitkeep
 ```
@@ -41,11 +52,13 @@ Write the following content verbatim to `studio/config.yaml`:
 
 ```yaml
 # Workshop Studio Configuration
-# Schema: pbl-course — PBL (Project-Based Learning) course design workspace
+# Schema: course-workshop — Multi-methodology course design workspace
 
-schema: pbl-course
+schema: course-workshop
 
 defaults:
+  # Default teaching methodology template (can be overridden per workspace)
+  methodology: pbl-huamei
   # Where promoted proposals are placed (relative to project root)
   target_collection: courses
   # Governance: who approves proposals before promote
@@ -70,18 +83,23 @@ lifecycle:
 ```
 Workshop studio initialized at studio/
 
-  studio/config.yaml   — workspace configuration (schema: pbl-course)
+  studio/config.yaml   — workspace configuration (schema: course-workshop)
   studio/changes/      — active course design workspaces
   studio/agents/       — custom domain expert definitions
+  studio/kb/           — school-specific knowledge base
   studio/archive/      — shipped proposal records
 
+Default methodology: pbl-huamei (华美 PBL 五步法)
 This directory is git-tracked — commit it to share with your team.
 ```
 
 ### Step 4: Suggest next steps
 
-- "Run `/workshop-designer:design <theme>` to start designing your first PBL course"
-- "Or create a workspace manually: `mkdir studio/changes/my-course`"
+- "Run `/workshop-templates:template-list` to see available teaching methodologies"
+- "Run `/workshop-templates:template-select <id>` to choose a methodology"
+- "Run `/workshop-kb:kb-import <path>` to import school-specific materials"
+- "Run `/workshop-designer:design <theme>` to start designing a PBL course"
+- "Run `/workshop-planner:semester-plan <semester>` to create a semester plan"
 
 ## Notes
 

@@ -1,0 +1,96 @@
+---
+name: lesson-objective
+description: Generate observable learning objectives for a single lesson aligned with Guidelines 3-6 and the active methodology template. Use when a teacher starts planning a lesson, when someone says "help me write objectives for a lesson about spring flowers", or when starting the five-step design pipeline.
+allowed-tools: Read, Write, Glob, Agent
+user-invocable: true
+---
+
+# Lesson Objective
+
+Generate clear, observable learning objectives for a single lesson, aligned with the 《3-6 岁儿童学习与发展指南》 and appropriate for the target age group.
+
+## Expert Discovery
+
+1. **Primary role**: Load `child-development-psychologist.md` (age-appropriate objectives)
+2. **Secondary role**: Load `early-childhood-curriculum-expert.md` (standards alignment)
+3. **Scan project experts**: Glob `studio/agents/*.md`
+
+## Pre-check
+
+1. Verify `studio/` exists
+2. Read active template from workspace config (`studio/changes/{workspace}/config.yaml`)
+   - If no template set, default to `five-step`
+3. Check knowledge base for related lesson plans:
+   - Glob `studio/kb/lesson-plans/*.md` — read frontmatter for matching themes
+   - If found, use past objectives as reference (not copy)
+
+## Step 1: Gather Context
+
+Ask the user for:
+
+> **请提供以下信息：**
+> 1. **课题**: 本节课的主题（如"认识春天的花"）
+> 2. **年龄段**: 小班 (3-4岁) / 中班 (4-5岁) / 大班 (5-6岁)
+> 3. **主要领域**: 健康 / 语言 / 社会 / 科学 / 艺术
+> 4. **活动类型**: 集体教学 / 小组活动 / 区角活动
+
+If knowledge base has relevant past lessons, present them:
+> **📚 参考**: 找到 {N} 个相关历年教案，已提取其教学目标作为参考。
+
+## Step 2: Generate Objectives
+
+Generate **3-4 learning objectives** in three dimensions:
+
+### 认知目标 (Cognitive)
+- What knowledge or understanding will children gain?
+- Use age-appropriate verbs:
+  - 小班: 感知、认识、知道、发现
+  - 中班: 了解、观察、比较、分辨
+  - 大班: 理解、分析、归纳、推理
+
+### 技能目标 (Skill)
+- What abilities will children practice or develop?
+- Use action verbs: 能够、学会、尝试、练习
+
+### 情感目标 (Affective)
+- What attitudes or dispositions will be fostered?
+- Use disposition verbs: 愿意、喜欢、乐于、主动
+
+### Objective Quality Rules
+
+Each objective must:
+1. Be **observable**: A teacher can see/hear whether the child achieved it
+2. Be **age-appropriate**: Verb complexity matches the age group (reference `guidelines-3-6.md`)
+3. Be **specific**: Not vague ("了解花" → "能说出 2-3 种春天常见花的名称和颜色特征")
+4. **Align with《指南》**: Map to at least one specific development goal
+
+## Step 3: Standards Mapping
+
+For each objective, identify the matching《指南》development goal:
+
+| 目标 | 领域 | 《指南》对应目标 | 年龄段要求 |
+|------|------|----------------|-----------|
+| {objective_1} | 科学 | "在探究中认识周围事物和现象" | 4-5岁: 能对事物进行观察比较 |
+| ... | ... | ... | ... |
+
+## Step 4: Expert Review
+
+Invoke child development psychologist to validate:
+- Verb appropriateness for the age band
+- Cognitive load (not too many objectives for a single lesson)
+- Development progression (objectives build on prior knowledge)
+
+## Step 5: User Confirmation and Write
+
+Present the objectives. Wait for approval.
+
+Write to `studio/changes/{workspace}/lesson-objective.md`.
+
+Suggest next steps:
+> **下一步:**
+> - `/workshop-lesson:lesson-scaffold` — 设计五步教学环节结构
+
+## Out of Scope
+
+- This skill does NOT design the full lesson (use the full pipeline for that)
+- This skill does NOT generate PBL learning goals (use `workshop-insight:competency-mapping` for PBL)
