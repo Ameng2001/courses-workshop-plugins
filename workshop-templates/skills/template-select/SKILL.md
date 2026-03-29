@@ -72,6 +72,14 @@ document_type: {document-type}
 }
 ```
 
+6. Request the first HIL checkpoint for project framing:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py request-hil \
+  {workspace} project-framing \
+  --notes "template selected; confirm theme, methodology, and starting scope"
+```
+
 ## Step 5: Confirm and Guide
 
 Display confirmation:
@@ -84,6 +92,9 @@ Display confirmation:
 
 输出格式: {document_type}
 编码前缀: {coding.prefix}
+
+HIL:
+- `project-framing` 已发起，等待人工确认项目范围
 
 下一步:
 - PBL 预案设计: /workshop-designer:design {theme}

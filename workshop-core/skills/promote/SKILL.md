@@ -47,8 +47,17 @@ python3 workshop-core/scripts/workspace_status.py promote-project {workspace}
 
 This performs the full promote flow:
 - resolve `target_collection`
-- copy final deliverables into `{target_collection}/{project-name}/`
-- copy supporting artifacts when present
+- copy the release bundle into `{target_collection}/{project-name}/`
+  - main deliverables:
+    - `proposal.md`
+    - `lesson-plan.md`
+  - optional supporting deliverables:
+    - `resource-plan.md`
+    - `quality-report.md`
+    - `review-comments.md`
+    - `resource-check-report.md`
+  - `activities/` only when a PBL proposal is present
+- keep design-process files only in archive, not in `{target_collection}/`
 - move the source workspace into `.workshop/archive/{YYYY-MM-DD}-{name}/`
 - update archived `status.json` with:
   - `phase = "shipped"`

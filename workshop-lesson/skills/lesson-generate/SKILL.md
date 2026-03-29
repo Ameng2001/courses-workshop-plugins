@@ -116,9 +116,25 @@ For each step, include the full teacher scripts from lesson-detail, formatted fo
 - **后续跟进计划**:
 ```
 
-## Step 7: Write Output
+## Step 7: Write Output and Request HIL
 
 Write the complete lesson plan to `.workshop/projects/{workspace}/lesson-plan.md`.
+
+Request the deliverable draft checkpoint:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py request-hil \
+  {workspace} deliverable-draft \
+  --notes "lesson plan draft ready for review"
+```
+
+Present the compiled lesson plan summary and wait for approval. After approval:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py approve-hil \
+  {workspace} deliverable-draft \
+  --approved-by curriculum-director
+```
 
 Update workspace status with:
 
