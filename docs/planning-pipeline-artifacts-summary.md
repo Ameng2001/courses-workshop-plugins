@@ -1052,7 +1052,7 @@ Phase 4 根据 skill-map 自动生成了以下文件：
 
 每个插件生成了 `plugin.json.draft` 包含 name, version, description, keywords, dependencies, skills, commands 字段。
 
-### 生成的 Reference 知识文件（7 个）
+### 生成的 Reference 知识文件（18 个）
 
 | Plugin | Reference | 内容 |
 |--------|-----------|------|

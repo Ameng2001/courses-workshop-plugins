@@ -1,6 +1,6 @@
 {
   "name": "workshop-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Course workshop workspace management — initialize project workspaces, manage status, link planning context, approve deliverables, and archive completed work",
   "author": {
     "name": "VanLengs",
