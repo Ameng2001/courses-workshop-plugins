@@ -26,9 +26,18 @@ Set the active teaching methodology template for the next deliverable in the cur
 
 ## Step 2: Read Template Manifest
 
-1. Read `workshop-templates/references/templates/{id}/manifest.yaml`
-2. Parse the manifest and extract key fields:
-   - `id`, `name`, `pipeline.plugin`, `output.document_type`, `coding.prefix`
+Run:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py select-template {id} {workspace} --theme "{theme}"
+```
+
+Use the returned manifest-derived fields:
+- `id`
+- `name`
+- `pipeline_plugin`
+- `document_type`
+- `stages`
 
 ## Step 3: Determine Project Workspace
 
@@ -39,46 +48,16 @@ Set the active teaching methodology template for the next deliverable in the cur
 > - 输入一个主题名称创建新项目工作区（如"春天的花"）
 > - 或输入已有项目工作区名称
 
-## Step 4: Write Configuration
+## Step 4: Confirm Writeback
 
-1. Read `.workshop/projects/{workspace}/config.yaml` (or create if not exists)
-2. Set or update the default methodology fields for the next deliverable:
+The helper has already:
 
-```yaml
-methodology: {template-id}
-methodology_name: {template-name}
-pipeline_plugin: {pipeline-plugin}
-document_type: {document-type}
-```
+1. created the project workspace if needed
+2. written `.workshop/projects/{workspace}/config.yaml`
+3. ensured `.workshop/projects/{workspace}/status.json`
+4. requested `project-framing`
 
-3. Write the updated config back
-4. Clarify to the user that this sets the current default for the next deliverable, not an exclusive project-wide lock
-5. If `.workshop/projects/{workspace}/status.json` does not exist, create a minimal project status file:
-
-```json
-{
-  "type": "project",
-  "project": "{workspace}",
-  "theme": "{workspace or user-provided theme}",
-  "target_collection": "courses",
-  "phase": "planning",
-  "created_at": "{ISO-8601}",
-  "plan_refs": {
-    "semester": null,
-    "month": null,
-    "week": null
-  },
-  "skills": {}
-}
-```
-
-6. Request the first HIL checkpoint for project framing:
-
-```bash
-python3 workshop-core/scripts/workspace_status.py request-hil \
-  {workspace} project-framing \
-  --notes "template selected; confirm theme, methodology, and starting scope"
-```
+Clarify to the user that this sets the current default for the next deliverable, not an exclusive project-wide lock.
 
 ## Step 5: Confirm and Guide
 

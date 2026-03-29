@@ -76,6 +76,15 @@ Generate practical reminders:
 
 ## Step 5: User Confirmation and Write
 
+Before writing the plan, initialize the planning workspace:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py prepare-plan \
+  {workspace} \
+  --plan-level week \
+  --methodology {selected-methodology-if-any}
+```
+
 Present the week plan. Wait for approval. Write to `.workshop/plans/{workspace}/week-{N}-plan.md`.
 
 Update planning status with:

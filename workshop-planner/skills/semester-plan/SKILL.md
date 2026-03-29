@@ -88,6 +88,14 @@ Wait for user approval. If the user requests changes, adjust and re-present.
 
 ## Step 7: Write Output
 
+Before writing the plan, initialize the planning workspace:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py prepare-plan \
+  {workspace} \
+  --plan-level semester
+```
+
 Write the approved calendar to `.workshop/plans/{workspace}/semester-plan.md`.
 
 Treat this workspace as a shared planning record, not as the canonical home for project deliverables.

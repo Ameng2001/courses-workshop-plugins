@@ -62,6 +62,34 @@ def config_path(root: Path) -> Path:
     return runtime_dir(root) / "config.yaml"
 
 
+def project_workspace_dir(root: Path, name: str) -> Path:
+    return runtime_dir(root) / "projects" / name
+
+
+def planning_workspace_dir(root: Path, name: str) -> Path:
+    return runtime_dir(root) / "plans" / name
+
+
+def project_status_path(root: Path, name: str) -> Path:
+    return project_workspace_dir(root, name) / "status.json"
+
+
+def planning_status_path(root: Path, name: str) -> Path:
+    return planning_workspace_dir(root, name) / "status.json"
+
+
+def project_config_path(root: Path, name: str) -> Path:
+    return project_workspace_dir(root, name) / "config.yaml"
+
+
+def planning_config_path(root: Path, name: str) -> Path:
+    return planning_workspace_dir(root, name) / "config.yaml"
+
+
+def repo_root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
 def find_root(explicit: str | None, create: bool = False) -> Path:
     if explicit:
         root = Path(explicit).expanduser().resolve()
@@ -210,6 +238,144 @@ def deep_set(data: dict[str, Any], dotted_key: str, value: Any) -> Any:
     return old
 
 
+def load_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def write_json(path: Path, data: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def manifest_path(template_id: str) -> Path:
+    return repo_root() / "workshop-templates" / "references" / "templates" / template_id / "manifest.yaml"
+
+
+def load_manifest(template_id: str) -> dict[str, Any]:
+    path = manifest_path(template_id)
+    if not path.exists():
+        raise SystemExit(f"Unknown template id: {template_id}")
+    text = path.read_text(encoding="utf-8")
+
+    top_level: dict[str, str] = {}
+    pipeline_plugin: str | None = None
+    document_type: str | None = None
+    coding_prefix: str | None = None
+    stage_ids: list[str] = []
+    section: str | None = None
+    subsection: str | None = None
+
+    for raw in text.splitlines():
+        if not raw.strip() or raw.lstrip().startswith("#"):
+            continue
+        indent = len(raw) - len(raw.lstrip(" "))
+        stripped = raw.strip()
+
+        if indent == 0:
+            section = None
+            subsection = None
+            if stripped.endswith(":"):
+                section = stripped[:-1]
+                continue
+            key, _, value = stripped.partition(":")
+            if _:
+                value = value.strip().strip('"')
+                top_level[key] = value
+            continue
+
+        if indent == 2 and stripped.endswith(":"):
+            subsection = stripped[:-1]
+            continue
+
+        if section == "pipeline" and indent == 2 and stripped.startswith("plugin:"):
+            pipeline_plugin = stripped.split(":", 1)[1].strip().strip('"')
+            continue
+
+        if section == "pipeline" and subsection == "stages" and indent == 4 and stripped.startswith("- id:"):
+            stage_ids.append(stripped.split(":", 1)[1].strip().strip('"'))
+            continue
+
+        if section == "output" and indent == 2 and stripped.startswith("document_type:"):
+            document_type = stripped.split(":", 1)[1].strip().strip('"')
+            continue
+
+        if section == "coding" and indent == 2 and stripped.startswith("prefix:"):
+            coding_prefix = stripped.split(":", 1)[1].strip().strip('"')
+            continue
+
+    return {
+        "id": top_level.get("id"),
+        "name": top_level.get("name"),
+        "pipeline": {
+            "plugin": pipeline_plugin,
+            "stages": [{"id": stage_id} for stage_id in stage_ids],
+        },
+        "output": {
+            "document_type": document_type,
+        },
+        "coding": {
+            "prefix": coding_prefix,
+        },
+    }
+
+
+def ensure_project_status(root: Path, workspace: str, theme: str | None) -> dict[str, Any]:
+    path = project_status_path(root, workspace)
+    data = load_json(path)
+    target_collection = data.get("target_collection") or deep_get(load_config(root), "defaults.target_collection") or "courses"
+    data.setdefault("type", "project")
+    data.setdefault("project", workspace)
+    data.setdefault("theme", theme or workspace)
+    data.setdefault("target_collection", target_collection)
+    data.setdefault("target", {"kind": "local", "path": f"{target_collection}/{workspace}"})
+    data.setdefault("phase", "planning")
+    data.setdefault("created_at", "")
+    if not data["created_at"]:
+        from datetime import datetime
+
+        data["created_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+    data.setdefault("plan_refs", {"semester": None, "month": None, "week": None})
+    data.setdefault("skills", {})
+    hil = data.setdefault(
+        "hil",
+        {
+            "checkpoint": "project-framing",
+            "status": "not_started",
+            "requested_at": None,
+            "approved_at": None,
+            "approved_by": None,
+            "notes": "",
+        },
+    )
+    hil.setdefault("checkpoint", "project-framing")
+    hil.setdefault("status", "not_started")
+    hil.setdefault("requested_at", None)
+    hil.setdefault("approved_at", None)
+    hil.setdefault("approved_by", None)
+    hil.setdefault("notes", "")
+    write_json(path, data)
+    return data
+
+
+def ensure_planning_status(root: Path, workspace: str, plan_level: str) -> dict[str, Any]:
+    path = planning_status_path(root, workspace)
+    data = load_json(path)
+    data.setdefault("type", "planning")
+    data.setdefault("plan_level", plan_level)
+    data.setdefault("plan_name", workspace)
+    data.setdefault("phase", "planning")
+    data.setdefault("created_at", "")
+    if not data["created_at"]:
+        from datetime import datetime
+
+        data["created_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+    data.setdefault("linked_projects", [])
+    write_json(path, data)
+    return data
+
+
 def init_runtime(root: Path) -> dict[str, Any]:
     rt = runtime_dir(root)
     dirs = [
@@ -318,6 +484,84 @@ def render_onboarding(summary: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def select_template(root: Path, template_id: str, workspace: str, theme: str | None) -> dict[str, Any]:
+    manifest = load_manifest(template_id)
+    workspace_dir = project_workspace_dir(root, workspace)
+    workspace_dir.mkdir(parents=True, exist_ok=True)
+
+    config = {}
+    config_file = project_config_path(root, workspace)
+    if config_file.exists():
+        config = parse_yaml_subset(config_file.read_text(encoding="utf-8"))
+
+    config["methodology"] = manifest["id"]
+    config["methodology_name"] = manifest.get("name")
+    config["pipeline_plugin"] = deep_get(manifest, "pipeline.plugin")
+    config["document_type"] = deep_get(manifest, "output.document_type")
+    write_config_file(config_file, config)
+
+    status = ensure_project_status(root, workspace, theme)
+    hil = status["hil"]
+    hil["checkpoint"] = "project-framing"
+    hil["status"] = "awaiting_review"
+    from datetime import datetime
+
+    hil["requested_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+    hil["approved_at"] = None
+    hil["approved_by"] = None
+    hil["notes"] = "template selected; confirm theme, methodology, and starting scope"
+    write_json(project_status_path(root, workspace), status)
+
+    stages = [stage.get("id") for stage in deep_get(manifest, "pipeline.stages") or []]
+    return {
+        "workspace": workspace,
+        "theme": status.get("theme"),
+        "template": {
+            "id": manifest.get("id"),
+            "name": manifest.get("name"),
+            "pipeline_plugin": deep_get(manifest, "pipeline.plugin"),
+            "document_type": deep_get(manifest, "output.document_type"),
+            "stages": stages,
+        },
+        "hil": status.get("hil"),
+        "project_config": str(config_file.relative_to(root)),
+    }
+
+
+def write_config_file(path: Path, data: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(dump_yaml_subset(data)) + "\n", encoding="utf-8")
+
+
+def prepare_plan(root: Path, workspace: str, plan_level: str, methodology: str | None) -> dict[str, Any]:
+    workspace_dir = planning_workspace_dir(root, workspace)
+    workspace_dir.mkdir(parents=True, exist_ok=True)
+    status = ensure_planning_status(root, workspace, plan_level)
+
+    config_file = planning_config_path(root, workspace)
+    config: dict[str, Any] = {}
+    if config_file.exists():
+        config = parse_yaml_subset(config_file.read_text(encoding="utf-8"))
+
+    selected_methodology = methodology or config.get("methodology")
+    if selected_methodology:
+        config["methodology"] = selected_methodology
+        manifest = load_manifest(selected_methodology) if manifest_path(selected_methodology).exists() else None
+        if manifest:
+            config["methodology_name"] = manifest.get("name")
+            config["pipeline_plugin"] = deep_get(manifest, "pipeline.plugin")
+            config["document_type"] = deep_get(manifest, "output.document_type")
+        write_config_file(config_file, config)
+
+    return {
+        "workspace": workspace,
+        "plan_level": status.get("plan_level"),
+        "methodology": config.get("methodology"),
+        "planning_status": str(planning_status_path(root, workspace).relative_to(root)),
+        "planning_config": str(config_file.relative_to(root)) if config_file.exists() else None,
+    }
+
+
 def cmd_init_runtime(args: argparse.Namespace) -> None:
     root = find_root(args.root, create=True)
     print(json.dumps(init_runtime(root), ensure_ascii=False, indent=2))
@@ -366,6 +610,18 @@ def cmd_onboarding_summary(args: argparse.Namespace) -> None:
     print(render_onboarding(summary))
 
 
+def cmd_select_template(args: argparse.Namespace) -> None:
+    root = find_root(args.root)
+    result = select_template(root, args.template_id, args.workspace, args.theme)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
+def cmd_prepare_plan(args: argparse.Namespace) -> None:
+    root = find_root(args.root)
+    result = prepare_plan(root, args.workspace, args.plan_level, args.methodology)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Runtime setup helper")
     parser.add_argument("--root", default=None, help="Project root containing .workshop/")
@@ -391,6 +647,18 @@ def build_parser() -> argparse.ArgumentParser:
     onboarding_cmd.add_argument("--publishing", choices=["local", "cos"], default=None)
     onboarding_cmd.add_argument("--json", action="store_true")
     onboarding_cmd.set_defaults(func=cmd_onboarding_summary)
+
+    select_template_cmd = sub.add_parser("select-template")
+    select_template_cmd.add_argument("template_id")
+    select_template_cmd.add_argument("workspace")
+    select_template_cmd.add_argument("--theme", default=None)
+    select_template_cmd.set_defaults(func=cmd_select_template)
+
+    prepare_plan_cmd = sub.add_parser("prepare-plan")
+    prepare_plan_cmd.add_argument("workspace")
+    prepare_plan_cmd.add_argument("--plan-level", choices=["semester", "month", "week"], required=True)
+    prepare_plan_cmd.add_argument("--methodology", default=None)
+    prepare_plan_cmd.set_defaults(func=cmd_prepare_plan)
 
     return parser
 
