@@ -37,6 +37,12 @@ Guide a team from an initialized runtime to a usable starting point.
 
 ## Step 1: Assess Readiness
 
+Run:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py onboarding-summary
+```
+
 Summarize the current state:
 
 - Is config present?
@@ -86,7 +92,7 @@ Also explain the first human review gate:
 
 ## Step 4: Print Next-Step Guide
 
-Output a short tailored guide such as:
+Use the helper output as the base, then print a short tailored guide such as:
 
 ```text
 Onboarding summary

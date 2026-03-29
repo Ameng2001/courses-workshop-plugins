@@ -76,7 +76,13 @@ remote:
 
 ## Step 1: Show Current Config
 
-If action is `show`, read `.workshop/config.yaml` and summarize:
+If action is `show`, run:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py config-show
+```
+
+Then summarize:
 
 - default methodology
 - publishing target
@@ -88,10 +94,13 @@ If action is `show`, read `.workshop/config.yaml` and summarize:
 
 If action is `set <key> <value>`:
 
-1. Read `.workshop/config.yaml`
-2. Update the requested key
-3. Preserve unrelated settings
-4. Write the file back
+Run:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py config-set <key> <value>
+```
+
+This updates the requested key and preserves unrelated settings.
 
 Examples:
 

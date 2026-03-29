@@ -22,7 +22,15 @@ The target users are kindergarten curriculum directors (课研主任) and classr
 
 ## Steps
 
-### Step 1: Create directory structure
+### Step 1: Create runtime skeleton
+
+Run:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py init-runtime
+```
+
+This creates:
 
 ```
 .workshop/
@@ -51,63 +59,9 @@ The target users are kindergarten curriculum directors (课研主任) and classr
 
 Create `.gitkeep` files as empty files — they ensure git tracks the empty directories.
 
-### Step 2: Write minimal config.yaml
+### Step 2: Confirm minimal config
 
-Write the following content verbatim to `.workshop/config.yaml`:
-
-```yaml
-# Course Workshop Runtime Configuration
-# Schema: course-workshop — Multi-methodology course runtime
-
-schema: course-workshop
-
-defaults:
-  # Default teaching methodology for the next deliverable in a project workspace
-  methodology: pbl-huamei
-  # Where promoted course deliverables are placed (relative to project root)
-  target_collection: courses
-  # Governance: who approves project deliverables before promote
-  governance:
-    approval_required: true
-    approver_role: curriculum-director
-
-models:
-  planning: gpt-5
-  review: gpt-5
-  resource_check: gpt-5-mini
-
-publishing:
-  default_target:
-    kind: local
-    path: courses
-
-runtime:
-  projects_dir: .workshop/projects
-  plans_dir: .workshop/plans
-  kb_dir: .workshop/kb
-  archive_dir: .workshop/archive
-
-experts:
-  custom_dir: .workshop/agents/custom
-  shared_dir: experts
-
-remote:
-  cos:
-    enabled: false
-    bucket: ""
-    base_path: ""
-
-# Lifecycle phases for project workspaces
-# Each active project in .workshop/projects/ progresses through these phases
-lifecycle:
-  phases:
-    - planning      # Ideation, theme exploration, domain analysis
-    - designing     # Detailed course structure, lesson design, material planning
-    - reviewing     # Expert review, curriculum alignment check, team review
-    - approved      # Ready to promote/ship
-    - shipped       # Promoted to target directory and archived
-  initial_phase: planning
-```
+The helper also writes the default `.workshop/config.yaml` if it does not exist yet.
 
 ### Step 3: Print summary
 
