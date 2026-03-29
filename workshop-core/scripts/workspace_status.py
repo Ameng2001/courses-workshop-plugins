@@ -36,6 +36,14 @@ def changes_dir(root: Path) -> Path:
     return root / "studio" / "changes"
 
 
+def archive_dir(root: Path) -> Path:
+    return root / "studio" / "archive"
+
+
+def kb_dir(root: Path) -> Path:
+    return root / "studio" / "kb"
+
+
 def workspace_dir(root: Path, name: str) -> Path:
     return changes_dir(root) / name
 
@@ -48,6 +56,17 @@ def load_status(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_default_methodology(root: Path) -> str | None:
+    config = root / "studio" / "config.yaml"
+    if not config.exists():
+        return None
+    for line in config.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("methodology:"):
+            return stripped.split(":", 1)[1].strip()
+    return None
 
 
 def write_status(path: Path, data: dict[str, Any]) -> None:
@@ -89,6 +108,124 @@ def required_skills_for(deliverables: dict[str, bool]) -> list[str]:
             ]
         )
     return required
+
+
+def completion_summary(skills: dict[str, Any]) -> tuple[int, int]:
+    total = len(skills)
+    done = sum(1 for value in skills.values() if value in {"done", "approved"})
+    return done, total
+
+
+def classify_workspace(root: Path, name: str, data: dict[str, Any]) -> str:
+    ws = workspace_dir(root, name)
+    status_type = data.get("type")
+    if status_type == "planning":
+        return "planning"
+    if status_type == "project":
+        return "project"
+    if status_type in {"plugin", "domain"}:
+        if data.get("target_dir") or data.get("action") or (ws / "plugin.json.draft").exists():
+            return "planning"
+    if (ws / "semester-plan.md").exists() or (ws / "month-plan.md").exists() or any(ws.glob("week*-plan.md")):
+        return "planning"
+    if (ws / "brief.md").exists() or (ws / "skill-map.md").exists() or (ws / "plugin.json.draft").exists():
+        return "planning"
+    return "project"
+
+
+def summarize_workspace(root: Path, name: str) -> dict[str, Any]:
+    ws = workspace_dir(root, name)
+    data = load_status(status_path(root, name))
+    kind = classify_workspace(root, name, data)
+    config_path = ws / "config.yaml"
+    methodology = None
+    if config_path.exists():
+        for line in config_path.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if stripped.startswith("methodology:"):
+                methodology = stripped.split(":", 1)[1].strip()
+                break
+
+    if kind == "planning":
+        planning_files = []
+        for candidate in ["semester-plan.md", "month-plan.md"]:
+            if (ws / candidate).exists():
+                planning_files.append(candidate)
+        planning_files.extend(sorted(path.name for path in ws.glob("week*-plan.md")))
+        return {
+            "name": name,
+            "type": "planning",
+            "phase": data.get("phase", "unknown"),
+            "plan_level": data.get("plan_level"),
+            "linked_projects": data.get("linked_projects", []),
+            "files": planning_files,
+        }
+
+    deliverables = deliverables_for_workspace(root, name)
+    skills = data.get("skills", {})
+    done, total = completion_summary(skills)
+    deliverable_list = [key for key, exists in deliverables.items() if exists and key in {"proposal", "lesson"}]
+    return {
+        "name": name,
+        "type": "project",
+        "phase": data.get("phase", "unknown"),
+        "methodology": methodology,
+        "plan_refs": data.get("plan_refs", {"semester": None, "month": None, "week": None}),
+        "deliverables": deliverable_list,
+        "skills_done": done,
+        "skills_total": total,
+    }
+
+
+def summarize_archives(root: Path) -> list[dict[str, Any]]:
+    archive = archive_dir(root)
+    if not archive.exists():
+        return []
+    entries = sorted(
+        [path for path in archive.iterdir() if path.is_dir()],
+        key=lambda p: p.name,
+        reverse=True,
+    )[:5]
+    result = []
+    for entry in entries:
+        data = load_status(entry / "status.json")
+        result.append({"name": entry.name, "shipped_to": data.get("shipped_to")})
+    return result
+
+
+def summarize_kb(root: Path) -> dict[str, int]:
+    kb = kb_dir(root)
+    categories = ["textbooks", "philosophy", "lesson-plans", "research-records", "calendars"]
+    counts: dict[str, int] = {}
+    for category in categories:
+        category_dir = kb / category
+        if not category_dir.exists():
+            counts[category] = 0
+            continue
+        counts[category] = len([p for p in category_dir.glob("*.md") if p.name != ".gitkeep"])
+    return counts
+
+
+def summarize_status(root: Path) -> dict[str, Any]:
+    changes = changes_dir(root)
+    projects = []
+    planning = []
+    if changes.exists():
+        for entry in sorted(changes.iterdir()):
+            if entry.name == ".gitkeep" or not entry.is_dir():
+                continue
+            summary = summarize_workspace(root, entry.name)
+            if summary["type"] == "project":
+                projects.append(summary)
+            else:
+                planning.append(summary)
+    return {
+        "default_methodology": read_default_methodology(root),
+        "knowledge_base": summarize_kb(root),
+        "planning": planning,
+        "projects": projects,
+        "archives": summarize_archives(root),
+    }
 
 
 def validate_project(root: Path, name: str, required_phase: str | None) -> dict[str, Any]:
@@ -260,6 +397,12 @@ def cmd_validate_project(args: argparse.Namespace) -> None:
         raise SystemExit(2)
 
 
+def cmd_summarize_status(args: argparse.Namespace) -> None:
+    root = find_studio_root(args.root)
+    result = summarize_status(root)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Workspace status helper")
     parser.add_argument("--root", help="Project root containing studio/", default=None)
@@ -320,6 +463,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
     )
     validate_project_cmd.set_defaults(func=cmd_validate_project)
+
+    summarize_status_cmd = sub.add_parser("summarize-status")
+    summarize_status_cmd.set_defaults(func=cmd_summarize_status)
 
     return parser
 
