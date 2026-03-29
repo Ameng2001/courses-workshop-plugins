@@ -13,20 +13,22 @@ Analyze a monthly theme to produce the "01 项目概览 Project Overview" sectio
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Primary role**: Always load `early-childhood-curriculum-expert.md` (leads standards alignment)
-2. **Scan project experts**: Glob `studio/agents/*.md` — load all custom experts
-3. **Match by relevance**: Select experts whose domain touches the monthly theme (e.g., if theme is "My Body", load health-related experts)
-4. **Skip template**: Do not load `_domain-expert-template.md`
+1. **Required expert**: Resolve `early-childhood-curriculum-expert.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-insight/agents/`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-insight/agents/*.md`
+5. **Match by relevance**: Select additional experts whose domain touches the monthly theme
+6. **Skip template**: Do not load `_domain-expert-template.md`
 
-The primary role validates curriculum standards mapping. Domain experts contribute theme-specific educational insights.
+The required expert validates curriculum standards mapping. Additional experts contribute theme-specific educational insights.
 
 ## Pre-check
 
-1. Verify `studio/` exists. If not, tell the user to run `/workshop-core:init` first.
+1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
 2. Determine the workspace path:
-   - If `$ARGUMENTS` contains a workspace name, use `studio/changes/$ARGUMENTS/`
+   - If `$ARGUMENTS` contains a workspace name, use `.workshop/projects/$ARGUMENTS/`
    - Otherwise, derive from the theme name (lowercase, kebab-case, 2-3 words)
-3. Check if `studio/changes/{workspace}/theme-analysis.md` already exists:
+3. Check if `.workshop/projects/{workspace}/theme-analysis.md` already exists:
    - If yes, read it and ask: "已有主题分析文档，是否需要重新生成或在此基础上修改？"
 
 ## Step 1: Gather Context
@@ -148,7 +150,7 @@ List **3-8 standard entries** total across all relevant domains. Prioritize entr
 Use the Agent tool to have the `early-childhood-curriculum-expert` review the complete analysis.
 
 Give the expert subagent:
-- The agent definition from `studio/agents/early-childhood-curriculum-expert.md`
+- The agent definition from `experts/early-childhood-curriculum-expert.md`
 - The full theme analysis (narrative + domain coverage + standards)
 - The monthly theme and age group
 - The instruction: "Review this theme analysis for a PBL project. Evaluate: (1) Does the narrative genuinely explain WHY this theme matters for children's development, or is it generic? (2) Is the domain coverage analysis accurate — are relevance levels correctly assigned? (3) Are the curriculum standard entries appropriate for the target age group? (4) Are there important standards that were missed? (5) Is there enough depth here to support a full PBL project? Suggest specific improvements."
@@ -213,7 +215,7 @@ Wait for user confirmation. If the user wants changes, iterate.
 Once confirmed, create the workspace (if not exists) and write:
 
 ```
-studio/changes/{workspace}/
+.workshop/projects/{workspace}/
 └── theme-analysis.md
 ```
 

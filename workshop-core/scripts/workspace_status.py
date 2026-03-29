@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Workspace status helper for course-workshop-plugins.
 
-This script provides a minimal executable layer for managing
-`studio/changes/*/status.json` files.
+Runtime layout:
+  .workshop/
+    projects/
+    plans/
+    kb/
+    archive/
 """
 
 from __future__ import annotations
@@ -19,38 +23,81 @@ def iso_now() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
 
 
-def find_studio_root(explicit: str | None) -> Path:
+def runtime_dir(root: Path) -> Path:
+    return root / ".workshop"
+
+
+def find_runtime_root(explicit: str | None, create: bool = False) -> Path:
     if explicit:
         root = Path(explicit).expanduser().resolve()
-        if not (root / "studio").is_dir():
-            raise SystemExit(f"studio/ not found under: {root}")
-        return root
+        if create or (root / ".workshop").is_dir():
+            return root
+        raise SystemExit(f".workshop/ not found under: {root}")
 
     current = Path.cwd().resolve()
     for candidate in [current, *current.parents]:
-        if (candidate / "studio").is_dir():
+        if (candidate / ".workshop").is_dir():
             return candidate
-    raise SystemExit("Could not find project root containing studio/")
+
+    if create:
+        return current
+    raise SystemExit("Could not find project root containing .workshop/")
 
 
-def changes_dir(root: Path) -> Path:
-    return root / "studio" / "changes"
+def config_path(root: Path) -> Path:
+    return runtime_dir(root) / "config.yaml"
+
+
+def project_workspaces_dir(root: Path) -> Path:
+    return runtime_dir(root) / "projects"
+
+
+def planning_workspaces_dir(root: Path) -> Path:
+    return runtime_dir(root) / "plans"
 
 
 def archive_dir(root: Path) -> Path:
-    return root / "studio" / "archive"
+    return runtime_dir(root) / "archive"
 
 
 def kb_dir(root: Path) -> Path:
-    return root / "studio" / "kb"
+    return runtime_dir(root) / "kb"
+
+
+def project_workspace_dir(root: Path, name: str) -> Path:
+    return project_workspaces_dir(root) / name
+
+
+def planning_workspace_dir(root: Path, name: str) -> Path:
+    return planning_workspaces_dir(root) / name
 
 
 def workspace_dir(root: Path, name: str) -> Path:
-    return changes_dir(root) / name
+    project = project_workspace_dir(root, name)
+    if project.exists():
+        return project
+    planning = planning_workspace_dir(root, name)
+    if planning.exists():
+        return planning
+    return project
+
+
+def project_status_path(root: Path, name: str) -> Path:
+    return project_workspace_dir(root, name) / "status.json"
+
+
+def planning_status_path(root: Path, name: str) -> Path:
+    return planning_workspace_dir(root, name) / "status.json"
 
 
 def status_path(root: Path, name: str) -> Path:
-    return workspace_dir(root, name) / "status.json"
+    project = project_status_path(root, name)
+    if project.exists():
+        return project
+    planning = planning_status_path(root, name)
+    if planning.exists():
+        return planning
+    return project
 
 
 def load_status(path: Path) -> dict[str, Any]:
@@ -60,7 +107,7 @@ def load_status(path: Path) -> dict[str, Any]:
 
 
 def read_default_methodology(root: Path) -> str | None:
-    config = root / "studio" / "config.yaml"
+    config = config_path(root)
     if not config.exists():
         return None
     for line in config.read_text(encoding="utf-8").splitlines():
@@ -71,7 +118,7 @@ def read_default_methodology(root: Path) -> str | None:
 
 
 def read_default_target_collection(root: Path) -> str:
-    config = root / "studio" / "config.yaml"
+    config = config_path(root)
     if not config.exists():
         return "courses"
     for line in config.read_text(encoding="utf-8").splitlines():
@@ -87,7 +134,7 @@ def write_status(path: Path, data: dict[str, Any]) -> None:
 
 
 def deliverables_for_workspace(root: Path, name: str) -> dict[str, bool]:
-    ws = workspace_dir(root, name)
+    ws = project_workspace_dir(root, name)
     return {
         "proposal": (ws / "proposal.md").exists(),
         "lesson": (ws / "lesson-plan.md").exists(),
@@ -128,27 +175,21 @@ def completion_summary(skills: dict[str, Any]) -> tuple[int, int]:
     return done, total
 
 
-def classify_workspace(root: Path, name: str, data: dict[str, Any]) -> str:
-    ws = workspace_dir(root, name)
+def classify_workspace(root: Path, ws: Path, data: dict[str, Any]) -> str:
     status_type = data.get("type")
     if status_type == "planning":
         return "planning"
     if status_type == "project":
         return "project"
-    if status_type in {"plugin", "domain"}:
-        if data.get("target_dir") or data.get("action") or (ws / "plugin.json.draft").exists():
-            return "planning"
     if (ws / "semester-plan.md").exists() or (ws / "month-plan.md").exists() or any(ws.glob("week*-plan.md")):
-        return "planning"
-    if (ws / "brief.md").exists() or (ws / "skill-map.md").exists() or (ws / "plugin.json.draft").exists():
         return "planning"
     return "project"
 
 
-def summarize_workspace(root: Path, name: str) -> dict[str, Any]:
-    ws = workspace_dir(root, name)
-    data = load_status(status_path(root, name))
-    kind = classify_workspace(root, name, data)
+def summarize_workspace(root: Path, ws: Path) -> dict[str, Any]:
+    name = ws.name
+    data = load_status(ws / "status.json")
+    kind = classify_workspace(root, ws, data)
     config_path = ws / "config.yaml"
     methodology = None
     if config_path.exists():
@@ -219,19 +260,22 @@ def summarize_kb(root: Path) -> dict[str, int]:
 
 
 def summarize_status(root: Path) -> dict[str, Any]:
-    changes = changes_dir(root)
     projects = []
     planning = []
-    if changes.exists():
-        for entry in sorted(changes.iterdir()):
+    project_root = project_workspaces_dir(root)
+    if project_root.exists():
+        for entry in sorted(project_root.iterdir()):
             if entry.name == ".gitkeep" or not entry.is_dir():
                 continue
-            summary = summarize_workspace(root, entry.name)
-            if summary["type"] == "project":
-                projects.append(summary)
-            else:
-                planning.append(summary)
+            projects.append(summarize_workspace(root, entry))
+    planning_root = planning_workspaces_dir(root)
+    if planning_root.exists():
+        for entry in sorted(planning_root.iterdir()):
+            if entry.name == ".gitkeep" or not entry.is_dir():
+                continue
+            planning.append(summarize_workspace(root, entry))
     return {
+        "runtime_root": str(runtime_dir(root).relative_to(root)),
         "default_methodology": read_default_methodology(root),
         "knowledge_base": summarize_kb(root),
         "planning": planning,
@@ -241,7 +285,7 @@ def summarize_status(root: Path) -> dict[str, Any]:
 
 
 def validate_project(root: Path, name: str, required_phase: str | None) -> dict[str, Any]:
-    data = load_status(status_path(root, name))
+    data = load_status(project_status_path(root, name))
     if not data:
         raise SystemExit(f"Missing status.json for workspace: {name}")
     if data.get("type") == "planning":
@@ -264,7 +308,7 @@ def validate_project(root: Path, name: str, required_phase: str | None) -> dict[
 
     return {
         "workspace": name,
-        "type": data.get("type", "legacy"),
+        "type": data.get("type", "unknown"),
         "phase": data.get("phase"),
         "deliverables": deliverables,
         "required_skills": required_skills,
@@ -289,20 +333,6 @@ def copy_if_exists(src: Path, dst: Path) -> None:
         shutil.copy2(src, dst)
 
 
-def update_legacy_domain(root: Path, project_name: str, project_status: dict[str, Any]) -> None:
-    domain = project_status.get("domain")
-    if not domain:
-        return
-    domain_status_file = status_path(root, domain)
-    domain_status = load_status(domain_status_file)
-    if not domain_status:
-        return
-    plugins = domain_status.get("plugins")
-    if isinstance(plugins, list) and project_name in plugins:
-        domain_status["plugins"] = [item for item in plugins if item != project_name]
-        write_status(domain_status_file, domain_status)
-
-
 def promote_project(root: Path, name: str, overwrite: bool) -> dict[str, Any]:
     validation = validate_project(root, name, "approved")
     if not validation["ready"]:
@@ -310,11 +340,20 @@ def promote_project(root: Path, name: str, overwrite: bool) -> dict[str, Any]:
             f"Workspace '{name}' is missing required skills: {', '.join(validation['missing_skills'])}"
         )
 
-    project_status_file = status_path(root, name)
+    project_status_file = project_status_path(root, name)
     project_status = load_status(project_status_file)
-    source = workspace_dir(root, name)
+    source = project_workspace_dir(root, name)
     target_collection = project_status.get("target_collection") or read_default_target_collection(root)
-    target = (root / target_collection / name).resolve()
+    target_config = project_status.get("target") or {
+        "kind": "local",
+        "path": f"{target_collection}/{name}",
+    }
+    if target_config.get("kind", "local") != "local":
+        raise SystemExit(
+            f"Unsupported target kind '{target_config.get('kind')}'. Only 'local' is implemented currently."
+        )
+    target_path = target_config.get("path") or f"{target_collection}/{name}"
+    target = (root / target_path).resolve()
 
     if target.exists():
         if not overwrite:
@@ -344,8 +383,6 @@ def promote_project(root: Path, name: str, overwrite: bool) -> dict[str, Any]:
         copy_if_exists(source / filename, target / filename)
     copy_if_exists(source / "activities", target / "activities")
 
-    update_legacy_domain(root, name, project_status)
-
     archive_name = f"{datetime.now().astimezone().date().isoformat()}-{name}"
     archive_target = archive_dir(root) / archive_name
     if archive_target.exists():
@@ -368,12 +405,14 @@ def promote_project(root: Path, name: str, overwrite: bool) -> dict[str, Any]:
 
 
 def ensure_project_status(root: Path, name: str, theme: str | None) -> dict[str, Any]:
-    path = status_path(root, name)
+    path = project_status_path(root, name)
     data = load_status(path)
+    target_collection = data.get("target_collection") or read_default_target_collection(root)
     data.setdefault("type", "project")
     data.setdefault("project", name)
     data.setdefault("theme", theme or name)
-    data.setdefault("target_collection", "courses")
+    data.setdefault("target_collection", target_collection)
+    data.setdefault("target", {"kind": "local", "path": f"{target_collection}/{name}"})
     data.setdefault("phase", "planning")
     data.setdefault("created_at", iso_now())
     data.setdefault("plan_refs", {"semester": None, "month": None, "week": None})
@@ -383,7 +422,7 @@ def ensure_project_status(root: Path, name: str, theme: str | None) -> dict[str,
 
 
 def ensure_planning_status(root: Path, name: str, plan_level: str) -> dict[str, Any]:
-    path = status_path(root, name)
+    path = planning_status_path(root, name)
     data = load_status(path)
     data.setdefault("type", "planning")
     data.setdefault("plan_level", plan_level)
@@ -396,19 +435,19 @@ def ensure_planning_status(root: Path, name: str, plan_level: str) -> dict[str, 
 
 
 def cmd_ensure_project(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root, create=True)
     data = ensure_project_status(root, args.workspace, args.theme)
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 def cmd_ensure_planning(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root, create=True)
     data = ensure_planning_status(root, args.workspace, args.plan_level)
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 def cmd_set_skill(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root)
     path = status_path(root, args.workspace)
     data = load_status(path)
     if not data:
@@ -420,7 +459,7 @@ def cmd_set_skill(args: argparse.Namespace) -> None:
 
 
 def cmd_set_phase(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root)
     path = status_path(root, args.workspace)
     data = load_status(path)
     if not data:
@@ -435,7 +474,7 @@ def cmd_set_phase(args: argparse.Namespace) -> None:
 
 
 def cmd_complete_project_skill(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root, create=True)
     data = ensure_project_status(root, args.workspace, args.theme)
     data.setdefault("skills", {})
     data["skills"][args.skill] = args.value
@@ -445,23 +484,23 @@ def cmd_complete_project_skill(args: argparse.Namespace) -> None:
             data["approved_at"] = iso_now()
             if args.approved_by:
                 data["approved_by"] = args.approved_by
-    write_status(status_path(root, args.workspace), data)
+    write_status(project_status_path(root, args.workspace), data)
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 def cmd_complete_planning(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root, create=True)
     data = ensure_planning_status(root, args.workspace, args.plan_level)
     if args.linked_project:
         linked = data.setdefault("linked_projects", [])
         if args.linked_project not in linked:
             linked.append(args.linked_project)
-    write_status(status_path(root, args.workspace), data)
+    write_status(planning_status_path(root, args.workspace), data)
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 def cmd_link_plan(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root, create=True)
     project = ensure_project_status(root, args.project, None)
     planning = ensure_planning_status(root, args.plan, args.plan_level)
 
@@ -472,8 +511,8 @@ def cmd_link_plan(args: argparse.Namespace) -> None:
     if args.project not in linked:
         linked.append(args.project)
 
-    write_status(status_path(root, args.project), project)
-    write_status(status_path(root, args.plan), planning)
+    write_status(project_status_path(root, args.project), project)
+    write_status(planning_status_path(root, args.plan), planning)
 
     print(
         json.dumps(
@@ -489,7 +528,7 @@ def cmd_link_plan(args: argparse.Namespace) -> None:
 
 
 def cmd_validate_project(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root)
     result = validate_project(root, args.workspace, args.required_phase)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if not result["ready"]:
@@ -497,20 +536,20 @@ def cmd_validate_project(args: argparse.Namespace) -> None:
 
 
 def cmd_summarize_status(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root)
     result = summarize_status(root)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
 def cmd_promote_project(args: argparse.Namespace) -> None:
-    root = find_studio_root(args.root)
+    root = find_runtime_root(args.root)
     result = promote_project(root, args.workspace, args.overwrite)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Workspace status helper")
-    parser.add_argument("--root", help="Project root containing studio/", default=None)
+    parser.add_argument("--root", help="Project root containing .workshop/", default=None)
     sub = parser.add_subparsers(dest="command", required=True)
 
     ensure_project = sub.add_parser("ensure-project")

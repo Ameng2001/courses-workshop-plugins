@@ -13,22 +13,24 @@ Generate an investigable, age-appropriate driving question for a PBL project. Th
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Primary role**: Always load `early-childhood-curriculum-expert.md` (leads question design)
-2. **Scan project experts**: Glob `studio/agents/*.md` — load all custom experts
-3. **Match by relevance**: Select experts relevant to the monthly theme
-4. **Skip template**: Do not load `_domain-expert-template.md`
+1. **Required expert**: Resolve `early-childhood-curriculum-expert.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-designer/agents/`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-designer/agents/*.md`
+5. **Match by relevance**: Select additional experts relevant to the monthly theme
+6. **Skip template**: Do not load `_domain-expert-template.md`
 
-The primary role validates the driving question. Other domain experts review if the theme touches their area.
+The required expert validates the driving question. Other domain experts review if the theme touches their area.
 
 ## Pre-check
 
-1. Verify `studio/` exists. If not, tell the user to run `/workshop-core:init` first.
+1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
 2. Determine the workspace path:
-   - If `$ARGUMENTS` contains a workspace name, use `studio/changes/$ARGUMENTS/`
+   - If `$ARGUMENTS` contains a workspace name, use `.workshop/projects/$ARGUMENTS/`
    - Otherwise create a new workspace from the theme name
 3. Check for optional enrichment files:
-   - `studio/changes/{workspace}/theme-analysis.md` — from workshop-insight
-   - `studio/changes/{workspace}/competency-mapping.md` — from workshop-insight
+   - `.workshop/projects/{workspace}/theme-analysis.md` — from workshop-insight
+   - `.workshop/projects/{workspace}/competency-mapping.md` — from workshop-insight
    - If present, read them for context. If absent, proceed without them.
 
 ## Step 1: Gather Context
@@ -121,7 +123,7 @@ Select the candidate with the highest total score as the **recommended question*
 Use the Agent tool to have the `early-childhood-curriculum-expert` review the recommended question.
 
 Give the expert subagent:
-- The agent definition from `studio/agents/early-childhood-curriculum-expert.md`
+- The agent definition from `experts/early-childhood-curriculum-expert.md`
 - The recommended driving question with its scores
 - The monthly theme and age group
 - The instruction: "Review this driving question for a PBL project. Evaluate: (1) Does it genuinely allow multi-dimensional inquiry, or is it superficially open? (2) Can children of this age actually investigate it through hands-on activities? (3) Does it connect naturally to the monthly theme? (4) Are there methodology concerns? Suggest improvements if needed."
@@ -170,7 +172,7 @@ Wait for user confirmation. If the user wants changes, iterate on the question d
 Once confirmed, create the workspace (if not exists) and write the output:
 
 ```
-studio/changes/{workspace}/
+.workshop/projects/{workspace}/
 └── driving-question.md
 ```
 

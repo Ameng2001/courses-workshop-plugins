@@ -11,7 +11,7 @@ Set the active teaching methodology template for the next deliverable in the cur
 
 ## Pre-check
 
-1. Verify `studio/` exists. If not, tell the user to run `/workshop-core:init` first.
+1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
 2. Determine the workspace path:
    - If `$ARGUMENTS` contains a recognized template ID, use it directly
    - Otherwise, list available templates and ask the user to choose
@@ -32,7 +32,7 @@ Set the active teaching methodology template for the next deliverable in the cur
 
 ## Step 3: Determine Project Workspace
 
-1. If a project workspace is already active (check `studio/changes/*/status.json` for `phase: "designing"`), use that workspace
+1. If a project workspace is already active (check `.workshop/projects/*/status.json` for `phase: "designing"`), use that workspace
 2. If no active workspace, ask the user:
 
 > **请指定项目：**
@@ -41,7 +41,7 @@ Set the active teaching methodology template for the next deliverable in the cur
 
 ## Step 4: Write Configuration
 
-1. Read `studio/changes/{workspace}/config.yaml` (or create if not exists)
+1. Read `.workshop/projects/{workspace}/config.yaml` (or create if not exists)
 2. Set or update the default methodology fields for the next deliverable:
 
 ```yaml
@@ -53,7 +53,7 @@ document_type: {document-type}
 
 3. Write the updated config back
 4. Clarify to the user that this sets the current default for the next deliverable, not an exclusive project-wide lock
-5. If `studio/changes/{workspace}/status.json` does not exist, create a minimal project status file:
+5. If `.workshop/projects/{workspace}/status.json` does not exist, create a minimal project status file:
 
 ```json
 {

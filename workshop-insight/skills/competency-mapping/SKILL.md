@@ -13,25 +13,27 @@ Map 4C competencies (Creativity, Critical Thinking, Communication, Collaboration
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Primary role**: Always load `child-development-psychologist.md` (leads developmental review)
-2. **Scan project experts**: Glob `studio/agents/*.md` — load all custom experts
-3. **Match by relevance**: Select experts relevant to the monthly theme
-4. **Skip template**: Do not load `_domain-expert-template.md`
+1. **Required expert**: Resolve `child-development-psychologist.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-insight/agents/`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-insight/agents/*.md`
+5. **Match by relevance**: Select experts relevant to the monthly theme
+6. **Skip template**: Do not load `_domain-expert-template.md`
 
-The primary role verifies that 4C definitions and learning goals are developmentally appropriate. Domain experts contribute theme-specific behavioral examples.
+The required expert verifies that 4C definitions and learning goals are developmentally appropriate. Additional experts contribute theme-specific behavioral examples.
 
 ## Pre-check
 
-1. Verify `studio/` exists. If not, tell the user to run `/workshop-core:init` first.
+1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
 2. Determine the workspace path:
-   - If `$ARGUMENTS` contains a workspace name, use `studio/changes/$ARGUMENTS/`
+   - If `$ARGUMENTS` contains a workspace name, use `.workshop/projects/$ARGUMENTS/`
    - Otherwise, derive from the theme name (lowercase, kebab-case, 2-3 words)
 3. Check for enrichment files (read if present):
-   - `studio/changes/{workspace}/prior-knowledge.md` — prior knowledge assessment
-   - `studio/changes/{workspace}/theme-analysis.md` — theme background and domain coverage
+   - `.workshop/projects/{workspace}/prior-knowledge.md` — prior knowledge assessment
+   - `.workshop/projects/{workspace}/theme-analysis.md` — theme background and domain coverage
    - If prior-knowledge.md exists, summarize: "已读取前期经验评估，将基于幼儿现有水平设计学习目标。"
    - If theme-analysis.md exists, summarize: "已读取主题分析，将参考《指南》领域覆盖设计能力映射。"
-4. Check if `studio/changes/{workspace}/competency-mapping.md` already exists:
+4. Check if `.workshop/projects/{workspace}/competency-mapping.md` already exists:
    - If yes, read it and ask: "已有4C能力映射文档，是否需要重新生成或在此基础上修改？"
 
 ## Step 1: Gather Context
@@ -173,7 +175,7 @@ This table is optional (only generated when prior-knowledge.md exists) but highl
 Use the Agent tool to have the `child-development-psychologist` review the complete mapping.
 
 Give the expert subagent:
-- The agent definition from `studio/agents/child-development-psychologist.md`
+- The agent definition from `experts/child-development-psychologist.md`
 - The 4C behavioral manifestation table
 - The learning goals list with 4C tags
 - The bridging table (if generated)
@@ -248,7 +250,7 @@ Wait for user confirmation. If the user wants changes, iterate.
 Once confirmed, create the workspace (if not exists) and write:
 
 ```
-studio/changes/{workspace}/
+.workshop/projects/{workspace}/
 └── competency-mapping.md
 ```
 

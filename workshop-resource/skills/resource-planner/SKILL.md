@@ -12,7 +12,7 @@ Match and categorize resources for each PBL activity into 4 categories. Ensures 
 ## Inputs
 
 Accept one of:
-- A workspace path via `$ARGUMENTS` (e.g., `studio/changes/workshop-design/`)
+- A workspace path via `$ARGUMENTS` (e.g., `.workshop/projects/spring-flowers/`)
 - If no path given, scan the current working directory for `activities/`
 
 Required artifacts:

@@ -11,9 +11,9 @@ Move a project workspace from `reviewing` to `approved` after verifying that its
 
 ## Pre-check
 
-1. Verify `studio/` exists.
+1. Verify `.workshop/` exists.
 2. Resolve the workspace name from `$ARGUMENTS`.
-3. Read `studio/changes/{workspace}/status.json`.
+3. Read `.workshop/projects/{workspace}/status.json`.
 4. Confirm `type == "project"`.
 5. Confirm `phase == "reviewing"` or explain why approval is premature.
 6. Check deliverables:

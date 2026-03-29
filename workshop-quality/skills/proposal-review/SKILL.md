@@ -13,20 +13,21 @@ Run a multi-expert peer review of a PBL proposal. Three domain expert agents rev
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Scan project experts**: Glob `studio/agents/*.md` -- load all custom experts the team has created
-2. **Required experts**: The following 3 experts must be found (project-level overrides plugin-level):
+1. **Required experts**: The following 3 experts must be resolved using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-quality/agents/`
    - `early-childhood-curriculum-expert.md`
    - `child-development-psychologist.md`
    - `instructional-designer.md`
-3. **Fallback**: If not found in `studio/agents/`, look in `${CLAUDE_SKILL_DIR}/../../agents/`
-4. **Skip template**: Do not load `_domain-expert-template.md`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-quality/agents/*.md`
+5. **Skip template**: Do not load `_domain-expert-template.md`
 
 If any of the 3 required experts cannot be found, warn the user and proceed with the available experts only.
 
 ## Inputs
 
 Accept one of:
-- A workspace path via `$ARGUMENTS` (e.g., `studio/changes/workshop-design/`)
+- A workspace path via `$ARGUMENTS` (e.g., `.workshop/projects/spring-flowers/`)
 - If no path given, scan the current working directory for `proposal.md` or `activities/`
 
 Required artifacts (at least one must exist):

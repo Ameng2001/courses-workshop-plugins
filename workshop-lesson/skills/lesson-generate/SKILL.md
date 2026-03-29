@@ -118,7 +118,7 @@ For each step, include the full teacher scripts from lesson-detail, formatted fo
 
 ## Step 7: Write Output
 
-Write the complete lesson plan to `studio/changes/{workspace}/lesson-plan.md`.
+Write the complete lesson plan to `.workshop/projects/{workspace}/lesson-plan.md`.
 
 Update workspace status with:
 

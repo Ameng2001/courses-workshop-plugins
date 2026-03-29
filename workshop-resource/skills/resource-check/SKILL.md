@@ -12,7 +12,7 @@ Validate resource lists for completeness, specificity, correct categorization, a
 ## Inputs
 
 Accept one of:
-- A workspace path via `$ARGUMENTS` (e.g., `studio/changes/workshop-design/`)
+- A workspace path via `$ARGUMENTS` (e.g., `.workshop/projects/spring-flowers/`)
 - If no path given, scan the current working directory
 
 Required artifacts:

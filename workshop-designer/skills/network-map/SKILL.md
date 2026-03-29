@@ -11,8 +11,8 @@ Build a structured thematic network diagram that expands a driving question into
 
 ## Pre-check
 
-1. Verify `studio/` exists.
-2. Read `studio/changes/$ARGUMENTS/driving-question.md`. If missing, tell the user to run `/workshop-designer:driving-question` first.
+1. Verify `.workshop/` exists.
+2. Read `.workshop/projects/$ARGUMENTS/driving-question.md`. If missing, tell the user to run `/workshop-designer:driving-question` first.
 3. Read the driving question, age group, and exploration dimensions from the file.
 
 ## Step 1: Extract Exploration Dimensions
@@ -117,7 +117,7 @@ Present the network map to the user:
 
 ## Step 7: Write Output
 
-Write `studio/changes/{workspace}/network-map.md`:
+Write `.workshop/projects/{workspace}/network-map.md`:
 
 ```markdown
 # Network Map: {Theme}

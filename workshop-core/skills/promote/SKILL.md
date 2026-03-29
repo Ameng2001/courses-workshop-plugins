@@ -7,21 +7,21 @@ user-invocable: true
 
 # Workshop Promote
 
-Move approved course deliverables from the development workspace (`studio/changes/`) to their production location, then archive the development record.
+Move approved course deliverables from the runtime workspace (`.workshop/projects/`) to their production location, then archive the development record.
 
 ## Pre-conditions
 
-1. If `$ARGUMENTS` is empty, scan `studio/changes/` for project workspaces with phase `approved` and list them. If exactly one, use it. If multiple, ask the user to choose. If none, explain what's needed and exit.
-2. Read `studio/changes/$ARGUMENTS/status.json`
+1. If `$ARGUMENTS` is empty, scan `.workshop/projects/` for project workspaces with phase `approved` and list them. If exactly one, use it. If multiple, ask the user to choose. If none, explain what's needed and exit.
+2. Read `.workshop/projects/$ARGUMENTS/status.json`
 3. Verify the workspace is a project:
    - If `type == "planning"`, stop and tell the user planning records are not shippable course deliverables
-   - If `type` is missing, treat it as legacy and proceed only if course deliverables are present
+   - If `type` is missing or invalid, stop and require a valid project status file
 4. Verify `phase` is `approved` — if not, show the current phase and explain:
    - `planning` → "This project is still in the planning phase. Continue the design work before promoting."
    - `designing` → "This project is still being designed. Complete the design before promoting."
    - `reviewing` → "This project is under review. Complete the review and set phase to approved first."
    - `shipped` → "This project has already been shipped."
-5. Read `target_collection` from status.json (fallback to `studio/config.yaml` `defaults.target_collection`)
+5. Read `target_collection` from status.json (fallback to `.workshop/config.yaml` `defaults.target_collection`)
 6. Run:
 
 ```bash
@@ -49,8 +49,7 @@ This performs the full promote flow:
 - resolve `target_collection`
 - copy final deliverables into `{target_collection}/{project-name}/`
 - copy supporting artifacts when present
-- remove the project from any legacy domain workspace metadata
-- move the source workspace into `studio/archive/{YYYY-MM-DD}-{name}/`
+- move the source workspace into `.workshop/archive/{YYYY-MM-DD}-{name}/`
 - update archived `status.json` with:
   - `phase = "shipped"`
   - `shipped_at`
@@ -66,7 +65,7 @@ python3 workshop-core/scripts/workspace_status.py promote-project {workspace} --
 
 Print:
 - What was promoted and where (e.g., "Promoted `spring-flowers` to `courses/spring-flowers/`")
-- Archive location (e.g., "Development records archived to `studio/archive/2026-03-28-seasons-pbl/`")
+- Archive location (e.g., "Development records archived to `.workshop/archive/2026-03-28-seasons-pbl/`")
 - Remind user to review and commit: "Review the promoted deliverables, then commit when ready."
 
 ## Does NOT

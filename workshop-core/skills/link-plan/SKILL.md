@@ -25,9 +25,9 @@ spring-flowers 2026-april-week-2 week
 
 ## Pre-check
 
-1. Verify `studio/` exists.
-2. Read `studio/changes/{project}/status.json` if present. If missing, create a minimal project status first.
-3. Read `studio/changes/{plan}/status.json` if present.
+1. Verify `.workshop/` exists.
+2. Read `.workshop/projects/{project}/status.json` if present. If missing, create a minimal project status first.
+3. Read `.workshop/plans/{plan}/status.json` if present.
 4. If the planning status is missing, initialize it with `type = "planning"` and the provided `plan-level`.
 5. If the planning status exists with a conflicting `plan_level`, stop and ask the user to resolve it.
 

@@ -67,4 +67,4 @@
 - Markdown 格式
 - 表格使用标准 Markdown 语法
 - 文件名：`lesson-plan.md`
-- 存储位置：`studio/changes/{workspace}/lesson-plan.md`
+- 存储位置：`.workshop/projects/{workspace}/lesson-plan.md`

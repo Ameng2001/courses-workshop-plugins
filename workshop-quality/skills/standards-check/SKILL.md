@@ -12,7 +12,7 @@ Automatically check a PBL proposal or its component artifacts against 8 quality 
 ## Inputs
 
 Accept one of:
-- A workspace path via `$ARGUMENTS` (e.g., `studio/changes/workshop-design/`)
+- A workspace path via `$ARGUMENTS` (e.g., `.workshop/projects/spring-flowers/`)
 - If no path given, scan the current working directory for `proposal.md` or `activities/`
 
 Required artifacts (at least one must exist):
@@ -243,8 +243,7 @@ Elements to check:
 If any of Check 2 (verb appropriateness) or Check 3 (4C mapping) produced WARNING or FAIL results, use the Agent tool to invoke the child-development-psychologist for a second opinion.
 
 **Agent lookup**:
-1. Scan `studio/agents/child-development-psychologist.md` (project-level)
-2. If not found, scan `${CLAUDE_SKILL_DIR}/../../agents/child-development-psychologist.md` (plugin-level built-in)
+1. Resolve `child-development-psychologist.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-quality/agents/`
 3. If no agent file found, skip this step
 
 **Agent prompt**:

@@ -1,34 +1,37 @@
 ---
 name: init
-description: Initialize a course workshop studio in the current project for project-based, multi-methodology course development (PBL, Five-Step, etc.). Use when starting course design in a new repo, when someone says "set up workshop", or when the workspace is missing. Creates a git-tracked studio with project workspaces and knowledge base support.
+description: Initialize a course workshop runtime in the current project for project-based, multi-methodology course development (PBL, Five-Step, etc.). Use when starting course design in a new repo, when someone says "set up workshop", or when the workspace is missing. Creates a git-tracked `.workshop/` runtime with project workspaces and knowledge base support.
 allowed-tools: Read, Write, Bash, Glob
 user-invocable: true
 ---
 
 # Workshop Init
 
-Initialize `studio/` directory in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable templates. This directory is git-tracked — it holds project workspaces, planning records, and design documentation that have version control value.
+Initialize `.workshop/` in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable templates. This directory is git-tracked — it holds runtime project workspaces, planning records, custom experts, and knowledge assets. `studio/` remains reserved for Astra Studio plugin development.
 
 The target users are kindergarten curriculum directors (课研主任) and classroom teachers (一线教师) who design and deliver courses.
 
 ## Pre-check
 
-1. Check if `studio/` already exists at the project root
-   - If yes: read `studio/config.yaml`, report current status, list active changes via `ls studio/changes/`, and **exit without creating anything**
+1. Check if `.workshop/` already exists at the project root
+   - If yes: read `.workshop/config.yaml`, report current status, list active projects via `ls .workshop/projects/`, and **exit without creating anything**
    - If no: proceed with initialization
-2. Confirm the current directory is a git repo (check for `.git/`). If not, warn: "studio/ is designed to be git-tracked. Consider running `git init` first." Proceed anyway if the user confirms.
+2. Confirm the current directory is a git repo (check for `.git/`). If not, warn: "`.workshop/` is designed to be git-tracked. Consider running `git init` first." Proceed anyway if the user confirms.
 
 ## Steps
 
 ### Step 1: Create directory structure
 
 ```
-studio/
-├── config.yaml          # workspace configuration (written in Step 2)
-├── changes/             # active project workspaces and shared planning records
+.workshop/
+├── config.yaml          # runtime configuration (written in Step 2)
+├── projects/            # active course-theme project workspaces
 │   └── .gitkeep
-├── agents/              # custom domain expert definitions (override built-ins)
+├── plans/               # shared semester / month / week planning workspaces
 │   └── .gitkeep
+├── agents/              # runtime expert definitions
+│   └── custom/          # school/project custom experts
+│       └── .gitkeep
 ├── kb/                  # school-specific knowledge base (managed by workshop-kb)
 │   ├── textbooks/       # 区编教材
 │   │   └── .gitkeep
@@ -40,7 +43,7 @@ studio/
 │   │   └── .gitkeep
 │   └── calendars/       # 学期主题日历
 │       └── .gitkeep
-└── archive/             # completed and archived project deliverables
+└── archive/             # shipped and archived project deliverables
     └── .gitkeep
 ```
 
@@ -48,11 +51,11 @@ Create `.gitkeep` files as empty files — they ensure git tracks the empty dire
 
 ### Step 2: Write config.yaml
 
-Write the following content verbatim to `studio/config.yaml`:
+Write the following content verbatim to `.workshop/config.yaml`:
 
 ```yaml
-# Workshop Studio Configuration
-# Schema: course-workshop — Multi-methodology course design workspace
+# Course Workshop Runtime Configuration
+# Schema: course-workshop — Multi-methodology course runtime
 
 schema: course-workshop
 
@@ -67,7 +70,7 @@ defaults:
     approver_role: curriculum-director
 
 # Lifecycle phases for project workspaces
-# Each active project in studio/changes/ progresses through these phases
+# Each active project in .workshop/projects/ progresses through these phases
 lifecycle:
   phases:
     - planning      # Ideation, theme exploration, domain analysis
@@ -81,13 +84,14 @@ lifecycle:
 ### Step 3: Print summary
 
 ```
-Workshop studio initialized at studio/
+Course workshop runtime initialized at .workshop/
 
-  studio/config.yaml   — studio configuration (schema: course-workshop)
-  studio/changes/      — active project workspaces and shared planning records
-  studio/agents/       — custom domain expert definitions
-  studio/kb/           — school-specific knowledge base
-  studio/archive/      — shipped project deliverables
+  .workshop/config.yaml   — runtime configuration (schema: course-workshop)
+  .workshop/projects/     — active project workspaces
+  .workshop/plans/        — shared planning records
+  .workshop/agents/custom/ — school/project custom experts
+  .workshop/kb/           — school-specific knowledge base
+  .workshop/archive/      — shipped project deliverables
 
 Default methodology: pbl-huamei (华美 PBL 五步法)
 This directory is git-tracked — commit it to share with your team.
@@ -103,8 +107,13 @@ This directory is git-tracked — commit it to share with your team.
 
 ## Notes
 
-- `studio/` is meant to be committed to git — it contains design decisions and rationale
-- `studio/changes/` holds active project workspaces and shared planning records; `studio/archive/` holds shipped work
+- `.workshop/` is meant to be committed to git — it contains runtime project state with collaboration value
+- `studio/` remains the Astra Studio plugin-development workspace and should not be used as the runtime home for course projects
+- `.workshop/projects/` holds active project workspaces; `.workshop/plans/` holds shared planning records; `.workshop/archive/` holds shipped work
+- `experts/` stores reusable domain experts shared across studio and runtime
+- `.workshop/agents/custom/` stores school- or project-specific experts and has the highest override priority at runtime
+- `workshop-*/agents/` remains available for plugin-local experts that should not be promoted to platform-wide shared use
+- `studio/roles/` stores plugin-design-only workflow roles such as product manager or solution architect
 - The default unit of work is a course-theme project workspace with `brief.md`, `status.json`, and one or more deliverables
 - A single project workspace may contain both `proposal.md` and `lesson-plan.md`
 - Semester/month/week planning remains a global asset layer and should be referenced by projects instead of duplicated when possible

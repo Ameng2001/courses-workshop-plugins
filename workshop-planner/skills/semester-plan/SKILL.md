@@ -11,18 +11,20 @@ Generate a structured semester theme calendar that allocates monthly themes, bal
 
 ## Expert Discovery
 
-1. **Primary role**: Load `early-childhood-curriculum-expert.md` (curriculum standards + theme selection)
-2. **Secondary role**: Load `child-development-psychologist.md` (age-appropriate progression)
-3. **Scan project experts**: Glob `studio/agents/*.md`
+1. **Required expert**: Resolve `early-childhood-curriculum-expert.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-planner/agents/`
+2. **Required expert**: Resolve `child-development-psychologist.md` using the same scope order
+3. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+4. **Optional shared experts**: Glob `experts/*.md`
+5. **Optional plugin-local experts**: Glob `workshop-planner/agents/*.md`
 
 ## Pre-check
 
-1. Verify `studio/` exists. If not, tell the user to run `/workshop-core:init` first.
-2. Check `studio/kb/` for existing materials:
-   - Glob `studio/kb/calendars/*.md` for past semester calendars
-   - Glob `studio/kb/textbooks/*.md` for district textbook content
+1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
+2. Check `.workshop/kb/` for existing materials:
+   - Glob `.workshop/kb/calendars/*.md` for past semester calendars
+   - Glob `.workshop/kb/textbooks/*.md` for district textbook content
    - If found, read them as reference for theme selection
-3. Read `studio/config.yaml` for default methodology
+3. Read `.workshop/config.yaml` for default methodology
 
 ## Step 1: Gather Context
 
@@ -86,7 +88,7 @@ Wait for user approval. If the user requests changes, adjust and re-present.
 
 ## Step 7: Write Output
 
-Write the approved calendar to `studio/changes/{workspace}/semester-plan.md`.
+Write the approved calendar to `.workshop/plans/{workspace}/semester-plan.md`.
 
 Treat this workspace as a shared planning record, not as the canonical home for project deliverables.
 

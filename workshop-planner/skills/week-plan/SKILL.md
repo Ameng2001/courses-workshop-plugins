@@ -11,16 +11,18 @@ Generate a detailed daily schedule for one week, mapping activities to time slot
 
 ## Expert Discovery
 
-1. **Primary role**: Load `instructional-designer.md` (feasibility, scheduling)
-2. **Scan project experts**: Glob `studio/agents/*.md`
+1. **Required expert**: Resolve `instructional-designer.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-planner/agents/`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-planner/agents/*.md`
 
 ## Pre-check
 
-1. Verify `studio/` exists
-2. Look for `studio/changes/{workspace}/month-plan.md` — read the target week's sub-theme and methodology
+1. Verify `.workshop/` exists
+2. Look for `.workshop/plans/{workspace}/month-plan.md` — read the target week's sub-theme and methodology
 3. Look for existing activity files:
-   - PBL activities: `studio/changes/{workspace}/activities/clue-*.md`
-   - Lesson plans: `studio/changes/{workspace}/lesson-plan*.md`
+   - PBL activities: `.workshop/projects/{workspace}/activities/clue-*.md`
+   - Lesson plans: `.workshop/projects/{workspace}/lesson-plan*.md`
    - If activities already designed, map them to daily slots
    - If not yet designed, create placeholder slots with suggested topics
 
@@ -74,7 +76,7 @@ Generate practical reminders:
 
 ## Step 5: User Confirmation and Write
 
-Present the week plan. Wait for approval. Write to `studio/changes/{workspace}/week-{N}-plan.md`.
+Present the week plan. Wait for approval. Write to `.workshop/plans/{workspace}/week-{N}-plan.md`.
 
 Update planning status with:
 
