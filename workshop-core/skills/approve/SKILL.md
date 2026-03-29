@@ -60,6 +60,9 @@ This updates:
 - `phase = "approved"`
 - `approved_at = {ISO-8601}`
 - `approved_by = "curriculum-director"`
+- recommended HIL state:
+  - `hil.checkpoint = "approval-gate"`
+  - `hil.status = "approved"`
 
 ## Step 3: Report
 
@@ -73,3 +76,4 @@ Tell the user:
 - Does NOT run promote
 - Does NOT generate missing artifacts
 - Does NOT approve planning workspaces
+- This is the explicit human-in-the-loop command for the final approval gate

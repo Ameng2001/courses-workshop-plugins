@@ -18,6 +18,7 @@ Guide a team from an initialized runtime to a usable starting point.
 - Check whether kb, plans, and projects already exist
 - Collect the team's starting preferences
 - Recommend the next command to run
+- explain where the first HIL checkpoint will occur
 
 ## Does NOT
 
@@ -78,6 +79,11 @@ Based on answers, recommend the next step:
 - If the team is unsure:
   - suggest creating one pilot project first
 
+Also explain the first human review gate:
+
+- planning-first teams usually hit `project-framing` after the first project is created and linked to a plan
+- project-first teams usually hit `project-framing` right after template selection and basic project setup
+
 ## Step 4: Print Next-Step Guide
 
 Output a short tailored guide such as:
@@ -102,3 +108,4 @@ Recommended next steps:
 - `init` = create the runtime skeleton
 - `config` = set system-level runtime parameters
 - `onboarding` = guide the first real use of the system
+- major workflow handoffs should pause at explicit HIL checkpoints
