@@ -1,13 +1,13 @@
 ---
 name: month-plan
-description: Break a monthly theme into 3-4 weekly sub-themes with methodology selection and learning focus for each week. Use when a teacher has a semester plan and needs to detail one month, or when someone says "plan this month" or "break down the April theme".
+description: Break a monthly theme into 3-4 weekly sub-themes with methodology selection and learning focus for each week. This produces a shared planning record that project workspaces can later reference.
 allowed-tools: Read, Write, Glob, Agent
 user-invocable: true
 ---
 
 # Month Plan
 
-Break a monthly theme from the semester calendar into weekly sub-themes with methodology assignments and focus areas.
+Break a monthly theme from the semester calendar into weekly sub-themes with methodology assignments and focus areas. This is a global planning asset, not a project deliverable by itself.
 
 ## Expert Discovery
 
@@ -72,12 +72,29 @@ Present the monthly plan. Wait for approval. If changes requested, adjust.
 Write to `studio/changes/{workspace}/month-plan.md`.
 
 Update `studio/changes/{workspace}/config.yaml` with the month's methodology setting if the user specifies a preference.
+Create or update `studio/changes/{workspace}/status.json`:
+- Set `type = "planning"`
+- Set `plan_level = "month"`
+- Preserve `plan_name`, `created_at`, and `linked_projects` if already present
+- If no file exists, initialize:
+
+```json
+{
+  "type": "planning",
+  "plan_level": "month",
+  "plan_name": "{workspace}",
+  "phase": "planning",
+  "created_at": "{ISO-8601}",
+  "linked_projects": []
+}
+```
 
 Suggest next steps:
 > **下一步:**
 > - `/workshop-planner:week-plan {周次}` — 细化某周的每日安排
-> - `/workshop-designer:design {主题}` — 开始 PBL 周的项目设计
-> - `/workshop-lesson:lesson {主题}` — 开始五步法周的教案设计
+> - 为某个周主题创建或进入 project workspace
+> - `/workshop-designer:design {主题}` — 在项目中开始 PBL 周的设计
+> - `/workshop-lesson:lesson {主题}` — 在项目中开始五步法教案设计
 
 ## Out of Scope
 

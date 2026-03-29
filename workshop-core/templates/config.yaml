@@ -1,29 +1,25 @@
-# Astra Studio Configuration
-# This file is created by /studio-core:init and lives at studio/config.yaml
-# It is git-tracked — shared across the team.
+# Workshop Studio Configuration
+# Schema: course-workshop — Multi-methodology course design workspace
 
-# Development schema
-schema: plugin-first
+schema: course-workshop
 
-# Default settings for new plugin workspaces
 defaults:
-  # Where to promote plugins (relative to project root)
-  target_collection: plugins
-  # Default governance metadata
+  # Default teaching methodology for the next deliverable in a project workspace
+  methodology: pbl-huamei
+  # Where promoted course deliverables are placed (relative to project root)
+  target_collection: courses
+  # Governance: who approves project deliverables before promote
   governance:
-    risk_level: low
-    review_status: draft
+    approval_required: true
+    approver_role: curriculum-director
 
-# Plugin development lifecycle
+# Lifecycle phases for project workspaces
+# Each active project in studio/changes/ progresses through these phases
 lifecycle:
-  # Phases a plugin passes through
   phases:
-    - planning      # brief.md written, skills being decomposed
-    - building      # SKILL.md files being authored and tested
-    - testing       # all skills tested, plugin-level validation
-    - approved      # validation passed, ready to promote
-    - shipped       # promoted to target, archived
-  # Phase required before promote is allowed
-  promote_requires: approved
-  # Automatically archive to studio/archive/ after promote
-  archive_on_promote: true
+    - planning      # Ideation, theme exploration, domain analysis
+    - designing     # Detailed course structure, lesson design, material planning
+    - reviewing     # Expert review, curriculum alignment check, team review
+    - approved      # Ready to promote/ship
+    - shipped       # Promoted to target directory and archived
+  initial_phase: planning

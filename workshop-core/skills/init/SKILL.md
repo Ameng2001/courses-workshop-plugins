@@ -1,13 +1,13 @@
 ---
 name: init
-description: Initialize a course workshop workspace in the current project for multi-methodology course development (PBL, Five-Step, etc.). Use when starting course design in a new repo, when someone says "set up workshop", or when the workspace is missing. Creates a git-tracked workspace with knowledge base support.
+description: Initialize a course workshop studio in the current project for project-based, multi-methodology course development (PBL, Five-Step, etc.). Use when starting course design in a new repo, when someone says "set up workshop", or when the workspace is missing. Creates a git-tracked studio with project workspaces and knowledge base support.
 allowed-tools: Read, Write, Bash, Glob
 user-invocable: true
 ---
 
 # Workshop Init
 
-Initialize `studio/` directory in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable templates. This directory is git-tracked — it holds course design documentation (briefs, proposals, status) that has version control value.
+Initialize `studio/` directory in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable templates. This directory is git-tracked — it holds project workspaces, planning records, and design documentation that have version control value.
 
 The target users are kindergarten curriculum directors (课研主任) and classroom teachers (一线教师) who design and deliver courses.
 
@@ -25,7 +25,7 @@ The target users are kindergarten curriculum directors (课研主任) and classr
 ```
 studio/
 ├── config.yaml          # workspace configuration (written in Step 2)
-├── changes/             # active course design workspaces (one dir per domain or plugin)
+├── changes/             # active project workspaces and shared planning records
 │   └── .gitkeep
 ├── agents/              # custom domain expert definitions (override built-ins)
 │   └── .gitkeep
@@ -40,7 +40,7 @@ studio/
 │   │   └── .gitkeep
 │   └── calendars/       # 学期主题日历
 │       └── .gitkeep
-└── archive/             # completed and archived proposal records
+└── archive/             # completed and archived project deliverables
     └── .gitkeep
 ```
 
@@ -57,22 +57,22 @@ Write the following content verbatim to `studio/config.yaml`:
 schema: course-workshop
 
 defaults:
-  # Default teaching methodology template (can be overridden per workspace)
+  # Default teaching methodology for the next deliverable in a project workspace
   methodology: pbl-huamei
-  # Where promoted proposals are placed (relative to project root)
+  # Where promoted course deliverables are placed (relative to project root)
   target_collection: courses
-  # Governance: who approves proposals before promote
+  # Governance: who approves project deliverables before promote
   governance:
     approval_required: true
     approver_role: curriculum-director
 
-# Lifecycle phases for course proposals
-# Each proposal in studio/changes/ progresses through these phases
+# Lifecycle phases for project workspaces
+# Each active project in studio/changes/ progresses through these phases
 lifecycle:
   phases:
     - planning      # Ideation, theme exploration, domain analysis
-    - designing     # Detailed course structure, activity design, material planning
-    - reviewing     # Expert review, curriculum alignment check
+    - designing     # Detailed course structure, lesson design, material planning
+    - reviewing     # Expert review, curriculum alignment check, team review
     - approved      # Ready to promote/ship
     - shipped       # Promoted to target directory and archived
   initial_phase: planning
@@ -83,11 +83,11 @@ lifecycle:
 ```
 Workshop studio initialized at studio/
 
-  studio/config.yaml   — workspace configuration (schema: course-workshop)
-  studio/changes/      — active course design workspaces
+  studio/config.yaml   — studio configuration (schema: course-workshop)
+  studio/changes/      — active project workspaces and shared planning records
   studio/agents/       — custom domain expert definitions
   studio/kb/           — school-specific knowledge base
-  studio/archive/      — shipped proposal records
+  studio/archive/      — shipped project deliverables
 
 Default methodology: pbl-huamei (华美 PBL 五步法)
 This directory is git-tracked — commit it to share with your team.
@@ -104,7 +104,10 @@ This directory is git-tracked — commit it to share with your team.
 ## Notes
 
 - `studio/` is meant to be committed to git — it contains design decisions and rationale
-- `studio/changes/` holds active work; `studio/archive/` holds shipped work
-- Each course proposal gets its own directory under `changes/` with brief.md, status.json, and design drafts
-- Domain workspaces (type: "domain") can hold shared analysis across multiple course proposals
-- Plugin workspaces (type: "plugin") hold individual course proposal designs
+- `studio/changes/` holds active project workspaces and shared planning records; `studio/archive/` holds shipped work
+- The default unit of work is a course-theme project workspace with `brief.md`, `status.json`, and one or more deliverables
+- A single project workspace may contain both `proposal.md` and `lesson-plan.md`
+- Semester/month/week planning remains a global asset layer and should be referenced by projects instead of duplicated when possible
+- Recommended metadata:
+  - project workspace: `type: "project"` + `plan_refs`
+  - planning workspace: `type: "planning"` + `plan_level`

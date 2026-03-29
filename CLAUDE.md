@@ -2,6 +2,15 @@
 
 Multi-methodology course design toolkit for kindergarten curriculum directors (课研主任) and classroom teachers (一线教师). Supports PBL proposals, Five-Step lesson plans, semester/month/week planning, and school knowledge base management.
 
+## Working Principles
+
+- The primary user-facing object is a `project workspace`, centered on one course theme.
+- A single project may contain multiple deliverables, including a PBL proposal, one or more lesson plans, resource plans, and review artifacts.
+- Templates are output-scoped defaults, not project-wide locks.
+- Semester/month/week planning is a global asset layer; projects should reference relevant plan slices instead of copying full plans.
+- `workshop-*` directories are the source of truth for implementation.
+- `studio/changes/*` contains active project workspaces and shared planning records tracked in git.
+
 ## Repository Structure
 
 ```
@@ -14,7 +23,7 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 ├── workshop-planner/      # Hierarchical curriculum planning (semester → month → week) — 3 skills
 ├── workshop-kb/           # School knowledge base (import, index, query) — 3 skills
 ├── workshop-templates/    # Teaching methodology template registry (list, select) — 2 skills
-└── studio/                # Design workspace (planning artifacts, git-tracked)
+└── studio/                # Project workspaces and shared planning records (git-tracked)
 ```
 
 ## Plugin Dependencies
@@ -30,6 +39,19 @@ workshop-lesson     (depends on workshop-core, workshop-templates)
 workshop-planner    (depends on workshop-core, workshop-templates)
 workshop-resource   (depends on workshop-core)
 ```
+
+## User Entry Model
+
+Users should enter through a project, not through a plugin list:
+
+1. Create or enter a course-theme project workspace
+2. Optionally choose a template for the next deliverable
+3. Produce one or more outputs inside that project:
+   - PBL proposal
+   - Five-Step lesson plan
+   - Resource plan
+   - Quality review
+4. Link the project to global semester/month/week planning context when relevant
 
 ## Design Pipelines
 
@@ -66,6 +88,13 @@ semester-plan → month-plan → week-plan
 - **early-childhood-curriculum-expert** — PBL methodology, curriculum standards, age-appropriateness
 - **child-development-psychologist** — developmental stages, 4C mapping, prior knowledge
 - **instructional-designer** — activity feasibility, resource planning, teacher instructions
+
+## Planning vs Project Workspaces
+
+- Project workspaces are the default unit of collaboration and delivery.
+- Planning records are shared assets that may live alongside projects during the current transition.
+- Do not treat planner outputs as the canonical home for course deliverables.
+- Do not duplicate implementation content into `studio/changes/*`; edit plugin files under `workshop-*` directly.
 
 ## Development Workflow
 
