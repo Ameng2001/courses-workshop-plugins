@@ -90,17 +90,12 @@ Write the approved calendar to `studio/changes/{workspace}/semester-plan.md`.
 
 Treat this workspace as a shared planning record, not as the canonical home for project deliverables.
 
-Create or update `studio/changes/{workspace}/status.json`:
+Update planning status with:
 
-```json
-{
-  "type": "planning",
-  "plan_level": "semester",
-  "plan_name": "{workspace}",
-  "phase": "planning",
-  "created_at": "{ISO-8601}",
-  "linked_projects": []
-}
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-planning \
+  {workspace} \
+  --plan-level semester
 ```
 
 Suggest next steps:

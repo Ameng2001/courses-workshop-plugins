@@ -86,28 +86,14 @@ Present the objectives. Wait for approval.
 
 Write to `studio/changes/{workspace}/lesson-objective.md`.
 
-Create or update `status.json` in the same workspace:
+Update workspace status with:
 
-```json
-{
-  "type": "project",
-  "project": "{workspace}",
-  "theme": "{lesson topic}",
-  "target_collection": "courses",
-  "phase": "planning",
-  "created_at": "{ISO-8601}",
-  "plan_refs": {
-    "semester": null,
-    "month": null,
-    "week": null
-  },
-  "skills": {
-    "lesson-objective": "done"
-  }
-}
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} lesson-objective \
+  --theme "{lesson topic}" \
+  --phase planning
 ```
-
-If the file already exists, preserve existing metadata and merge the new skill status.
 
 Suggest next steps:
 > **下一步:**

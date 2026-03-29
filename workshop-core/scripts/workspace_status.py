@@ -122,6 +122,32 @@ def cmd_set_phase(args: argparse.Namespace) -> None:
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
+def cmd_complete_project_skill(args: argparse.Namespace) -> None:
+    root = find_studio_root(args.root)
+    data = ensure_project_status(root, args.workspace, args.theme)
+    data.setdefault("skills", {})
+    data["skills"][args.skill] = args.value
+    if args.phase:
+        data["phase"] = args.phase
+        if args.phase == "approved":
+            data["approved_at"] = iso_now()
+            if args.approved_by:
+                data["approved_by"] = args.approved_by
+    write_status(status_path(root, args.workspace), data)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def cmd_complete_planning(args: argparse.Namespace) -> None:
+    root = find_studio_root(args.root)
+    data = ensure_planning_status(root, args.workspace, args.plan_level)
+    if args.linked_project:
+        linked = data.setdefault("linked_projects", [])
+        if args.linked_project not in linked:
+            linked.append(args.linked_project)
+    write_status(status_path(root, args.workspace), data)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
 def cmd_link_plan(args: argparse.Namespace) -> None:
     root = find_studio_root(args.root)
     project = ensure_project_status(root, args.project, None)
@@ -176,6 +202,25 @@ def build_parser() -> argparse.ArgumentParser:
     set_phase.add_argument("phase", choices=["planning", "designing", "reviewing", "approved", "shipped"])
     set_phase.add_argument("--approved-by", default=None)
     set_phase.set_defaults(func=cmd_set_phase)
+
+    complete_project_skill = sub.add_parser("complete-project-skill")
+    complete_project_skill.add_argument("workspace")
+    complete_project_skill.add_argument("skill")
+    complete_project_skill.add_argument("--theme", default=None)
+    complete_project_skill.add_argument("--value", default="done")
+    complete_project_skill.add_argument(
+        "--phase",
+        choices=["planning", "designing", "reviewing", "approved", "shipped"],
+        default=None,
+    )
+    complete_project_skill.add_argument("--approved-by", default=None)
+    complete_project_skill.set_defaults(func=cmd_complete_project_skill)
+
+    complete_planning = sub.add_parser("complete-planning")
+    complete_planning.add_argument("workspace")
+    complete_planning.add_argument("--plan-level", choices=["semester", "month", "week"], required=True)
+    complete_planning.add_argument("--linked-project", default=None)
+    complete_planning.set_defaults(func=cmd_complete_planning)
 
     link_plan = sub.add_parser("link-plan")
     link_plan.add_argument("project")

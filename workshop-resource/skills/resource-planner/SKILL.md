@@ -85,10 +85,12 @@ Digital content including videos, songs, images, and interactive resources.
 6. **Generate PBL Box summary** -- aggregate order across all activities
 7. **Write output** -- save resource-plan.md
 
-After writing `resource-plan.md`, update `status.json`:
-- Preserve all existing fields
-- Set `skills.resource-planner = "done"`
-- Keep `phase` unchanged unless it is missing, in which case initialize it from existing project state
+After writing `resource-plan.md`, update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} resource-planner
+```
 
 ## Step 1: Read Activities
 

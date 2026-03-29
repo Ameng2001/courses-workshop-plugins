@@ -212,10 +212,13 @@ For each clue, write `studio/changes/{workspace}/activities/clue-{N}.md`:
 
 Create the `activities/` directory if it doesn't exist.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.activity-design = "done"` when all requested clue files are written
-- Set `phase` to `designing`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} activity-design \
+  --phase designing
+```
 
 If all 3 clues are designed, tell the user: "All activities designed. Run `/workshop-designer:proposal-generate {workspace}` to compile the complete PBL proposal."
 

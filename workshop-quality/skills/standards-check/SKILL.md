@@ -34,10 +34,13 @@ Also update `status.json` in the same workspace when present.
 4. **Compile report** -- assemble results into structured output
 5. **Present and save** -- show summary to user, write full report
 
-After writing `quality-report.md`, update `status.json`:
-- Preserve all existing fields
-- Set `skills.standards-check = "done"`
-- Keep `phase` at `reviewing`
+After writing `quality-report.md`, update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} standards-check \
+  --phase reviewing
+```
 
 ## Step 1: Locate Artifacts
 

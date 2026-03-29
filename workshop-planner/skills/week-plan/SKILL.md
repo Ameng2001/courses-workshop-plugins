@@ -76,21 +76,12 @@ Generate practical reminders:
 
 Present the week plan. Wait for approval. Write to `studio/changes/{workspace}/week-{N}-plan.md`.
 
-Create or update `studio/changes/{workspace}/status.json`:
-- Set `type = "planning"`
-- Set `plan_level = "week"`
-- Preserve `plan_name`, `created_at`, and `linked_projects` if already present
-- If no file exists, initialize:
+Update planning status with:
 
-```json
-{
-  "type": "planning",
-  "plan_level": "week",
-  "plan_name": "{workspace}",
-  "phase": "planning",
-  "created_at": "{ISO-8601}",
-  "linked_projects": []
-}
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-planning \
+  {workspace} \
+  --plan-level week
 ```
 
 Suggest next steps:

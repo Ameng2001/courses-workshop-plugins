@@ -111,11 +111,13 @@ Content:
 
 Write `studio/changes/{workspace}/proposal.md` with the complete 5-section document.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.proposal-generate = "done"`
-- Set `phase` to `reviewing`
-- Ensure `type` remains `project`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} proposal-generate \
+  --phase reviewing
+```
 
 Present summary to user:
 

@@ -96,11 +96,13 @@ Present the scaffold overview. Wait for approval.
 
 Write to `studio/changes/{workspace}/lesson-scaffold.md`.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.lesson-scaffold = "done"`
-- If `phase` is missing, initialize it to `planning`
-- If `lesson-objective.md` and `lesson-scaffold.md` both exist, `phase` may remain `planning`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} lesson-scaffold \
+  --phase planning
+```
 
 Suggest next steps:
 > **下一步:**

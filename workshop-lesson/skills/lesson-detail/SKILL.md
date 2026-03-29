@@ -100,10 +100,13 @@ Present the detailed lesson. Wait for approval.
 
 Write to `studio/changes/{workspace}/lesson-detail.md`.
 
-Update `studio/changes/{workspace}/status.json`:
-- Preserve all existing fields
-- Set `skills.lesson-detail = "done"`
-- If `lesson-objective.md`, `lesson-scaffold.md`, and `lesson-detail.md` all exist, set `phase` to `designing`
+Update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} lesson-detail \
+  --phase designing
+```
 
 Suggest next steps:
 > **下一步:**

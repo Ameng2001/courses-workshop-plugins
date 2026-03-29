@@ -53,10 +53,13 @@ Also update `status.json` in the same workspace when present.
 5. **Score and recommend** -- produce overall score and top 5 recommendations
 6. **Write output** -- save review-comments.md
 
-After writing `review-comments.md`, update `status.json`:
-- Preserve all existing fields
-- Set `skills.proposal-review = "done"`
-- Keep `phase` at `reviewing`
+After writing `review-comments.md`, update workspace status with:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+  {workspace} proposal-review \
+  --phase reviewing
+```
 
 ## Step 1: Gather All Artifacts
 
