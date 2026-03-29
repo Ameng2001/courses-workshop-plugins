@@ -52,17 +52,19 @@ If anything required is missing, stop and tell the user exactly what to complete
 Run:
 
 ```bash
+python3 workshop-core/scripts/workspace_status.py approve-hil {workspace} approval-gate --approved-by curriculum-director
 python3 workshop-core/scripts/workspace_status.py set-phase {workspace} approved --approved-by curriculum-director
 ```
 
 This updates:
 
+- `hil.checkpoint = "approval-gate"`
+- `hil.status = "approved"`
+- `hil.approved_at = {ISO-8601}`
+- `hil.approved_by = "curriculum-director"`
 - `phase = "approved"`
 - `approved_at = {ISO-8601}`
 - `approved_by = "curriculum-director"`
-- recommended HIL state:
-  - `hil.checkpoint = "approval-gate"`
-  - `hil.status = "approved"`
 
 ## Step 3: Report
 

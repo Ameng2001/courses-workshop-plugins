@@ -133,6 +133,27 @@ def write_status(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def ensure_hil_state(data: dict[str, Any], checkpoint: str | None = None) -> dict[str, Any]:
+    hil = data.setdefault(
+        "hil",
+        {
+            "checkpoint": checkpoint or "project-framing",
+            "status": "not_started",
+            "requested_at": None,
+            "approved_at": None,
+            "approved_by": None,
+            "notes": "",
+        },
+    )
+    hil.setdefault("checkpoint", checkpoint or "project-framing")
+    hil.setdefault("status", "not_started")
+    hil.setdefault("requested_at", None)
+    hil.setdefault("approved_at", None)
+    hil.setdefault("approved_by", None)
+    hil.setdefault("notes", "")
+    return hil
+
+
 def deliverables_for_workspace(root: Path, name: str) -> dict[str, bool]:
     ws = project_workspace_dir(root, name)
     return {
@@ -224,6 +245,7 @@ def summarize_workspace(root: Path, ws: Path) -> dict[str, Any]:
         "phase": data.get("phase", "unknown"),
         "methodology": methodology,
         "plan_refs": data.get("plan_refs", {"semester": None, "month": None, "week": None}),
+        "hil": data.get("hil"),
         "deliverables": deliverable_list,
         "skills_done": done,
         "skills_total": total,
@@ -310,6 +332,7 @@ def validate_project(root: Path, name: str, required_phase: str | None) -> dict[
         "workspace": name,
         "type": data.get("type", "unknown"),
         "phase": data.get("phase"),
+        "hil": data.get("hil"),
         "deliverables": deliverables,
         "required_skills": required_skills,
         "missing_skills": missing_skills,
@@ -417,6 +440,7 @@ def ensure_project_status(root: Path, name: str, theme: str | None) -> dict[str,
     data.setdefault("created_at", iso_now())
     data.setdefault("plan_refs", {"semester": None, "month": None, "week": None})
     data.setdefault("skills", {})
+    ensure_hil_state(data)
     write_status(path, data)
     return data
 
@@ -430,6 +454,65 @@ def ensure_planning_status(root: Path, name: str, plan_level: str) -> dict[str, 
     data.setdefault("phase", "planning")
     data.setdefault("created_at", iso_now())
     data.setdefault("linked_projects", [])
+    write_status(path, data)
+    return data
+
+
+def request_hil(root: Path, name: str, checkpoint: str, notes: str | None) -> dict[str, Any]:
+    path = project_status_path(root, name)
+    data = load_status(path)
+    if not data:
+        raise SystemExit(f"Missing status.json for workspace: {name}")
+    if data.get("type") != "project":
+        raise SystemExit(f"Workspace '{name}' is not a project.")
+    hil = ensure_hil_state(data, checkpoint)
+    hil["checkpoint"] = checkpoint
+    hil["status"] = "awaiting_review"
+    hil["requested_at"] = iso_now()
+    hil["approved_at"] = None
+    hil["approved_by"] = None
+    if notes is not None:
+        hil["notes"] = notes
+    write_status(path, data)
+    return data
+
+
+def approve_hil(root: Path, name: str, checkpoint: str, approved_by: str | None, notes: str | None) -> dict[str, Any]:
+    path = project_status_path(root, name)
+    data = load_status(path)
+    if not data:
+        raise SystemExit(f"Missing status.json for workspace: {name}")
+    if data.get("type") != "project":
+        raise SystemExit(f"Workspace '{name}' is not a project.")
+    hil = ensure_hil_state(data, checkpoint)
+    hil["checkpoint"] = checkpoint
+    hil["status"] = "approved"
+    if hil.get("requested_at") is None:
+        hil["requested_at"] = iso_now()
+    hil["approved_at"] = iso_now()
+    hil["approved_by"] = approved_by
+    if notes is not None:
+        hil["notes"] = notes
+    write_status(path, data)
+    return data
+
+
+def reject_hil(root: Path, name: str, checkpoint: str, notes: str | None) -> dict[str, Any]:
+    path = project_status_path(root, name)
+    data = load_status(path)
+    if not data:
+        raise SystemExit(f"Missing status.json for workspace: {name}")
+    if data.get("type") != "project":
+        raise SystemExit(f"Workspace '{name}' is not a project.")
+    hil = ensure_hil_state(data, checkpoint)
+    hil["checkpoint"] = checkpoint
+    hil["status"] = "changes_requested"
+    if hil.get("requested_at") is None:
+        hil["requested_at"] = iso_now()
+    hil["approved_at"] = None
+    hil["approved_by"] = None
+    if notes is not None:
+        hil["notes"] = notes
     write_status(path, data)
     return data
 
@@ -469,7 +552,32 @@ def cmd_set_phase(args: argparse.Namespace) -> None:
         data["approved_at"] = iso_now()
         if args.approved_by:
             data["approved_by"] = args.approved_by
+        hil = ensure_hil_state(data, "approval-gate")
+        hil["checkpoint"] = "approval-gate"
+        hil["status"] = "approved"
+        if hil.get("requested_at") is None:
+            hil["requested_at"] = iso_now()
+        hil["approved_at"] = data["approved_at"]
+        hil["approved_by"] = args.approved_by
     write_status(path, data)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def cmd_request_hil(args: argparse.Namespace) -> None:
+    root = find_runtime_root(args.root)
+    data = request_hil(root, args.workspace, args.checkpoint, args.notes)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def cmd_approve_hil(args: argparse.Namespace) -> None:
+    root = find_runtime_root(args.root)
+    data = approve_hil(root, args.workspace, args.checkpoint, args.approved_by, args.notes)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def cmd_reject_hil(args: argparse.Namespace) -> None:
+    root = find_runtime_root(args.root)
+    data = reject_hil(root, args.workspace, args.checkpoint, args.notes)
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
@@ -484,6 +592,13 @@ def cmd_complete_project_skill(args: argparse.Namespace) -> None:
             data["approved_at"] = iso_now()
             if args.approved_by:
                 data["approved_by"] = args.approved_by
+            hil = ensure_hil_state(data, "approval-gate")
+            hil["checkpoint"] = "approval-gate"
+            hil["status"] = "approved"
+            if hil.get("requested_at") is None:
+                hil["requested_at"] = iso_now()
+            hil["approved_at"] = data["approved_at"]
+            hil["approved_by"] = args.approved_by
     write_status(project_status_path(root, args.workspace), data)
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
@@ -573,6 +688,34 @@ def build_parser() -> argparse.ArgumentParser:
     set_phase.add_argument("phase", choices=["planning", "designing", "reviewing", "approved", "shipped"])
     set_phase.add_argument("--approved-by", default=None)
     set_phase.set_defaults(func=cmd_set_phase)
+
+    request_hil_cmd = sub.add_parser("request-hil")
+    request_hil_cmd.add_argument("workspace")
+    request_hil_cmd.add_argument(
+        "checkpoint",
+        choices=["project-framing", "design-scaffold", "deliverable-draft", "approval-gate"],
+    )
+    request_hil_cmd.add_argument("--notes", default=None)
+    request_hil_cmd.set_defaults(func=cmd_request_hil)
+
+    approve_hil_cmd = sub.add_parser("approve-hil")
+    approve_hil_cmd.add_argument("workspace")
+    approve_hil_cmd.add_argument(
+        "checkpoint",
+        choices=["project-framing", "design-scaffold", "deliverable-draft", "approval-gate"],
+    )
+    approve_hil_cmd.add_argument("--approved-by", default=None)
+    approve_hil_cmd.add_argument("--notes", default=None)
+    approve_hil_cmd.set_defaults(func=cmd_approve_hil)
+
+    reject_hil_cmd = sub.add_parser("reject-hil")
+    reject_hil_cmd.add_argument("workspace")
+    reject_hil_cmd.add_argument(
+        "checkpoint",
+        choices=["project-framing", "design-scaffold", "deliverable-draft", "approval-gate"],
+    )
+    reject_hil_cmd.add_argument("--notes", default=None)
+    reject_hil_cmd.set_defaults(func=cmd_reject_hil)
 
     complete_project_skill = sub.add_parser("complete-project-skill")
     complete_project_skill.add_argument("workspace")
