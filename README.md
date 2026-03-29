@@ -187,6 +187,7 @@ agent 作用域也分层：
 
 更多原则见 `docs/project-workspace-principles.md`。
 HIL 规则见 [docs/hil-checkpoint-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/hil-checkpoint-model.md)。
+脚本化边界见 [docs/skill-script-boundary.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/skill-script-boundary.md)。
 
 ## 许可证
 
