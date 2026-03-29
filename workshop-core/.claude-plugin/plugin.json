@@ -1,13 +1,13 @@
 {
   "name": "workshop-core",
   "version": "0.1.0",
-  "description": "Course workshop workspace management — initialize workspace, track proposal development status, and archive completed proposals",
+  "description": "Course workshop workspace management — initialize project workspaces, manage status, link planning context, approve deliverables, and archive completed work",
   "author": {
     "name": "VanLengs",
     "url": "https://github.com/VanLengs"
   },
   "license": "Apache-2.0",
-  "keywords": ["workshop", "workspace", "pbl", "lifecycle"],
+  "keywords": ["workshop", "workspace", "project", "planning", "lifecycle"],
   "skills": "./skills/",
   "commands": "./commands/"
 }
