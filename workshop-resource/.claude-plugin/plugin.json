@@ -1,6 +1,6 @@
 {
   "name": "workshop-resource",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "PBL activity resource management — automated resource matching, categorization (PBL Box / Journal / self-prepared), and completeness validation",
   "author": {
     "name": "VanLengs",
