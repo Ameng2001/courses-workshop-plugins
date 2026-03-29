@@ -92,18 +92,34 @@ Invoke instructional designer to check:
 - Activity variety (not all steps are "teacher talks")
 - Differentiation adequacy in S3
 
-## Step 5: User Confirmation and Write
+## Step 5: Write Draft and Request HIL
+
+Write to `.workshop/projects/{workspace}/lesson-scaffold.md`.
+
+Then request the design scaffold checkpoint:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py request-hil \
+  {workspace} design-scaffold \
+  --notes "lesson scaffold draft ready for review"
+```
 
 Present the scaffold overview. Wait for approval.
 
-Write to `.workshop/projects/{workspace}/lesson-scaffold.md`.
+After approval, mark the checkpoint approved:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py approve-hil \
+  {workspace} design-scaffold \
+  --approved-by curriculum-director
+```
 
 Update workspace status with:
 
 ```bash
 python3 workshop-core/scripts/workspace_status.py complete-project-skill \
   {workspace} lesson-scaffold \
-  --phase planning
+  --phase designing
 ```
 
 Suggest next steps:

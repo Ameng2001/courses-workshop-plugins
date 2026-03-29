@@ -125,7 +125,7 @@ Incorporate corrections before presenting to the user.
 >
 > 确认还是需要调整？
 
-## Step 8: Write Output
+## Step 8: Write Output and Request HIL
 
 Write `.workshop/projects/{workspace}/inquiry-clues.md`:
 
@@ -166,6 +166,22 @@ Clue 1 → Clue 2 → Clue 3:
 
 - Curriculum expert: {feedback}
 - Psychologist: {feedback}
+```
+
+Request the design scaffold checkpoint:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py request-hil \
+  {workspace} design-scaffold \
+  --notes "inquiry scaffold draft ready for review"
+```
+
+After the user confirms the 3-clue structure, mark the checkpoint approved:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py approve-hil \
+  {workspace} design-scaffold \
+  --approved-by curriculum-director
 ```
 
 Update workspace status with:

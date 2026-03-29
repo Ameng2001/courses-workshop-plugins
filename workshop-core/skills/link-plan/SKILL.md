@@ -46,6 +46,14 @@ This updates:
 - planning side:
   - append `{project}` to `linked_projects`
 
+If this link completes the initial framing context, request the first HIL checkpoint:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py request-hil \
+  {project} project-framing \
+  --notes "plan linked; confirm project framing against planning context"
+```
+
 ## Step 2: Report
 
 Summarize:
@@ -53,6 +61,7 @@ Summarize:
 - project linked
 - plan linked
 - updated `plan_refs`
+- whether `project-framing` is now ready for human approval
 
 ## Out of Scope
 

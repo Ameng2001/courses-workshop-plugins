@@ -107,9 +107,25 @@ Content:
 > Date: {YYYY-MM-DD}
 ```
 
-### Step 7: Write Output
+### Step 7: Write Output and Request HIL
 
 Write `.workshop/projects/{workspace}/proposal.md` with the complete 5-section document.
+
+Request the deliverable draft checkpoint:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py request-hil \
+  {workspace} deliverable-draft \
+  --notes "proposal draft ready for review"
+```
+
+After the user confirms the assembled proposal draft, approve the checkpoint:
+
+```bash
+python3 workshop-core/scripts/workspace_status.py approve-hil \
+  {workspace} deliverable-draft \
+  --approved-by curriculum-director
+```
 
 Update workspace status with:
 
