@@ -1,13 +1,13 @@
 ---
 name: template-select
-description: Set the active teaching methodology template for the current workspace. Use when a user wants to choose a methodology (PBL, Five-Step, etc.) before starting course design, or when someone says "I want to use five-step method" or "switch to PBL".
+description: Set the active teaching methodology template for the next deliverable in the current project workspace. Use when a user wants to choose a methodology (PBL, Five-Step, etc.) before starting course design, or when someone says "I want to use five-step method" or "switch to PBL".
 allowed-tools: Read, Write, Glob
 user-invocable: true
 ---
 
 # Template Select
 
-Set the active teaching methodology template for the current workspace. The selected template determines which design pipeline to use, what output format to generate, and which coding convention to follow.
+Set the active teaching methodology template for the next deliverable in the current project workspace. The selected template determines which design pipeline to use, what output format to generate, and which coding convention to follow. A single project may use different templates for different deliverables over time.
 
 ## Pre-check
 
@@ -30,19 +30,19 @@ Set the active teaching methodology template for the current workspace. The sele
 2. Parse the manifest and extract key fields:
    - `id`, `name`, `pipeline.plugin`, `output.document_type`, `coding.prefix`
 
-## Step 3: Determine Workspace
+## Step 3: Determine Project Workspace
 
-1. If a workspace is already active (check `studio/changes/*/status.json` for `phase: "designing"`), use that workspace
+1. If a project workspace is already active (check `studio/changes/*/status.json` for `phase: "designing"`), use that workspace
 2. If no active workspace, ask the user:
 
-> **请指定工作区：**
-> - 输入一个主题名称创建新工作区（如"春天的花"）
-> - 或输入已有工作区名称
+> **请指定项目：**
+> - 输入一个主题名称创建新项目工作区（如"春天的花"）
+> - 或输入已有项目工作区名称
 
 ## Step 4: Write Configuration
 
 1. Read `studio/changes/{workspace}/config.yaml` (or create if not exists)
-2. Set or update the `methodology` field:
+2. Set or update the default methodology fields for the next deliverable:
 
 ```yaml
 methodology: {template-id}
@@ -52,6 +52,25 @@ document_type: {document-type}
 ```
 
 3. Write the updated config back
+4. Clarify to the user that this sets the current default for the next deliverable, not an exclusive project-wide lock
+5. If `studio/changes/{workspace}/status.json` does not exist, create a minimal project status file:
+
+```json
+{
+  "type": "project",
+  "project": "{workspace}",
+  "theme": "{workspace or user-provided theme}",
+  "target_collection": "courses",
+  "phase": "planning",
+  "created_at": "{ISO-8601}",
+  "plan_refs": {
+    "semester": null,
+    "month": null,
+    "week": null
+  },
+  "skills": {}
+}
+```
 
 ## Step 5: Confirm and Guide
 
@@ -74,6 +93,6 @@ Display confirmation:
 
 ## Out of Scope
 
-- This skill does NOT run the design pipeline — only sets the template
+- This skill does NOT run the design pipeline — it only sets the default template for the next deliverable
 - This skill does NOT create templates — it selects from existing ones
 - This skill does NOT modify template content

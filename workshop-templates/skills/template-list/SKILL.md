@@ -7,7 +7,7 @@ user-invocable: true
 
 # Template List
 
-Display all available teaching methodology templates registered in the system. Each template defines a complete design pipeline, output format, and coding convention.
+Display all available teaching methodology templates registered in the system. Each template defines a complete design pipeline, output format, and coding convention for a single deliverable inside a project workspace.
 
 ## Step 1: Scan Templates
 
@@ -55,7 +55,7 @@ Present as a formatted comparison table:
 After displaying the list, suggest:
 
 > **下一步 / Next steps:**
-> - 使用 `/workshop-templates:template-select {id}` 为当前工作区选择模板
+> - 使用 `/workshop-templates:template-select {id}` 为当前项目中的下一个产物选择模板
 > - 选择后，系统会自动路由到对应的设计流水线
 
 ## Out of Scope

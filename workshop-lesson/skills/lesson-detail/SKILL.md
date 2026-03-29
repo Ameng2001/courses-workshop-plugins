@@ -100,6 +100,11 @@ Present the detailed lesson. Wait for approval.
 
 Write to `studio/changes/{workspace}/lesson-detail.md`.
 
+Update `studio/changes/{workspace}/status.json`:
+- Preserve all existing fields
+- Set `skills.lesson-detail = "done"`
+- If `lesson-objective.md`, `lesson-scaffold.md`, and `lesson-detail.md` all exist, set `phase` to `designing`
+
 Suggest next steps:
 > **下一步:**
 > - `/workshop-lesson:lesson-generate` — 编译为标准教案格式

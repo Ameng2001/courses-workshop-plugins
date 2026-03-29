@@ -42,6 +42,7 @@ Optional supporting artifacts:
 ## Outputs
 
 Write `review-comments.md` in the same workspace directory.
+Also update `status.json` in the same workspace when present.
 
 ## Workflow
 
@@ -51,6 +52,11 @@ Write `review-comments.md` in the same workspace directory.
 4. **Consolidate feedback** -- merge expert opinions, resolve conflicts
 5. **Score and recommend** -- produce overall score and top 5 recommendations
 6. **Write output** -- save review-comments.md
+
+After writing `review-comments.md`, update `status.json`:
+- Preserve all existing fields
+- Set `skills.proposal-review = "done"`
+- Keep `phase` at `reviewing`
 
 ## Step 1: Gather All Artifacts
 

@@ -1,13 +1,13 @@
 ---
 name: semester-plan
-description: Create a semester-level theme calendar with monthly topic allocation, domain balance checking, and cross-month progression logic. Use at the start of a new semester, when a teacher needs to plan the whole term, or when someone says "help me plan next semester".
+description: Create a semester-level global theme calendar with monthly topic allocation, domain balance checking, and cross-month progression logic. Use at the start of a new semester, when a teacher needs to plan the whole term, or when someone says "help me plan next semester".
 allowed-tools: Read, Write, Glob, Agent
 user-invocable: true
 ---
 
 # Semester Plan
 
-Generate a structured semester theme calendar that allocates monthly themes, balances learning domains, and establishes cross-month progression.
+Generate a structured semester theme calendar that allocates monthly themes, balances learning domains, and establishes cross-month progression. This is a global planning asset that later project workspaces may reference.
 
 ## Expert Discovery
 
@@ -88,10 +88,25 @@ Wait for user approval. If the user requests changes, adjust and re-present.
 
 Write the approved calendar to `studio/changes/{workspace}/semester-plan.md`.
 
+Treat this workspace as a shared planning record, not as the canonical home for project deliverables.
+
+Create or update `studio/changes/{workspace}/status.json`:
+
+```json
+{
+  "type": "planning",
+  "plan_level": "semester",
+  "plan_name": "{workspace}",
+  "phase": "planning",
+  "created_at": "{ISO-8601}",
+  "linked_projects": []
+}
+```
+
 Suggest next steps:
 > **下一步:**
 > - `/workshop-planner:month-plan {月份}` — 将某个月展开为周计划
-> - `/workshop-templates:template-select {id}` — 为特定月份选择教学法
+> - 基于某个月度主题创建 project workspace，再进入 `/workshop-designer:design` 或 `/workshop-lesson:lesson`
 
 ## Out of Scope
 

@@ -1,118 +1,168 @@
 # Course Workshop Plugins
 
-AI 驱动的幼儿园 PBL 课程研发工具集 —— 从月度主题到课堂预案的完整设计流水线。
+AI 驱动的幼儿园课程设计平台插件集合，面向课研主任和一线教师，支持 PBL 预案、五步法教案、学期/月/周规划，以及校本知识库复用。
 
-> 基于开放的 SKILL.md 插件规范构建，可在任何兼容的 AI 运行时上使用。使用 [Astra Studio](https://github.com/VanLengs/astra-studio-plugins) 工具链开发。
+> 基于开放的 `SKILL.md` 插件规范构建，可在兼容运行时上使用。使用 [Astra Studio](https://github.com/VanLengs/astra-studio-plugins) 工具链开发。
 
 ## 概述
 
-Course Workshop 将华美 PBL 方法论（五步路径、三阶段九要素、驱动问题六原则、4C 能力框架）内置为可执行的设计流水线，让课研主任从"白纸起步"变为"确认和调整"。
+Course Workshop 已从单一 PBL 工具集演进为多方法论课程工作台：
 
-```
-输入：月度主题 + 年龄段
-  → 主题分析 → 驱动问题 → 网络图 → 线索拆分 → 活动设计 ×3 → 预案生成
-输出：符合华美 PBL 五段式的完整课堂预案（含 4C 映射、资源清单、质量报告）
-```
+- `workshop-designer` 负责 PBL 月度项目预案
+- `workshop-lesson` 负责五步法单课时教案
+- `workshop-planner` 负责学期 / 月 / 周全局规划
+- `workshop-kb` 负责校本知识库导入、索引和检索
+- `workshop-templates` 负责教学法模板注册与选择
+
+系统的主工作对象是 **课程项目（project workspace）**，不是单个 plugin、skill 或文档类型。
+
+一个 project workspace 对应一个具体课程主题，例如：
+- `spring-flowers`
+- `people-around-me`
+- `my-body`
+
+同一 project 内可以并存多种产物：
+- PBL 预案 `proposal.md`
+- 五步法教案 `lesson-plan.md`
+- 资源规划与核验结果
+- 质量检查与专家评审结果
+- 与该主题相关的周计划引用
+
+## Project Workspace First
+
+当前仓库遵循以下实现原则：
+
+1. 用户先创建或进入一个 `project workspace`，再选择要产出什么。
+2. `workshop-*` 目录是唯一真实实现源。
+3. `studio/changes/*` 中的目录默认表示项目工作区；计划类记录是全局资产，不等同于课程项目。
+4. 教学法模板是产物级选择，不锁定整个项目。
+5. 学期 / 月 / 周计划是全局可复用资产，project 只引用相关切片，不复制完整计划。
+6. 计划与课程设计是弱依赖：可以先做计划，也可以先做项目，后续再互相关联。
+
+## 插件分层
+
+| 分层 | 插件 | 说明 |
+|------|------|------|
+| 平台底座 | `workshop-core` | 初始化 `studio/`、查看状态、归档交付物 |
+| 平台能力 | `workshop-kb`, `workshop-templates` | 提供知识上下文与教学法模板 |
+| 设计流水线 | `workshop-designer`, `workshop-lesson`, `workshop-planner` | 生成 PBL 预案、五步法教案和全局计划 |
+| 辅助能力 | `workshop-insight`, `workshop-quality`, `workshop-resource` | 前期分析、质量保障、资源规划 |
 
 ## 插件一览
 
 | 插件 | 说明 | 技能 |
 |------|------|------|
-| **workshop-core** | 工作区管理 —— 初始化、状态追踪、归档 | init, status, promote |
-| **workshop-insight** | 主题分析 —— 主题拆解、前置经验评估、4C 能力映射 | theme-analysis, prior-knowledge, competency-mapping |
-| **workshop-designer** | 课程设计 —— 驱动问题、网络图、探究线索、活动设计、预案生成 | driving-question, network-map, inquiry-scaffold, activity-design, proposal-generate |
-| **workshop-quality** | 质量保障 —— 课标检查、年龄适切性验证、专家评审 | standards-check, proposal-review |
-| **workshop-resource** | 资源管理 —— 材料匹配、分类（PBL Box/探索袋/自备）、完整性校验 | resource-planner, resource-check |
-
-每个插件可独立安装使用，也可全部安装获得完整流水线。
+| **workshop-core** | 项目工作区管理 | `init`, `status`, `link-plan`, `approve`, `promote` |
+| **workshop-insight** | 项目前期分析 | `theme-analysis`, `prior-knowledge`, `competency-mapping` |
+| **workshop-designer** | PBL 项目预案设计 | `driving-question`, `network-map`, `inquiry-scaffold`, `activity-design`, `proposal-generate` |
+| **workshop-quality** | 质量检查与专家评审 | `standards-check`, `proposal-review` |
+| **workshop-resource** | 教学资源规划与核验 | `resource-planner`, `resource-check` |
+| **workshop-lesson** | 五步法单课时教案 | `lesson-objective`, `lesson-scaffold`, `lesson-detail`, `lesson-generate` |
+| **workshop-planner** | 学期 / 月 / 周规划 | `semester-plan`, `month-plan`, `week-plan` |
+| **workshop-kb** | 校本知识库 | `kb-import`, `kb-index`, `kb-query` |
+| **workshop-templates** | 模板注册与选择 | `template-list`, `template-select` |
 
 ## 快速开始
 
 ### 前置条件
 
-- 任意支持 SKILL.md 插件规范的 AI 运行时（如 Claude Code、或其他兼容平台）
-- Git（推荐，用于版本管理设计产出）
+- 任意支持 `SKILL.md` 插件规范的 AI 运行时
+- Git（推荐，用于版本管理 `studio/` 下的设计产物）
 
 ### 安装
 
-**方式一：本地加载（推荐初次体验）**
-
-将以下 5 个插件目录加载到你的 AI 运行时：
-
-```
-./workshop-core
-./workshop-designer
-./workshop-insight
-./workshop-quality
-./workshop-resource
-```
-
-具体加载命令因平台而异。以 Claude Code 为例：
+本地加载全部插件目录：
 
 ```bash
 claude --plugin-dir ./workshop-core \
        --plugin-dir ./workshop-designer \
        --plugin-dir ./workshop-insight \
        --plugin-dir ./workshop-quality \
-       --plugin-dir ./workshop-resource
+       --plugin-dir ./workshop-resource \
+       --plugin-dir ./workshop-lesson \
+       --plugin-dir ./workshop-planner \
+       --plugin-dir ./workshop-kb \
+       --plugin-dir ./workshop-templates
 ```
 
-**方式二：从 Marketplace 安装**
+### 推荐使用顺序
 
-如果平台支持 Marketplace 机制。以 Claude Code 为例：
-
-```bash
-claude plugin marketplace add VanLengs/courses-workshop-plugins
-claude plugin install workshop-core@course-workshop-plugins
-claude plugin install workshop-designer@course-workshop-plugins
-# 按需安装其他插件: workshop-insight, workshop-quality, workshop-resource
+```text
+1. /workshop-core:init
+2. 创建或进入一个 project workspace（一个课程主题）
+3. /workshop-templates:template-list
+4. /workshop-templates:template-select <id>
+5. 按需要继续：
+   - /workshop-designer:design <theme>
+   - /workshop-lesson:lesson <theme>
+   - /workshop-planner:semester-plan <semester>
+   - /workshop-kb:kb-import <path>
 ```
 
-### 典型流程
+### 典型项目路径
 
+PBL 项目：
+
+```text
+/workshop-insight:theme-analysis
+/workshop-insight:competency-mapping
+/workshop-designer:driving-question
+/workshop-designer:network-map
+/workshop-designer:inquiry-scaffold
+/workshop-designer:activity-design
+/workshop-designer:proposal-generate
+/workshop-quality:standards-check
+/workshop-resource:resource-planner
 ```
-/workshop-insight:theme-analysis      # 1. 分析月度主题
-/workshop-insight:competency-mapping  # 2. 4C 能力映射
-/workshop-designer:driving-question   # 3. 生成驱动问题
-/workshop-designer:network-map        # 4. 绘制网络图
-/workshop-designer:inquiry-scaffold   # 5. 拆分探究线索
-/workshop-designer:activity-design    # 6. 设计活动（×3）
-/workshop-designer:proposal-generate  # 7. 生成完整预案
-/workshop-quality:standards-check     # 8. 课标与质量检查
-/workshop-resource:resource-planner   # 9. 资源清单规划
+
+五步法教案：
+
+```text
+/workshop-lesson:lesson-objective
+/workshop-lesson:lesson-scaffold
+/workshop-lesson:lesson-detail
+/workshop-lesson:lesson-generate
+```
+
+## 项目结构
+
+```text
+├── workshop-core/          # 项目工作区与交付管理
+├── workshop-designer/      # PBL 项目预案流水线
+├── workshop-insight/       # 项目前期分析
+├── workshop-quality/       # 质量检查与评审
+├── workshop-resource/      # 资源规划与核验
+├── workshop-lesson/        # 五步法教案流水线
+├── workshop-planner/       # 全局学期 / 月 / 周规划
+├── workshop-kb/            # 校本知识库
+├── workshop-templates/     # 教学法模板
+├── studio/
+│   ├── config.yaml         # 工作台配置
+│   ├── changes/            # 项目工作区与共享规划记录
+│   ├── agents/             # 自定义领域专家
+│   ├── kb/                 # 校本知识库内容
+│   └── archive/            # 已归档课程交付物
+└── docs/                   # 白皮书、原则说明与参考文档
 ```
 
 ## 领域专家 Agent
 
 内置 3 位领域专家参与多角色协作评审：
 
-- **幼儿发展心理学家** —— 年龄适切性、认知发展阶段判断
-- **幼儿园课程专家** —— 课标覆盖、PBL 方法论合规性
-- **教学设计师** —— 活动编排、学习体验设计
-
-## 项目结构
-
-```
-├── workshop-core/          # 工作区管理插件（已发布）
-├── workshop-designer/      # 课程设计插件（已发布）
-├── workshop-insight/       # 主题分析插件（已发布）
-├── workshop-quality/       # 质量保障插件（已发布）
-├── workshop-resource/      # 资源管理插件（已发布）
-├── studio/                 # Astra Studio 开发工作区
-│   ├── config.yaml         # Studio 配置
-│   ├── changes/            # 开发中的插件
-│   ├── agents/             # 自定义领域专家
-│   └── archive/            # 已归档的插件
-└── docs/                   # 白皮书与开发日志
-```
+- **幼儿发展心理学家**：年龄适切性、认知发展阶段判断
+- **幼儿园课程专家**：课程标准、PBL 合规性、主题适配
+- **教学设计师**：活动编排、可执行性、学习体验设计
 
 ## 方法论基础
 
-- **华美 PBL 五步路径图** —— 控制设计流程阶段与产出物
-- **三阶段九要素** —— 控制项目实施结构
-- **驱动问题六原则** —— 控制问题生成质量
-- **4C 能力框架**（Critical Thinking, Creativity, Communication, Collaboration）—— 控制能力映射准确性
-- **《3-6 岁儿童学习与发展指南》** —— 控制年龄适切性与领域覆盖
+- **华美 PBL 五步路径图**
+- **三阶段九要素**
+- **驱动问题六原则**
+- **4C 能力框架**
+- **《3-6 岁儿童学习与发展指南》**
+- **五步教学法结构化教案方法**
+
+更多原则见 `docs/project-workspace-principles.md`。
 
 ## 许可证
 

@@ -120,6 +120,12 @@ For each step, include the full teacher scripts from lesson-detail, formatted fo
 
 Write the complete lesson plan to `studio/changes/{workspace}/lesson-plan.md`.
 
+Update `studio/changes/{workspace}/status.json`:
+- Preserve all existing fields
+- Set `skills.lesson-generate = "done"`
+- Set `phase` to `reviewing`
+- Ensure the workspace remains `type: "project"`
+
 Present a summary to the user:
 
 ```

@@ -158,6 +158,12 @@ Write `studio/changes/{workspace}/network-map.md`:
 - Domain coverage: {N}/5
 ```
 
+Update `studio/changes/{workspace}/status.json`:
+- Preserve all existing fields
+- If no status file exists, create one using project defaults
+- Set `skills.network-map = "done"`
+- Keep `phase` at `planning` unless later PBL design artifacts already exist
+
 Tell the user: "Network map complete. Run `/workshop-designer:inquiry-scaffold {workspace}` to split into 3 inquiry clues."
 
 ## Out of Scope

@@ -1,13 +1,13 @@
 ---
 name: week-plan
-description: Generate a detailed weekly schedule with daily time slots, activity assignments, and material lists. Use when a teacher needs the daily breakdown for a specific week, or when someone says "plan this week" or "what do I teach each day".
+description: Generate a detailed weekly schedule with daily time slots, activity assignments, and material lists. This produces a shared weekly planning record that project workspaces can reference.
 allowed-tools: Read, Write, Glob, Agent
 user-invocable: true
 ---
 
 # Week Plan
 
-Generate a detailed daily schedule for one week, mapping activities to time slots and preparing material lists.
+Generate a detailed daily schedule for one week, mapping activities to time slots and preparing material lists. This is a planning asset that can guide later project and lesson work.
 
 ## Expert Discovery
 
@@ -76,10 +76,28 @@ Generate practical reminders:
 
 Present the week plan. Wait for approval. Write to `studio/changes/{workspace}/week-{N}-plan.md`.
 
+Create or update `studio/changes/{workspace}/status.json`:
+- Set `type = "planning"`
+- Set `plan_level = "week"`
+- Preserve `plan_name`, `created_at`, and `linked_projects` if already present
+- If no file exists, initialize:
+
+```json
+{
+  "type": "planning",
+  "plan_level": "week",
+  "plan_name": "{workspace}",
+  "phase": "planning",
+  "created_at": "{ISO-8601}",
+  "linked_projects": []
+}
+```
+
 Suggest next steps:
 > **下一步:**
-> - `/workshop-lesson:lesson {主题}` — 为某天的集体教学编写教案
-> - `/workshop-resource:resource-planner` — 统一规划本周资源
+> - 为某天或某个主题创建 / 进入 project workspace
+> - `/workshop-lesson:lesson {主题}` — 在项目中为某天的集体教学编写教案
+> - `/workshop-resource:resource-planner` — 在项目中统一规划本周资源
 
 ## Out of Scope
 

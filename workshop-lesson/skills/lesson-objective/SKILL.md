@@ -86,6 +86,29 @@ Present the objectives. Wait for approval.
 
 Write to `studio/changes/{workspace}/lesson-objective.md`.
 
+Create or update `status.json` in the same workspace:
+
+```json
+{
+  "type": "project",
+  "project": "{workspace}",
+  "theme": "{lesson topic}",
+  "target_collection": "courses",
+  "phase": "planning",
+  "created_at": "{ISO-8601}",
+  "plan_refs": {
+    "semester": null,
+    "month": null,
+    "week": null
+  },
+  "skills": {
+    "lesson-objective": "done"
+  }
+}
+```
+
+If the file already exists, preserve existing metadata and merge the new skill status.
+
 Suggest next steps:
 > **下一步:**
 > - `/workshop-lesson:lesson-scaffold` — 设计五步教学环节结构
