@@ -22,12 +22,16 @@ Move approved course deliverables from the development workspace (`studio/change
    - `reviewing` → "This project is under review. Complete the review and set phase to approved first."
    - `shipped` → "This project has already been shipped."
 5. Read `target_collection` from status.json (fallback to `studio/config.yaml` `defaults.target_collection`)
-6. Verify all required skills in status.json have status `done` or `approved`
+6. Run:
 
-Required skills by deliverable type:
-- If `proposal.md` exists: `driving-question`, `network-map`, `inquiry-scaffold`, `activity-design`, `proposal-generate`
-- If `lesson-plan.md` exists: `lesson-objective`, `lesson-scaffold`, `lesson-detail`, `lesson-generate`
-- If both exist, validate both sets
+```bash
+python3 workshop-core/scripts/workspace_status.py validate-project {workspace} --required-phase approved
+```
+
+This validates:
+- final deliverables exist
+- required skill statuses are complete
+- the project is in the `approved` phase
 
 If pre-conditions fail, print a clear message about what needs to happen first and exit.
 

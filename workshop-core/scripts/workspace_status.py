@@ -55,6 +55,82 @@ def write_status(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def deliverables_for_workspace(root: Path, name: str) -> dict[str, bool]:
+    ws = workspace_dir(root, name)
+    return {
+        "proposal": (ws / "proposal.md").exists(),
+        "lesson": (ws / "lesson-plan.md").exists(),
+        "quality_report": (ws / "quality-report.md").exists(),
+        "review_comments": (ws / "review-comments.md").exists(),
+        "resource_plan": (ws / "resource-plan.md").exists(),
+        "resource_check_report": (ws / "resource-check-report.md").exists(),
+    }
+
+
+def required_skills_for(deliverables: dict[str, bool]) -> list[str]:
+    required: list[str] = []
+    if deliverables["proposal"]:
+        required.extend(
+            [
+                "driving-question",
+                "network-map",
+                "inquiry-scaffold",
+                "activity-design",
+                "proposal-generate",
+            ]
+        )
+    if deliverables["lesson"]:
+        required.extend(
+            [
+                "lesson-objective",
+                "lesson-scaffold",
+                "lesson-detail",
+                "lesson-generate",
+            ]
+        )
+    return required
+
+
+def validate_project(root: Path, name: str, required_phase: str | None) -> dict[str, Any]:
+    ws_path = workspace_dir(root, name)
+    data = load_status(status_path(root, name))
+    if not data:
+        raise SystemExit(f"Missing status.json for workspace: {name}")
+    if data.get("type") == "planning":
+        raise SystemExit(f"Workspace '{name}' is planning, not a shippable project.")
+
+    deliverables = deliverables_for_workspace(root, name)
+    if not deliverables["proposal"] and not deliverables["lesson"]:
+        raise SystemExit(
+            f"Workspace '{name}' has no final deliverable. Expected proposal.md or lesson-plan.md."
+        )
+
+    if required_phase and data.get("phase") != required_phase:
+        raise SystemExit(
+            f"Workspace '{name}' is in phase '{data.get('phase')}', expected '{required_phase}'."
+        )
+
+    skills = data.get("skills", {})
+    required_skills = required_skills_for(deliverables)
+    missing_skills = [skill for skill in required_skills if skills.get(skill) not in {"done", "approved"}]
+
+    return {
+        "workspace": name,
+        "type": data.get("type", "legacy"),
+        "phase": data.get("phase"),
+        "deliverables": deliverables,
+        "required_skills": required_skills,
+        "missing_skills": missing_skills,
+        "optional_reviews": {
+            "quality_report": deliverables["quality_report"],
+            "review_comments": deliverables["review_comments"],
+            "resource_plan": deliverables["resource_plan"],
+            "resource_check_report": deliverables["resource_check_report"],
+        },
+        "ready": len(missing_skills) == 0,
+    }
+
+
 def ensure_project_status(root: Path, name: str, theme: str | None) -> dict[str, Any]:
     path = status_path(root, name)
     data = load_status(path)
@@ -176,6 +252,14 @@ def cmd_link_plan(args: argparse.Namespace) -> None:
     )
 
 
+def cmd_validate_project(args: argparse.Namespace) -> None:
+    root = find_studio_root(args.root)
+    result = validate_project(root, args.workspace, args.required_phase)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    if not result["ready"]:
+        raise SystemExit(2)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Workspace status helper")
     parser.add_argument("--root", help="Project root containing studio/", default=None)
@@ -227,6 +311,15 @@ def build_parser() -> argparse.ArgumentParser:
     link_plan.add_argument("plan")
     link_plan.add_argument("--plan-level", choices=["semester", "month", "week"], required=True)
     link_plan.set_defaults(func=cmd_link_plan)
+
+    validate_project_cmd = sub.add_parser("validate-project")
+    validate_project_cmd.add_argument("workspace")
+    validate_project_cmd.add_argument(
+        "--required-phase",
+        choices=["planning", "designing", "reviewing", "approved", "shipped"],
+        default=None,
+    )
+    validate_project_cmd.set_defaults(func=cmd_validate_project)
 
     return parser
 
