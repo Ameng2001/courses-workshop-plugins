@@ -20,7 +20,7 @@ Purpose:
 - confirm the project is correctly framed before deep design starts
 
 Typical inputs:
-- template selection
+- pipeline selection
 - project naming
 - age group
 - plan linking
