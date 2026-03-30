@@ -2,7 +2,7 @@
 id: five-step
 name: "五步教学法教案"
 name_en: "Five-Step Lesson Plan"
-description: "基于导入→探究→操作→总结→延伸的单课时教案设计，适合一线教师日常备课"
+description: "基于导入→探究→操作→总结→延伸的单课时教学活动设计，适合一线教师日常备课，也可作为主题课程中的教学活动子管线"
 version: "1.0.0"
 
 target_roles:
@@ -40,6 +40,10 @@ output:
       title: "基本信息"
       title_en: "Basic Info"
       required: true
+    - id: core-goals
+      title: "核心发展目标"
+      title_en: "Core Development Goals"
+      required: false
     - id: objective
       title: "教学目标"
       title_en: "Learning Objectives"
@@ -58,6 +62,10 @@ output:
         - "操作 / Practice"
         - "总结 / Summary"
         - "延伸 / Extension"
+    - id: observation-support
+      title: "教师观察与支持要点"
+      title_en: "Observation and Support Notes"
+      required: true
     - id: differentiation
       title: "分层指导"
       title_en: "Differentiation"
@@ -66,6 +74,15 @@ output:
       title: "教学反思"
       title_en: "Reflection"
       required: true
+
+compatibility:
+  thematic_curriculum:
+    supported: true
+    role: "teaching-activity"
+    notes:
+      - "适合作为主题课程中的集体教学活动子产物"
+      - "应与月活动矩阵和周活动安排中的活动名称保持一致"
+      - "当客户模板要求时，应携带核心发展目标、活动重点 / 难点和教师观察与支持要点"
 
 coding:
   prefix: "FS"
