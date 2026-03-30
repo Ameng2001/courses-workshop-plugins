@@ -132,15 +132,14 @@ PBL 项目：
 
 ```text
 ├── workshop-core/          # 项目工作区与交付管理
-├── workshop-pbl/      # PBL 项目预案流水线
+├── workshop-pbl/           # PBL 项目预案流水线
 ├── workshop-insight/       # 项目前期分析
 ├── workshop-quality/       # 质量检查与评审
 ├── workshop-resource/      # 资源规划与核验
-├── workshop-5step/        # 五步法教案流水线
+├── workshop-5step/         # 五步法主题课程流水线
 ├── workshop-planner/       # 全局学期 / 月 / 周规划
 ├── workshop-kb/            # 校本知识库
 ├── workshop-pipelines/     # 教学法 pipeline 注册中心
-├── studio/                 # Astra Studio 插件研发目录
 ├── .workshop/
 │   ├── config.yaml         # 课程工作台运行配置
 │   ├── projects/           # 项目工作区
@@ -151,7 +150,7 @@ PBL 项目：
 │   └── archive/            # 已归档课程完整历史
 ├── courses/                # 已发布课程 release bundles
 ├── experts/                # 共享领域专家单一事实源
-├── studio/
+├── studio/                 # Astra Studio 插件研发目录
 │   ├── roles/              # Astra Studio 专用流程角色
 │   └── ...                 # 其余 plugin 研发资产
 └── docs/                   # 白皮书、原则说明与参考文档
