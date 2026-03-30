@@ -36,7 +36,7 @@
 | workshop-lesson | 4 | 五步法教案设计流水线 | 一线教师 |
 | workshop-planner | 3 | 分层课程规划 | 课研主任 |
 | workshop-kb | 3 | 园本知识库管理 | 课研主任 + 一线教师 |
-| workshop-templates | 2 | 教学方法论模板注册 | 所有用户 |
+| workshop-pipelines | 2 | 教学方法论管线注册 | 所有用户 |
 
 ---
 
@@ -93,7 +93,7 @@ Write studio/changes/course-workshop/journeys/classroom-teacher-daily-lesson-pre
 | **五步法教案** | **核心** | **v2** | **workshop-lesson** |
 | **课程规划** | **核心** | **v2** | **workshop-planner** |
 | **知识库管理** | **支撑** | **v2** | **workshop-kb** |
-| **方法论模板** | **通用** | **v2** | **workshop-templates** |
+| **方法论管线** | **通用** | **v2** | **workshop-pipelines** |
 
 ### 2.2 依赖关系更新
 
@@ -101,11 +101,11 @@ Write studio/changes/course-workshop/journeys/classroom-teacher-daily-lesson-pre
 workshop-core       (零依赖)
 workshop-insight    (零依赖)
 workshop-quality    (零依赖)
-workshop-templates  (零依赖)
+workshop-pipelines  (零依赖)
 workshop-kb         → workshop-core
-workshop-designer   → workshop-core, workshop-templates
-workshop-lesson     → workshop-core, workshop-templates
-workshop-planner    → workshop-core, workshop-templates
+workshop-designer   → workshop-core, workshop-pipelines
+workshop-lesson     → workshop-core, workshop-pipelines
+workshop-planner    → workshop-core, workshop-pipelines
 workshop-resource   → workshop-core
 ```
 
@@ -131,8 +131,8 @@ Read/Write studio/changes/workshop-lesson/skill-map.md
 ```
 lesson-objective → lesson-scaffold → lesson-detail → lesson-generate
       ↑                  ↑                                  ↑
-  (workshop-kb)    (workshop-templates              (workshop-quality
-                    five-step template)              optional check)
+  (workshop-kb)    (workshop-pipelines              (workshop-quality
+                    five-step pipeline)              optional check)
 ```
 
 ### 3.2 workshop-planner — Skill Map
@@ -161,17 +161,17 @@ Read/Write studio/changes/workshop-kb/skill-map.md
 | kb-index | Medium | — | Depends on import |
 | kb-query | Simple | — | Depends on index |
 
-### 3.4 workshop-templates — Skill Map
+### 3.4 workshop-pipelines — Skill Map
 
 ```
-Read/Write studio/changes/workshop-templates/skill-map.md
+Read/Write studio/changes/workshop-pipelines/skill-map.md
   → 2 skills designed
 ```
 
 | Skill | Complexity | Agent | Pipeline Position |
 |-------|-----------|-------|-------------------|
-| template-list | Simple | — | Independent |
-| template-select | Simple | — | Independent |
+| pipeline-list | Simple | — | Independent |
+| pipeline-select | Simple | — | Independent |
 
 ---
 
@@ -217,13 +217,13 @@ Pre-existing: commands/kb-import.md, kb-index.md, kb-query.md
 Pre-existing: references/kb-schema.md
 ```
 
-### 4.4 workshop-templates — SKILL.md + Commands + References
+### 4.4 workshop-pipelines — SKILL.md + Commands + References
 
 ```
-Write workshop-templates/skills/template-list/SKILL.md
-Write workshop-templates/skills/template-select/SKILL.md
-Pre-existing: commands/template-list.md, template-select.md
-Pre-existing: references/template-schema.md
+Write workshop-pipelines/skills/pipeline-list/SKILL.md
+Write workshop-pipelines/skills/pipeline-select/SKILL.md
+Pre-existing: commands/pipeline-list.md, pipeline-select.md
+Pre-existing: references/pipeline-schema.md
 Pre-existing: references/templates/five-step/* (4 files)
 Pre-existing: references/templates/pbl-huamei/* (4 files)
 ```
@@ -234,7 +234,7 @@ Pre-existing: references/templates/pbl-huamei/* (4 files)
 Edit workshop-core/skills/init/SKILL.md
   → 新增 studio/kb/ 目录结构（textbooks, philosophy, lesson-plans, research-records, calendars）
   → 新增 config.yaml methodology 配置（defaults.methodology: pbl-huamei）
-  → 新增 next steps 引导到 template-list, kb-import, planner, designer
+  → 新增 next steps 引导到 pipeline-list, kb-import, planner, designer
 
 Edit workshop-core/skills/status/SKILL.md
   → 新增知识库状态显示（文档分类计数）
@@ -250,7 +250,7 @@ Edit workshop-core/skills/status/SKILL.md
 Write studio/changes/workshop-lesson/{brief.md, skill-map.md, status.json, plugin.json.draft}
 Write studio/changes/workshop-kb/{brief.md, skill-map.md, status.json, plugin.json.draft}
 Write studio/changes/workshop-planner/{brief.md, skill-map.md, status.json, plugin.json.draft}
-Write studio/changes/workshop-templates/{brief.md, skill-map.md, status.json, plugin.json.draft}
+Write studio/changes/workshop-pipelines/{brief.md, skill-map.md, status.json, plugin.json.draft}
 ```
 
 ### 4.7 CLAUDE.md 更新
@@ -356,7 +356,7 @@ claude --plugin-dir ./workshop-core \
        --plugin-dir ./workshop-lesson \
        --plugin-dir ./workshop-planner \
        --plugin-dir ./workshop-kb \
-       --plugin-dir ./workshop-templates
+       --plugin-dir ./workshop-pipelines
 
 # PBL 预案设计：
 /workshop-designer:design 我周围的人
@@ -371,5 +371,5 @@ claude --plugin-dir ./workshop-core \
 /workshop-kb:kb-import ~/教案资料/
 
 # 查看可用模板：
-/workshop-templates:template-list
+/workshop-pipelines:pipeline-list
 ```

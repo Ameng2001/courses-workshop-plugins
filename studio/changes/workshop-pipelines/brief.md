@@ -1,4 +1,4 @@
-# Plugin Brief: workshop-templates
+# Plugin Brief: workshop-pipelines
 
 > Created: 2026-03-29
 

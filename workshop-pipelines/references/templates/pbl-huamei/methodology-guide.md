@@ -7,6 +7,6 @@
 
 本模板包复用 workshop-designer 中的完整方法论指南，此处不做冗余复制。
 设计类技能的模板感知加载顺序：
-1. 检查 `workshop-templates/references/templates/{id}/methodology-guide.md`
+1. 检查 `workshop-pipelines/references/templates/{id}/methodology-guide.md`
 2. 若为引用文件，则跟随引用加载原始文件
 3. 确保方法论内容始终来自单一权威来源

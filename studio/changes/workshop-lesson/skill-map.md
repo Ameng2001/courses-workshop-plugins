@@ -45,8 +45,8 @@
 ```
 lesson-objective → lesson-scaffold → lesson-detail → lesson-generate
       ↑                   ↑                                ↑
-  (workshop-kb         (workshop-templates             (workshop-quality
-   optional)            five-step template)             optional check)
+  (workshop-kb         (workshop-pipelines             (workshop-quality
+   optional)            five-step pipeline)             optional check)
 ```
 
 ## Complexity Summary

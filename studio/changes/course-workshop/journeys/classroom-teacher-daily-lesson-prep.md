@@ -85,7 +85,7 @@
 | 2 | 月度拆解 | 月到周的拆解没有章法 | 高 | `workshop-planner:month-plan` — 月度→周次自动拆解 |
 | 3 | 周计划编写 | 每周从零拼凑，无递进逻辑 | 高 | `workshop-planner:week-plan` — 每日活动时段编排 |
 | 4 | 找灵感素材 | 碎片化搜索占备课 40% 时间 | 高 | `workshop-kb:kb-query` — 校本知识库检索 |
-| 5 | 选定教学法 | 教学法选择凭直觉 | 中 | `workshop-templates:pipeline-select` — 教学法管线推荐 |
+| 5 | 选定教学法 | 教学法选择凭直觉 | 中 | `workshop-pipelines:pipeline-select` — 教学法管线推荐 |
 | 6 | 写教案 | 理论到活动的转化最难 | 高 | `workshop-lesson:lesson` — 五步法教案自动生成链 |
 | 7 | 写教案 | AI 生成内容不适配幼教 | 中 | 领域专家 agent + 《指南》标准校验 |
 | 8 | 做课件材料 | 多媒体制作耗时 | 中 | `workshop-resource` 增强（未来迭代） |

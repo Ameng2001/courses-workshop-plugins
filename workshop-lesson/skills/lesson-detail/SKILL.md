@@ -22,7 +22,7 @@ Flesh out each teaching step with concrete teacher scripts (话术), material li
 1. Read `.workshop/projects/{workspace}/lesson-scaffold.md` — required input
    - If not found: "请先运行 `/workshop-lesson:lesson-scaffold` 设计教学环节结构"
 2. Read `.workshop/projects/{workspace}/lesson-objective.md` for objectives
-3. Read coding spec from template: `workshop-templates/references/templates/five-step/coding-spec.md`
+3. Read coding spec from pipeline: `workshop-pipelines/references/templates/five-step/coding-spec.md`
 
 ## Step 1: Detail Each Step
 

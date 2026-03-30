@@ -19,7 +19,7 @@ Set the active teaching methodology pipeline for the next deliverable in the cur
 ## Step 1: Validate Pipeline ID
 
 1. Read the user's requested pipeline ID from `$ARGUMENTS`
-2. Check if `workshop-templates/references/templates/{id}/manifest.yaml` exists
+2. Check if `workshop-pipelines/references/templates/{id}/manifest.yaml` exists
 3. If not found:
    - Run pipeline-list logic to show available pipeline options
    - Ask the user to pick one

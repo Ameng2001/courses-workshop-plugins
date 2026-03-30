@@ -110,7 +110,7 @@ Skills remain responsible for:
 - explaining results
 - guiding user next steps
 
-### 3.2 `workshop-templates`
+### 3.2 `workshop-pipelines`
 
 Should script:
 - pipeline selection writeback
@@ -196,7 +196,7 @@ Should remain flexible:
 
 Recommended next scripting priorities:
 
-1. `workshop-templates`
+1. `workshop-pipelines`
    - make project initialization and framing writeback fully script-driven
 2. `workshop-planner`
    - make planning initialization and link behavior fully script-driven
@@ -212,7 +212,7 @@ Avoid these:
 - writing ad-hoc `status.json` fields directly inside many different skills
 - duplicating HIL logic in multiple skills
 - hard-coding course design decisions into scripts
-- turning design generation into rigid templates with no room for review or revision
+- turning design generation into rigid pipelines with no room for review or revision
 - copying full project workspaces into `courses/`
 
 ## 6. Summary

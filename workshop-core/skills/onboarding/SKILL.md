@@ -81,7 +81,7 @@ Based on answers, recommend the next step:
 - If the team starts from planning:
   - suggest `/workshop-planner:semester-plan <semester>`
 - If the team starts from a concrete course:
-  - suggest `/workshop-templates:pipeline-select <id>` to choose the first pipeline
+  - suggest `/workshop-pipelines:pipeline-select <id>` to choose the first pipeline
 - If the team is unsure:
   - suggest creating one pilot project first
 
@@ -106,7 +106,7 @@ Onboarding summary
 Recommended next steps:
 1. /workshop-kb:kb-import <path>
 2. /workshop-planner:semester-plan 2026春季学期
-3. /workshop-templates:pipeline-select pbl-huamei
+3. /workshop-pipelines:pipeline-select pbl-huamei
 ```
 
 ## Relationship to Other Core Commands

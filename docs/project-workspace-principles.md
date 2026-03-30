@@ -25,7 +25,7 @@
 - `workshop-core` manages project workspaces and shipped deliverables.
 - `workshop-planner` produces global planning records that later projects may reference.
 - `workshop-kb` provides shared school knowledge context.
-- `workshop-templates` acts as the pipeline registry and decides the pipeline and output format for the next deliverable.
+- `workshop-pipelines` acts as the pipeline registry and decides the pipeline and output format for the next deliverable.
 - `workshop-designer`, `workshop-lesson`, `workshop-resource`, `workshop-quality`, and `workshop-insight` operate as project capabilities.
 - Runtime storage should prefer:
   - `.workshop/projects/`
