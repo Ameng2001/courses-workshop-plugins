@@ -20,7 +20,7 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 ## Repository Structure
 
 ```
-├── workshop-core/         # Workspace management (init, status, promote) — 3 skills
+├── workshop-core/         # Workspace management (init, config, onboarding, status, link-plan, approve, promote) — 7 skills
 ├── workshop-designer/     # PBL course design pipeline (driving-question → proposal) — 5 skills
 ├── workshop-insight/      # Pre-analysis toolkit (theme, prior-knowledge, 4C) — 3 skills
 ├── workshop-quality/      # Quality assurance (standards-check, proposal-review) — 2 skills
