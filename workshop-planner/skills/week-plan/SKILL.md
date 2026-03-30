@@ -1,13 +1,13 @@
 ---
 name: week-plan
-description: Generate a detailed weekly schedule with daily time slots, activity assignments, and material lists. This produces a shared weekly planning record that project workspaces can reference.
+description: Generate a detailed weekly arrangement with 15-17 mixed activity slots, sequencing, and material lists. This produces a shared weekly planning record that project workspaces can reference.
 allowed-tools: Read, Write, Glob, Agent
 user-invocable: true
 ---
 
 # Week Plan
 
-Generate a detailed daily schedule for one week, mapping activities to time slots and preparing material lists. This is a planning asset that can guide later project and lesson work.
+Generate a detailed weekly arrangement for one week, mixing teaching activities, region activities, outdoor games, life routines, and home-school tasks. This is a planning asset that can guide later project and lesson work.
 
 ## Expert Discovery
 
@@ -20,6 +20,7 @@ Generate a detailed daily schedule for one week, mapping activities to time slot
 
 1. Verify `.workshop/` exists
 2. Look for `.workshop/plans/{workspace}/month-plan.md` — read the target week's sub-theme and methodology
+3. Read `references/weekly-arrangement-template.md` as the preferred output shape
 3. Look for existing activity files:
    - PBL activities: `.workshop/projects/{workspace}/activities/clue-*.md`
    - Lesson plans: `.workshop/projects/{workspace}/lesson-plan*.md`
@@ -37,27 +38,32 @@ Auto-populate from month-plan if available. Otherwise ask:
 > 4. **教学法**: 本周使用什么教学法？
 > 5. **特殊安排**: 是否有节假日、园所活动等占用？
 
-## Step 2: Generate Daily Schedule
+## Step 2: Generate Weekly Arrangement
 
-Following the format in `references/weekly-schedule-template.md`, generate:
+Following `references/weekly-arrangement-template.md`, generate:
 
-### 每日时段表
+### 一周活动安排表
 
-| 时段 | 周一 | 周二 | 周三 | 周四 | 周五 |
-|------|------|------|------|------|------|
-| 晨间活动 | {activity} | {activity} | {activity} | {activity} | {activity} |
-| 集体教学 | {coded_activity} | {coded_activity} | {coded_activity} | {coded_activity} | {coded_activity} |
-| 区角活动 | {area_activity} | {area_activity} | {area_activity} | {area_activity} | {area_activity} |
-| 户外活动 | {outdoor} | {outdoor} | {outdoor} | {outdoor} | {outdoor} |
-| 午后活动 | {afternoon} | {afternoon} | {afternoon} | {afternoon} | {afternoon} |
+Prefer a linear weekly arrangement that can hold 15-17 items:
+
+| 序号 | 类型 | 活动编码 | 活动名称 | 对应日次/时段 | 备注 |
+|------|------|---------|---------|--------------|------|
+| 1 | 家园互动 | {code} | {activity} | {day/slot} | {note} |
+| 2 | 教学活动 | {code} | {activity} | {day/slot} | {note} |
+| 3 | 区域活动 | {code} | {activity} | {day/slot} | {note} |
+| ... | ... | ... | ... | ... | ... |
 
 ### 编排原则
 
-- 集体教学时段安排核心教学活动（PBL 活动或五步法教案）
-- 区角活动投放与当日集体教学呼应的材料
-- 户外活动可融入主题元素但不强制
-- 周五留出分享/回顾时间
-- 每天的集体教学活动使用对应方法论的编码（PBL-Cx-y 或 FS-Sx-y）
+- 教学活动承担新经验建构
+- 区域活动和教学活动呼应
+- 户外活动融入主题元素但不强行概念化
+- 生活渗透应嵌入真实生活场景
+- 家园互动保持简短可执行
+- 如为主题式课程场景，总项数优先控制在 15-17 项
+- 活动编码优先使用所选 pipeline 的编码约定
+
+If the user explicitly asks for a classic day-slot table, you may append a compact daily grid as a secondary view, but the primary output should remain the linear arrangement.
 
 ## Step 3: Material Preparation List
 
@@ -73,6 +79,13 @@ Generate practical reminders:
 - 提前准备事项（需要提前一天准备的材料或布置）
 - 关注要点（本周需要重点观察记录的幼儿行为）
 - 家园互动（需要发给家长的通知或亲子任务）
+
+If the week uses `thematic-curriculum`, explicitly include:
+
+- 区域材料投放要点
+- 户外游戏安全提示
+- 生活渗透执行节点
+- 家园互动发送时机
 
 ## Step 5: User Confirmation and Write
 
@@ -100,6 +113,7 @@ Suggest next steps:
 > - 为某天或某个主题创建 / 进入 project workspace
 > - `/workshop-5step:lesson {主题}` — 在项目中为某天的集体教学编写教案
 > - `/workshop-resource:resource-planner` — 在项目中统一规划本周资源
+> - 为区域活动、户外游戏、生活渗透、家园互动准备后续活动稿
 
 ## Out of Scope
 

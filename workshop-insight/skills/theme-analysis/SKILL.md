@@ -1,13 +1,13 @@
 ---
 name: theme-analysis
-description: Analyze a monthly theme's educational value, background context, and curriculum standards alignment. Use when starting a new PBL project, when the curriculum director needs a project overview, or when someone says "analyze this theme". Produces a project overview with standards references.
+description: Analyze a monthly theme's educational value, background context, and curriculum standards alignment. Use when starting a new PBL project or thematic curriculum package, when the curriculum director needs a project overview, or when someone says "analyze this theme". Produces a reusable theme overview with standards references.
 allowed-tools: Read, Write, Glob, Agent
 user-invocable: true
 ---
 
 # Theme Analysis
 
-Analyze a monthly theme to produce the "01 项目概览 Project Overview" section of a PBL proposal — theme background narrative, educational value, and alignment with《3-6岁儿童学习与发展指南》curriculum standards.
+Analyze a monthly theme to produce a reusable theme overview artifact — theme background narrative, educational value, and alignment with《3-6岁儿童学习与发展指南》curriculum standards. This artifact can feed either a PBL proposal or a thematic curriculum package.
 
 ## Expert Discovery
 
@@ -28,7 +28,8 @@ The required expert validates curriculum standards mapping. Additional experts c
 2. Determine the workspace path:
    - If `$ARGUMENTS` contains a workspace name, use `.workshop/projects/$ARGUMENTS/`
    - Otherwise, derive from the theme name (lowercase, kebab-case, 2-3 words)
-3. Check if `.workshop/projects/{workspace}/theme-analysis.md` already exists:
+3. If `.workshop/projects/{workspace}/config.yaml` exists, read the active pipeline (for example `pbl-huamei`, `five-step`, or `thematic-curriculum`)
+4. Check if `.workshop/projects/{workspace}/theme-analysis.md` already exists:
    - If yes, read it and ask: "已有主题分析文档，是否需要重新生成或在此基础上修改？"
 
 ## Step 1: Gather Context
@@ -44,6 +45,7 @@ Extract:
 - **Theme**: the monthly theme (Chinese + English)
 - **Age group**: determines depth of analysis and standards scope
 - **Context**: any additional focus, cultural hooks, or prior materials
+- **Pipeline context**: whether this theme is intended for PBL or a thematic curriculum package
 
 ## Step 2: Generate Theme Background Narrative
 
@@ -55,7 +57,7 @@ Write a **bilingual narrative (Chinese primary, English secondary)** of 2-3 para
 |-----------|-------|---------|
 | 1. 主题意义 | Why it matters | Connect the theme to children's lived experience. Explain what makes it meaningful — not a dictionary definition, but a developmental argument. |
 | 2. 发展价值 | Developmental value | Articulate what cognitive, social, emotional, or physical growth this theme supports. Reference age-specific characteristics. |
-| 3. 探究潜力 | Inquiry potential | Explain why this theme is suitable for PBL — what open questions it raises, what hands-on exploration it enables, what multiple perspectives it offers. |
+| 3. 延展潜力 | Expansion potential | Explain why this theme can support either a PBL inquiry or a thematic curriculum package — what questions, activity types, and developmental pathways it enables. |
 
 ### Narrative Quality Rules
 
@@ -64,7 +66,7 @@ Write a **bilingual narrative (Chinese primary, English secondary)** of 2-3 para
 | Explain WHY, not WHAT | "了解食物的来源帮助幼儿建立对自然界因果关系的初步理解" | "食物是人类生存的基本需求" |
 | Ground in child's experience | "3-4岁幼儿每天都在经历'吃'这件事，但很少思考食物从哪里来" | "食物话题很重要" |
 | Be specific to age group | "对于PreK-4幼儿，'我周围的人'可以从最熟悉的家庭成员开始延伸" | "这个主题适合各年龄段" |
-| Show inquiry potential | "这一主题天然包含多个探究维度：谁种的？怎么长的？怎么变成食物的？" | "幼儿可以探索这个主题" |
+| Show expansion potential | "这一主题既可以形成探究问题，也适合拆成教学活动、区域活动和家园互动" | "幼儿可以探索这个主题" |
 
 ### Bilingual Format
 
@@ -107,11 +109,24 @@ For each domain, assess:
 
 ### Coverage Validation Rules
 
-- A well-chosen PBL theme should touch **at least 3 domains** at 核心 or 关联 level
+- A strong monthly theme should touch **at least 3 domains** at 核心 or 关联 level
 - If fewer than 3 domains are engaged, flag it: "此主题领域覆盖较窄，建议扩展探究方向以覆盖更多领域"
 - If ALL 5 domains are 核心, verify — it may mean the analysis is too generous. A theme rarely deeply engages every domain.
 
-## Step 4: Identify Curriculum Standard Entries
+## Step 4: Draft Weekly Progression
+
+If the active pipeline is `thematic-curriculum`, also draft a weekly progression outline:
+
+| 周次 | 递进定位 | 子主题建议 | 活动组织重点 |
+|------|---------|-----------|-------------|
+| 第 1 周 | 感知导入 | {subtheme_1} | 建立初步表象，偏教学活动与简单区域投放 |
+| 第 2 周 | 体验探索 | {subtheme_2} | 增加比较、操作、分类与区域延伸 |
+| 第 3 周 | 表现创造 | {subtheme_3} | 强化表现、制作、建构、角色扮演 |
+| 第 4 周 | 延展分享 | {subtheme_4} | 总结、展示、家园连接 |
+
+For PBL, keep this section lighter and focus on developmental progression rather than a fixed 4-week structure.
+
+## Step 5: Identify Curriculum Standard Entries
 
 For each domain marked 核心 or 关联, list the specific《指南》standard entries that apply.
 
@@ -145,7 +160,7 @@ List **3-8 standard entries** total across all relevant domains. Prioritize entr
 - ✅ Focus on standards where the theme provides hands-on, experiential learning opportunities
 - ✅ Include the specific age-band behavioral indicators (典型表现)
 
-## Step 5: Expert Review
+## Step 6: Expert Review
 
 Use the Agent tool to have the `early-childhood-curriculum-expert` review the complete analysis.
 
@@ -153,7 +168,7 @@ Give the expert subagent:
 - The agent definition from `experts/early-childhood-curriculum-expert.md`
 - The full theme analysis (narrative + domain coverage + standards)
 - The monthly theme and age group
-- The instruction: "Review this theme analysis for a PBL project. Evaluate: (1) Does the narrative genuinely explain WHY this theme matters for children's development, or is it generic? (2) Is the domain coverage analysis accurate — are relevance levels correctly assigned? (3) Are the curriculum standard entries appropriate for the target age group? (4) Are there important standards that were missed? (5) Is there enough depth here to support a full PBL project? Suggest specific improvements."
+- The instruction: "Review this theme analysis for either a PBL project or a thematic curriculum package. Evaluate: (1) Does the narrative genuinely explain WHY this theme matters for children's development, or is it generic? (2) Is the domain coverage analysis accurate — are relevance levels correctly assigned? (3) Are the curriculum standard entries appropriate for the target age group? (4) Are there important standards that were missed? (5) Is there enough developmental and curricular depth here to support the target pipeline? Suggest specific improvements."
 
 If additional domain experts were loaded, also ask them to review the narrative for domain-specific accuracy. For example, if the theme is "Healthy Eating" and a nutrition expert is loaded, ask: "Does the narrative accurately represent the nutritional education value? Are there misconceptions?"
 
@@ -166,7 +181,7 @@ If additional domain experts were loaded, also ask them to review the narrative 
 
 Incorporate expert feedback before presenting to the user.
 
-## Step 6: Present to User
+## Step 7: Present to User
 
 Present the complete theme analysis:
 
@@ -204,13 +219,21 @@ Present the complete theme analysis:
 >
 > ---
 >
+> **主题递进建议 Weekly Progression** (if thematic-curriculum)
+>
+> | 周次 | 递进定位 | 子主题建议 | 活动组织重点 |
+> |------|---------|-----------|-------------|
+> | ... | ... | ... | ... |
+>
+> ---
+>
 > **专家评价**: {expert feedback summary}
 >
 > 请确认分析内容，或指出需要修改的部分。
 
 Wait for user confirmation. If the user wants changes, iterate.
 
-## Step 7: Write Output
+## Step 8: Write Output
 
 Once confirmed, create the workspace (if not exists) and write:
 
@@ -272,13 +295,22 @@ Write `theme-analysis.md`:
 
 {... more standards as applicable ...}
 
+## Weekly Progression / 主题递进建议
+
+| 周次 | 递进定位 | 子主题建议 | 活动组织重点 |
+|------|---------|-----------|-------------|
+| 第 1 周 | {position} | {subtheme} | {focus} |
+| 第 2 周 | {position} | {subtheme} | {focus} |
+| 第 3 周 | {position} | {subtheme} | {focus} |
+| 第 4 周 | {position} | {subtheme} | {focus} |
+
 ## Expert Review / 专家评审
 
 - **{Expert name}**: {feedback summary and any adjustments made}
 
 ## Notes
 
-- This analysis feeds into the "01 项目概览 Project Overview" section of the PBL proposal
+- This analysis feeds into either the PBL "01 项目概览 Project Overview" section or the thematic curriculum package
 - Domain coverage informs which 4C skills and learning goals to prioritize
 ```
 
@@ -303,7 +335,7 @@ Create or update `status.json`:
 }
 ```
 
-Tell the user: "主题分析完成。建议接下来运行 `/workshop-insight:prior-knowledge {workspace}` 评估幼儿前期经验。"
+Tell the user: "主题分析完成。建议接下来运行 `/workshop-insight:prior-knowledge {workspace}` 评估幼儿前期经验；如使用主题式课程管线，也可以继续推进 `/workshop-planner:month-plan {workspace}`。"
 
 ## Validation Rules
 

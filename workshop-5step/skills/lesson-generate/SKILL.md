@@ -54,6 +54,13 @@ From `lesson-objective.md`, format as:
 1. {affective_1}
 ```
 
+If core development goal codes exist, add:
+
+```markdown
+### 核心发展目标
+- {SE-code}: {goal note}
+```
+
 ## Step 3: Compile Preparation Section
 
 From `lesson-detail.md`, aggregate the material checklist:
@@ -73,6 +80,15 @@ From `lesson-detail.md`, aggregate the material checklist:
 - {prior_experience_needed}
 ```
 
+Also compile:
+
+```markdown
+## 重难点
+
+- **活动重点**: {key_point}
+- **活动难点**: {difficulty_point}
+```
+
 ## Step 4: Compile Teaching Process
 
 From `lesson-scaffold.md` and `lesson-detail.md`, generate the main teaching table:
@@ -80,13 +96,13 @@ From `lesson-scaffold.md` and `lesson-detail.md`, generate the main teaching tab
 ```markdown
 ## 教学过程
 
-| 环节 | 时长 | 教师行为 | 幼儿行为 | 材料 | 设计意图 |
-|------|------|---------|---------|------|---------|
-| **S1 导入** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} |
-| **S2 探究** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} |
-| **S3 操作** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} |
-| **S4 总结** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} |
-| **S5 延伸** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} |
+| 环节 | 时长 | 教师行为 | 幼儿行为 | 材料 | 设计意图 | 教师观察与支持要点 |
+|------|------|---------|---------|------|---------|-------------------|
+| **S1 导入** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} | {observe_and_support} |
+| **S2 探究** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} | {observe_and_support} |
+| **S3 操作** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} | {observe_and_support} |
+| **S4 总结** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} | {observe_and_support} |
+| **S5 延伸** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} | {observe_and_support} |
 ```
 
 For each step, include the full teacher scripts from lesson-detail, formatted for readability.

@@ -60,6 +60,14 @@ For each step, list specific materials:
 
 For each step, explain the pedagogical purpose in 1-2 sentences.
 
+### Observation and Support Notes (教师观察与支持要点)
+
+For each step, explicitly state:
+
+- 教师应观察什么
+- 可能出现的困难
+- 当场支持策略
+
 ### Differentiation (分层指导)
 
 For S2 (Exploration) and S3 (Practice), provide 3 tiers:
@@ -88,7 +96,14 @@ Aggregate all materials across all steps into a single preparation checklist:
 |---|---------|------|---------|---------|
 | 1 | {material} | {qty} | S{n} | 提前一天准备 / 当天准备 / 常备 |
 
-## Step 4: Expert Review
+## Step 4: Identify Key Points
+
+Summarize:
+
+- **活动重点**
+- **活动难点**
+
+## Step 5: Expert Review
 
 Invoke instructional designer to check:
 - Scripts are natural, not robotic
@@ -96,11 +111,20 @@ Invoke instructional designer to check:
 - Differentiation is practical (not just "降低难度" with no detail)
 - Total material prep time is reasonable
 
-## Step 5: User Confirmation and Write
+## Step 6: User Confirmation and Write
 
 Present the detailed lesson. Wait for approval.
 
 Write to `.workshop/projects/{workspace}/lesson-detail.md`.
+
+The output should now contain:
+
+- 每环节教师行为
+- 幼儿行为预设
+- 材料清单
+- 分层指导
+- 教师观察与支持要点
+- 活动重点 / 活动难点
 
 Update workspace status with:
 

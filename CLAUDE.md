@@ -26,6 +26,7 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 ├── workshop-quality/      # Quality assurance (standards-check, proposal-review) — 2 skills
 ├── workshop-resource/     # Resource management (resource-planner, resource-check) — 2 skills
 ├── workshop-5step/        # Five-Step themed session pipeline (objective → scaffold → detail → generate) — 4 skills
+├── workshop-activity/     # Thematic activity drafting (region, outdoor, life-routine, home-school) — 4 skills
 ├── workshop-planner/      # Hierarchical curriculum planning (semester → month → week) — 3 skills
 ├── workshop-kb/           # School knowledge base (import, index, query) — 3 skills
 ├── workshop-pipelines/    # Teaching methodology pipeline registry (list, select) — 2 skills
@@ -44,6 +45,7 @@ workshop-pipelines  (zero deps)
 workshop-kb         (depends on workshop-core)
 workshop-pbl        (depends on workshop-core, workshop-pipelines)
 workshop-5step      (depends on workshop-core, workshop-pipelines)
+workshop-activity   (depends on workshop-core, workshop-pipelines)
 workshop-planner    (depends on workshop-core, workshop-pipelines)
 workshop-resource   (depends on workshop-core)
 ```
@@ -57,6 +59,7 @@ Users should enter through a project, not through a plugin list:
 3. Produce one or more outputs inside that project:
    - PBL proposal
    - Five-Step lesson plan
+   - Thematic activity drafts
    - Resource plan
    - Quality review
 4. Link the project to global semester/month/week planning context when relevant
@@ -90,6 +93,14 @@ semester-plan → month-plan → week-plan
   calendars)     textbooks)     or workshop-pbl)
 ```
 
+### Thematic Activity Drafting: `/workshop-activity:*`
+
+```
+week-plan / month-plan → region-activity / outdoor-game / life-routine / home-school
+            ↑
+       (workshop-kb client examples)
+```
+
 ## Domain Experts
 
 Runtime expert sources are layered:
@@ -112,10 +123,11 @@ Shared runtime experts typically include:
 ## Development Workflow
 
 1. Edit SKILL.md files directly — changes take effect immediately
-2. Test with: `claude --plugin-dir ./workshop-core --plugin-dir ./workshop-pbl --plugin-dir ./workshop-insight --plugin-dir ./workshop-quality --plugin-dir ./workshop-resource --plugin-dir ./workshop-5step --plugin-dir ./workshop-planner --plugin-dir ./workshop-kb --plugin-dir ./workshop-pipelines`
+2. Test with: `claude --plugin-dir ./workshop-core --plugin-dir ./workshop-pbl --plugin-dir ./workshop-insight --plugin-dir ./workshop-quality --plugin-dir ./workshop-resource --plugin-dir ./workshop-5step --plugin-dir ./workshop-activity --plugin-dir ./workshop-planner --plugin-dir ./workshop-kb --plugin-dir ./workshop-pipelines`
 3. Key test flows:
    - PBL: `/workshop-pbl:design 我周围的人`
    - Five-Step: `/workshop-5step:lesson 认识春天的花`
+   - Thematic Activities: `/workshop-activity:region-activity 多样的服饰`
    - Planning: `/workshop-planner:plan 2026春季学期`
 
 ## Key References
