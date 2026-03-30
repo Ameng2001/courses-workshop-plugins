@@ -219,10 +219,10 @@ agent 作用域也分层：
 - **《3-6 岁儿童学习与发展指南》**
 - **五步教学法结构化教案方法**
 
-更多原则见 `docs/project-workspace-principles.md`。
-HIL 规则见 [docs/hil-checkpoint-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/hil-checkpoint-model.md)。
-脚本化边界见 [docs/skill-script-boundary.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/skill-script-boundary.md)。
-整体工作机理见 [docs/how-it-works.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/how-it-works.md)。
+完整文档导航见 [docs/index.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/index.md)。
+运行时架构见 [runtime-architecture.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/architecture/runtime-architecture.md)。
+执行边界见 [execution-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/architecture/execution-model.md)。
+整体工作机理见 [how-it-works.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/product/how-it-works.md)。
 
 ## 许可证
 

@@ -13,7 +13,7 @@ Prepare a delivery-oriented export bundle without altering the runtime source-of
 
 1. If the workspace is active, read `.workshop/projects/{workspace}/status.json`
 2. If the workspace is archived, read `.workshop/archive/{archive}/status.json`
-3. Read `docs/release-bundle-model.md`
+3. Read `docs/architecture/runtime-architecture.md`
 4. Read `workshop-format/references/export-targets.md`
 
 ## Step 1: Determine Source
