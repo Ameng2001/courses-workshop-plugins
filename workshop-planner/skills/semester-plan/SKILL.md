@@ -111,7 +111,7 @@ python3 workshop-core/scripts/workspace_status.py complete-planning \
 Suggest next steps:
 > **下一步:**
 > - `/workshop-planner:month-plan {月份}` — 将某个月展开为周计划
-> - 基于某个月度主题创建 project workspace，再进入 `/workshop-designer:design` 或 `/workshop-lesson:lesson`
+> - 基于某个月度主题创建 project workspace，再进入 `/workshop-pbl:design` 或 `/workshop-5step:lesson`
 
 ## Out of Scope
 

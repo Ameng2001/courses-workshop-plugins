@@ -8,7 +8,7 @@
 - **Description**: Initialize a course workshop workspace in the current project for PBL course development. Use when starting course design in a new repo, when someone says "set up workshop", or when the workspace is missing. Creates a git-tracked workspace for planning, designing, and shipping PBL proposals.
 - **Inputs**: (none — interactive setup)
 - **Outputs**: `studio/` directory with config.yaml, changes/, agents/, archive/
-- **Out of scope**: 不做课程设计（workshop-designer 的职责）
+- **Out of scope**: 不做课程设计（workshop-pbl 的职责）
 - **Complexity**: Simple
 - **allowed-tools**: Read, Write, Bash, Glob
 - **Preconditions**: none

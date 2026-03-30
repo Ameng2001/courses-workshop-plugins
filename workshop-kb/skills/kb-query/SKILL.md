@@ -79,7 +79,7 @@ This skill is designed to be called by other skills (not just by users):
 
 - **workshop-insight:theme-analysis** — 查询与主题相关的校本资料
 - **workshop-insight:prior-knowledge** — 查询往年同主题的幼儿经验记录
-- **workshop-lesson:lesson-objective** — 查询过去同主题的教学目标设定
+- **workshop-5step:lesson-objective** — 查询过去同主题的教学目标设定
 - **workshop-planner:semester-plan** — 查询往年学期主题安排
 
 When called programmatically, the query returns structured data (file paths + metadata) rather than formatted display.

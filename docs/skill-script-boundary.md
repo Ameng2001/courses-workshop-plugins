@@ -141,7 +141,7 @@ Should remain flexible:
 - prior knowledge interpretation
 - competency mapping content
 
-### 3.5 `workshop-designer`
+### 3.5 `workshop-pbl`
 
 Should script:
 - phase progression
@@ -156,7 +156,7 @@ Should remain flexible:
 - activities
 - proposal content
 
-### 3.6 `workshop-lesson`
+### 3.6 `workshop-5step`
 
 Should script:
 - phase progression
@@ -200,7 +200,7 @@ Recommended next scripting priorities:
    - make project initialization and framing writeback fully script-driven
 2. `workshop-planner`
    - make planning initialization and link behavior fully script-driven
-3. `workshop-lesson` and `workshop-designer`
+3. `workshop-5step` and `workshop-pbl`
    - script common phase/HIL transitions
 4. `workshop-quality` and `workshop-resource`
    - script review/result writeback

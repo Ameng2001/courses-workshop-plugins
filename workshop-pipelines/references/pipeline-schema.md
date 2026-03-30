@@ -34,7 +34,7 @@ time_scope: string            # 时间跨度：lesson (单课时) | week (周) |
 
 # === 设计流水线 ===
 pipeline:
-  plugin: string              # 对应的设计插件名（如 workshop-designer, workshop-lesson）
+  plugin: string              # 对应的设计插件名（如 workshop-pbl, workshop-5step）
   stages:                     # 有序的设计阶段列表
     - id: string              # 阶段标识（对应插件中的技能名）
       name: string            # 阶段显示名称

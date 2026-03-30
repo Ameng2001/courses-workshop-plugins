@@ -356,6 +356,6 @@ Before finalizing output, verify:
 ## Out of Scope
 
 - Does NOT set learning goals (competency-mapping's responsibility)
-- Does NOT design driving questions (workshop-designer's responsibility)
+- Does NOT design driving questions (workshop-pbl's responsibility)
 - Does NOT validate against curriculum standards (theme-analysis handles standards)
 - Does NOT design assessment methods (workshop-quality's responsibility)

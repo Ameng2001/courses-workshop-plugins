@@ -21,4 +21,4 @@
 - 管线存储在 references/templates/{pipeline-id}/ 下
 - 每条管线包含 manifest.yaml、methodology-guide.md、coding-spec.md、output-format.md
 - 当前内置管线：pbl-huamei（华美 PBL）、five-step（五步法）
-- 被 workshop-designer、workshop-lesson 引用
+- 被 workshop-pbl、workshop-5step 引用

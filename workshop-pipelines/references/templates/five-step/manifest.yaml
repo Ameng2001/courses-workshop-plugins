@@ -14,7 +14,7 @@ target_age_groups:
 time_scope: lesson
 
 pipeline:
-  plugin: workshop-lesson
+  plugin: workshop-5step
   stages:
     - id: lesson-objective
       name: "教学目标设计"

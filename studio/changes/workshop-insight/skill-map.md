@@ -8,7 +8,7 @@
 - **Description**: Analyze a monthly theme's educational value, background context, and curriculum standards alignment. Use when starting a new PBL project, when the curriculum director needs a project overview, or when someone says "analyze this theme". Produces a project overview with standards references.
 - **Inputs**: 月度主题, 年龄段
 - **Outputs**: `theme-analysis.md` — 主题背景(中英文)、教育价值阐述、《指南》五大领域覆盖分析、关联课标条目
-- **Out of scope**: 不设计驱动问题（workshop-designer 的职责）
+- **Out of scope**: 不设计驱动问题（workshop-pbl 的职责）
 - **Complexity**: Simple
 - **allowed-tools**: Read, Write, Glob, Agent
 - **Preconditions**: studio/ exists

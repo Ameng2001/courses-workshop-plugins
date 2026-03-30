@@ -76,8 +76,8 @@ HIL:
 - `project-framing` 已发起，等待人工确认项目范围
 
 下一步:
-- PBL 预案设计: /workshop-designer:design {theme}
-- 五步法教案设计: /workshop-lesson:lesson {theme}
+- PBL 预案设计: /workshop-pbl:design {theme}
+- 五步法教案设计: /workshop-5step:lesson {theme}
 - 层级规划: /workshop-planner:semester-plan {semester}
 ```
 

@@ -20,4 +20,4 @@
 
 - 知识库存储在 studio/kb/ 目录下，按分类组织
 - 依赖 workshop-core（工作区管理）
-- 被 workshop-lesson、workshop-designer、workshop-planner 引用
+- 被 workshop-5step、workshop-pbl、workshop-planner 引用

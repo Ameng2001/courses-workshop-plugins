@@ -81,8 +81,8 @@ HIL must be visible:
 
 Based on current state, suggest what to do next:
 - If a project is `approved`: "Run `/workshop-core:promote {name}` to ship its deliverables"
-- If a project is `designing` with `pbl-huamei`: "Continue with `/workshop-designer:design {name}`"
-- If a project is `designing` with `five-step`: "Continue with `/workshop-lesson:lesson {name}`"
+- If a project is `designing` with `pbl-huamei`: "Continue with `/workshop-pbl:design {name}`"
+- If a project is `designing` with `five-step`: "Continue with `/workshop-5step:lesson {name}`"
 - If a project is `reviewing`: "Complete the review, then set phase to approved"
 - If a project is `planning`: "Choose the pipeline for the next deliverable with `/workshop-pipelines:pipeline-select`"
 - If no active changes: "Run `/workshop-pipelines:pipeline-list` to see available pipelines, or `/workshop-planner:semester-plan` to plan a semester"

@@ -5,5 +5,5 @@
   "phase": "planning",
   "created_at": "2026-03-28T21:00:00+08:00",
   "updated_at": "2026-03-28T21:30:00+08:00",
-  "plugins": ["workshop-core", "workshop-designer", "workshop-insight", "workshop-quality", "workshop-resource"]
+  "plugins": ["workshop-core", "workshop-pbl", "workshop-insight", "workshop-quality", "workshop-resource"]
 }
