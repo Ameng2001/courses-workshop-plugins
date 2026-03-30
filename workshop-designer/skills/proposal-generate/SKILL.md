@@ -119,20 +119,14 @@ python3 workshop-core/scripts/workspace_status.py request-hil \
   --notes "proposal draft ready for review"
 ```
 
-After the user confirms the assembled proposal draft, approve the checkpoint:
+After the user confirms the assembled proposal draft, complete the stage review:
 
 ```bash
-python3 workshop-core/scripts/workspace_status.py approve-hil \
-  {workspace} deliverable-draft \
-  --approved-by curriculum-director
-```
-
-Update workspace status with:
-
-```bash
-python3 workshop-core/scripts/workspace_status.py complete-project-skill \
-  {workspace} proposal-generate \
-  --phase reviewing
+python3 workshop-core/scripts/workspace_status.py complete-stage-review \
+  {workspace} deliverable-draft proposal-generate \
+  --phase reviewing \
+  --approved-by curriculum-director \
+  --notes "proposal draft ready for review"
 ```
 
 Present summary to user:

@@ -176,20 +176,14 @@ python3 workshop-core/scripts/workspace_status.py request-hil \
   --notes "inquiry scaffold draft ready for review"
 ```
 
-After the user confirms the 3-clue structure, mark the checkpoint approved:
+After the user confirms the 3-clue structure, complete the stage review:
 
 ```bash
-python3 workshop-core/scripts/workspace_status.py approve-hil \
-  {workspace} design-scaffold \
-  --approved-by curriculum-director
-```
-
-Update workspace status with:
-
-```bash
-python3 workshop-core/scripts/workspace_status.py complete-project-skill \
-  {workspace} inquiry-scaffold \
-  --phase designing
+python3 workshop-core/scripts/workspace_status.py complete-stage-review \
+  {workspace} design-scaffold inquiry-scaffold \
+  --phase designing \
+  --approved-by curriculum-director \
+  --notes "inquiry scaffold draft ready for review"
 ```
 
 Tell the user: "Inquiry scaffold complete. Run `/workshop-designer:activity-design {workspace}` to design activities for each clue."

@@ -1,24 +1,24 @@
 ---
 name: template-list
-description: List all available teaching methodology templates with their pipeline stages and target audience. Use when a teacher or curriculum director wants to see what methodologies are supported, or when someone asks "what templates are available" or "what teaching methods can I use".
+description: List all available teaching methodology pipelines with their stages and target audience. Use when a teacher or curriculum director wants to see what methodologies are supported, or when someone asks "what pipelines are available" or "what teaching methods can I use".
 allowed-tools: Read, Glob
 user-invocable: true
 ---
 
-# Template List
+# Pipeline List
 
-Display all available teaching methodology templates registered in the system. Each template defines a complete design pipeline, output format, and coding convention for a single deliverable inside a project workspace.
+Display all available teaching methodology pipelines registered in the system. Each pipeline defines a complete design flow, output format, and coding convention for a single deliverable inside a project workspace.
 
-## Step 1: Scan Templates
+## Step 1: Scan Registered Pipelines
 
 1. Glob `workshop-templates/references/templates/*/manifest.yaml`
 2. For each manifest found, read and parse the YAML content
 
-## Step 2: Build Template Overview
+## Step 2: Build Pipeline Overview
 
-For each template, extract and display:
+For each pipeline, extract and display:
 
-- **ID**: The template identifier
+- **ID**: The pipeline identifier
 - **名称**: Chinese name
 - **Name**: English name
 - **描述**: One-line description
@@ -34,7 +34,7 @@ Present as a formatted comparison table:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  📋 可用教学法模板 / Available Methodology Templates    │
+│  📋 可用教学法管线 / Available Methodology Pipelines    │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │  [1] pbl-huamei — 华美 PBL 五步法                       │
@@ -55,10 +55,10 @@ Present as a formatted comparison table:
 After displaying the list, suggest:
 
 > **下一步 / Next steps:**
-> - 使用 `/workshop-templates:template-select {id}` 为当前项目中的下一个产物选择模板
+> - 使用 `/workshop-templates:template-select {id}` 为当前项目中的下一个产物选择 pipeline
 > - 选择后，系统会自动路由到对应的设计流水线
 
 ## Out of Scope
 
-- This skill does NOT create or modify templates
-- This skill does NOT set the active template (use `template-select` for that)
+- This skill does NOT create or modify pipelines
+- This skill does NOT set the active pipeline (use `template-select` for that)

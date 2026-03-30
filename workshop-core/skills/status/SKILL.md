@@ -84,8 +84,8 @@ Based on current state, suggest what to do next:
 - If a project is `designing` with `pbl-huamei`: "Continue with `/workshop-designer:design {name}`"
 - If a project is `designing` with `five-step`: "Continue with `/workshop-lesson:lesson {name}`"
 - If a project is `reviewing`: "Complete the review, then set phase to approved"
-- If a project is `planning`: "Choose the template for the next deliverable with `/workshop-templates:template-select`"
-- If no active changes: "Run `/workshop-templates:template-list` to see methodologies, or `/workshop-planner:semester-plan` to plan a semester"
+- If a project is `planning`: "Choose the pipeline for the next deliverable with `/workshop-templates:template-select`"
+- If no active changes: "Run `/workshop-templates:template-list` to see available pipelines, or `/workshop-planner:semester-plan` to plan a semester"
 - If knowledge base is empty: "Run `/workshop-kb:kb-import <path>` to import school materials"
 
 ## Notes

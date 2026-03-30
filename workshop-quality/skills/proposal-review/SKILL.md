@@ -57,9 +57,10 @@ Also update `status.json` in the same workspace when present.
 After writing `review-comments.md`, update workspace status with:
 
 ```bash
-python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+python3 workshop-core/scripts/workspace_status.py record-project-artifact \
   {workspace} proposal-review \
-  --phase reviewing
+  --phase reviewing \
+  --notes "review-comments.md generated"
 ```
 
 ## Step 1: Gather All Artifacts

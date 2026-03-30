@@ -88,8 +88,10 @@ Digital content including videos, songs, images, and interactive resources.
 After writing `resource-plan.md`, update workspace status with:
 
 ```bash
-python3 workshop-core/scripts/workspace_status.py complete-project-skill \
-  {workspace} resource-planner
+python3 workshop-core/scripts/workspace_status.py record-project-artifact \
+  {workspace} resource-planner \
+  --phase reviewing \
+  --notes "resource-plan.md generated"
 ```
 
 ## Step 1: Read Activities

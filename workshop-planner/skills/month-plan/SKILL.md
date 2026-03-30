@@ -71,6 +71,15 @@ Present the monthly plan. Wait for approval. If changes requested, adjust.
 
 ## Step 5: Write Output
 
+Before writing the plan, initialize the planning workspace:
+
+```bash
+python3 workshop-core/scripts/runtime_setup.py prepare-plan \
+  {workspace} \
+  --plan-level month \
+  --methodology {selected-methodology-if-any}
+```
+
 Write to `.workshop/plans/{workspace}/month-plan.md`.
 
 Update `.workshop/plans/{workspace}/config.yaml` with the month's methodology setting if the user specifies a preference.

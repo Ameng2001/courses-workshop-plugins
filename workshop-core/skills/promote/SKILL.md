@@ -32,6 +32,7 @@ This validates:
 - final deliverables exist
 - required skill statuses are complete
 - the project is in the `approved` phase
+- `approval-gate` HIL is approved
 
 If pre-conditions fail, print a clear message about what needs to happen first and exit.
 

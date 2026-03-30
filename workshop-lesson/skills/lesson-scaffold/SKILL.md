@@ -106,20 +106,14 @@ python3 workshop-core/scripts/workspace_status.py request-hil \
 
 Present the scaffold overview. Wait for approval.
 
-After approval, mark the checkpoint approved:
+After approval, complete the stage review:
 
 ```bash
-python3 workshop-core/scripts/workspace_status.py approve-hil \
-  {workspace} design-scaffold \
-  --approved-by curriculum-director
-```
-
-Update workspace status with:
-
-```bash
-python3 workshop-core/scripts/workspace_status.py complete-project-skill \
-  {workspace} lesson-scaffold \
-  --phase designing
+python3 workshop-core/scripts/workspace_status.py complete-stage-review \
+  {workspace} design-scaffold lesson-scaffold \
+  --phase designing \
+  --approved-by curriculum-director \
+  --notes "lesson scaffold draft ready for review"
 ```
 
 Suggest next steps:

@@ -444,22 +444,31 @@ def validate_project(root: Path, name: str, required_phase: str | None) -> dict[
     skills = data.get("skills", {})
     required_skills = required_skills_for(deliverables)
     missing_skills = [skill for skill in required_skills if skills.get(skill) not in {"done", "approved"}]
+    hil = data.get("hil") or {}
+    approval_gate_ready = True
+    approval_gate_issue = None
+    if required_phase == "approved":
+        approval_gate_ready = hil.get("checkpoint") == "approval-gate" and hil.get("status") == "approved"
+        if not approval_gate_ready:
+            approval_gate_issue = "approval-gate is not approved"
 
     return {
         "workspace": name,
         "type": data.get("type", "unknown"),
         "phase": data.get("phase"),
-        "hil": data.get("hil"),
+        "hil": hil or None,
         "deliverables": deliverables,
         "required_skills": required_skills,
         "missing_skills": missing_skills,
+        "approval_gate_ready": approval_gate_ready,
+        "approval_gate_issue": approval_gate_issue,
         "optional_reviews": {
             "quality_report": deliverables["quality_report"],
             "review_comments": deliverables["review_comments"],
             "resource_plan": deliverables["resource_plan"],
             "resource_check_report": deliverables["resource_check_report"],
         },
-        "ready": len(missing_skills) == 0,
+        "ready": len(missing_skills) == 0 and approval_gate_ready,
     }
 
 
@@ -647,6 +656,75 @@ def reject_hil(root: Path, name: str, checkpoint: str, notes: str | None) -> dic
     return data
 
 
+def complete_stage_review(
+    root: Path,
+    name: str,
+    checkpoint: str,
+    skill: str,
+    phase: str | None,
+    approved_by: str | None,
+    notes: str | None,
+    value: str,
+) -> dict[str, Any]:
+    path = project_status_path(root, name)
+    data = load_status(path)
+    if not data:
+        raise SystemExit(f"Missing status.json for workspace: {name}")
+    if data.get("type") != "project":
+        raise SystemExit(f"Workspace '{name}' is not a project.")
+
+    hil = ensure_hil_state(data, checkpoint)
+    hil["checkpoint"] = checkpoint
+    if hil.get("requested_at") is None:
+        hil["requested_at"] = iso_now()
+    hil["status"] = "approved"
+    hil["approved_at"] = iso_now()
+    hil["approved_by"] = approved_by
+    if notes is not None:
+        hil["notes"] = notes
+
+    data.setdefault("skills", {})
+    data["skills"][skill] = value
+
+    if phase:
+        data["phase"] = phase
+        if phase == "approved":
+            data["approved_at"] = iso_now()
+            if approved_by:
+                data["approved_by"] = approved_by
+
+    write_status(path, data)
+    return data
+
+
+def record_project_artifact(
+    root: Path,
+    name: str,
+    skill: str,
+    phase: str | None,
+    notes: str | None,
+    value: str,
+) -> dict[str, Any]:
+    path = project_status_path(root, name)
+    data = load_status(path)
+    if not data:
+        raise SystemExit(f"Missing status.json for workspace: {name}")
+    if data.get("type") != "project":
+        raise SystemExit(f"Workspace '{name}' is not a project.")
+
+    data.setdefault("skills", {})
+    data["skills"][skill] = value
+    if phase:
+        data["phase"] = phase
+
+    if notes:
+        artifact_notes = data.setdefault("artifact_notes", {})
+        artifact_notes[skill] = notes
+
+    write_status(path, data)
+    return data
+
+
 def cmd_ensure_project(args: argparse.Namespace) -> None:
     root = find_runtime_root(args.root, create=True)
     data = ensure_project_status(root, args.workspace, args.theme)
@@ -708,6 +786,34 @@ def cmd_approve_hil(args: argparse.Namespace) -> None:
 def cmd_reject_hil(args: argparse.Namespace) -> None:
     root = find_runtime_root(args.root)
     data = reject_hil(root, args.workspace, args.checkpoint, args.notes)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def cmd_complete_stage_review(args: argparse.Namespace) -> None:
+    root = find_runtime_root(args.root)
+    data = complete_stage_review(
+        root,
+        args.workspace,
+        args.checkpoint,
+        args.skill,
+        args.phase,
+        args.approved_by,
+        args.notes,
+        args.value,
+    )
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def cmd_record_project_artifact(args: argparse.Namespace) -> None:
+    root = find_runtime_root(args.root)
+    data = record_project_artifact(
+        root,
+        args.workspace,
+        args.skill,
+        args.phase,
+        args.notes,
+        args.value,
+    )
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
@@ -851,6 +957,35 @@ def build_parser() -> argparse.ArgumentParser:
     )
     reject_hil_cmd.add_argument("--notes", default=None)
     reject_hil_cmd.set_defaults(func=cmd_reject_hil)
+
+    complete_stage_review_cmd = sub.add_parser("complete-stage-review")
+    complete_stage_review_cmd.add_argument("workspace")
+    complete_stage_review_cmd.add_argument(
+        "checkpoint",
+        choices=["project-framing", "design-scaffold", "deliverable-draft", "approval-gate"],
+    )
+    complete_stage_review_cmd.add_argument("skill")
+    complete_stage_review_cmd.add_argument(
+        "--phase",
+        choices=["planning", "designing", "reviewing", "approved", "shipped"],
+        default=None,
+    )
+    complete_stage_review_cmd.add_argument("--approved-by", default=None)
+    complete_stage_review_cmd.add_argument("--notes", default=None)
+    complete_stage_review_cmd.add_argument("--value", default="done")
+    complete_stage_review_cmd.set_defaults(func=cmd_complete_stage_review)
+
+    record_project_artifact_cmd = sub.add_parser("record-project-artifact")
+    record_project_artifact_cmd.add_argument("workspace")
+    record_project_artifact_cmd.add_argument("skill")
+    record_project_artifact_cmd.add_argument(
+        "--phase",
+        choices=["planning", "designing", "reviewing", "approved", "shipped"],
+        default=None,
+    )
+    record_project_artifact_cmd.add_argument("--notes", default=None)
+    record_project_artifact_cmd.add_argument("--value", default="done")
+    record_project_artifact_cmd.set_defaults(func=cmd_record_project_artifact)
 
     complete_project_skill = sub.add_parser("complete-project-skill")
     complete_project_skill.add_argument("workspace")
