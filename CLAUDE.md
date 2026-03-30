@@ -21,11 +21,11 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 
 ```
 ├── workshop-core/         # Workspace management (init, config, onboarding, status, link-plan, approve, promote) — 7 skills
-├── workshop-pbl/     # PBL course design pipeline (driving-question → proposal) — 5 skills
+├── workshop-pbl/          # PBL course design pipeline (driving-question → proposal) — 5 skills
 ├── workshop-insight/      # Pre-analysis toolkit (theme, prior-knowledge, 4C) — 3 skills
 ├── workshop-quality/      # Quality assurance (standards-check, proposal-review) — 2 skills
 ├── workshop-resource/     # Resource management (resource-planner, resource-check) — 2 skills
-├── workshop-5step/       # Five-Step lesson plan pipeline (objective → scaffold → detail → generate) — 4 skills
+├── workshop-5step/        # Five-Step themed session pipeline (objective → scaffold → detail → generate) — 4 skills
 ├── workshop-planner/      # Hierarchical curriculum planning (semester → month → week) — 3 skills
 ├── workshop-kb/           # School knowledge base (import, index, query) — 3 skills
 ├── workshop-pipelines/    # Teaching methodology pipeline registry (list, select) — 2 skills
@@ -42,8 +42,8 @@ workshop-insight    (zero deps)
 workshop-quality    (zero deps)
 workshop-pipelines  (zero deps)
 workshop-kb         (depends on workshop-core)
-workshop-pbl   (depends on workshop-core, workshop-pipelines)
-workshop-5step     (depends on workshop-core, workshop-pipelines)
+workshop-pbl        (depends on workshop-core, workshop-pipelines)
+workshop-5step      (depends on workshop-core, workshop-pipelines)
 workshop-planner    (depends on workshop-core, workshop-pipelines)
 workshop-resource   (depends on workshop-core)
 ```
