@@ -22,7 +22,7 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 ```
 ├── workshop-core/         # Workspace management (init, config, onboarding, status, link-plan, approve, promote) — 7 skills
 ├── workshop-pbl/          # PBL course design pipeline (driving-question → proposal) — 5 skills
-├── workshop-insight/      # Pre-analysis toolkit (theme, prior-knowledge, 4C) — 3 skills
+├── workshop-insight/      # Pre-analysis toolkit (theme, narrative, network, prior-knowledge, 4C) — 5 skills
 ├── workshop-quality/      # Quality assurance (standards-check, proposal-review) — 2 skills
 ├── workshop-resource/     # Resource management (resource-planner, resource-check) — 2 skills
 ├── workshop-5step/        # Five-Step themed session pipeline (objective → scaffold → detail → generate) — 4 skills
@@ -104,6 +104,14 @@ week-plan / month-plan → region-activity / outdoor-game / life-routine / home-
        (workshop-kb client examples)
 ```
 
+### Thematic Curriculum Framing: `/workshop-insight:*`
+
+```
+theme-analysis → theme-narrative → theme-network
+      ↓                ↓                ↓
+        (feeds into workshop-planner month/week outputs)
+```
+
 ## Domain Experts
 
 Runtime expert sources are layered:
@@ -132,6 +140,7 @@ Shared runtime experts typically include:
    - Five-Step: `/workshop-5step:lesson 认识春天的花`
    - Thematic Activities: `/workshop-activity:region-activity 多样的服饰`
    - Planning: `/workshop-planner:plan 2026春季学期`
+   - Theme Package Framing: `/workshop-insight:theme-narrative 多样的服饰`
    - Formatting: `/workshop-format:format-lesson spring-flowers`
 
 ## Key References
