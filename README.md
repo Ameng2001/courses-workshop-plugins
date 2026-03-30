@@ -1,228 +1,84 @@
 # Course Workshop Plugins
 
-AI 驱动的幼儿园课程设计平台插件集合，面向课研主任和一线教师，支持 PBL 预案、五步法教案、主题式课程活动、学期/月/周规划，以及校本知识库复用。
+AI 驱动的幼儿园课程设计平台插件集合，面向课研主任、一线教师和客户交付团队。
 
-> 基于开放的 `SKILL.md` 插件规范构建，可在兼容运行时上使用。使用 [Astra Studio](https://github.com/VanLengs/astra-studio-plugins) 工具链开发。
+它当前支持三类核心工作：
 
-## 概述
+- `workshop-pbl`
+  - 月度 PBL 预案
+- `workshop-5step` + `workshop-activity`
+  - 主题式课程中的教学活动、区域活动、户外游戏、生活渗透、家园互动
+- `workshop-planner`
+  - 学期 / 月 / 周规划
 
-Course Workshop 已从单一 PBL 工具集演进为多方法论课程工作台：
+平台的主工作对象是 **project workspace**，运行时根目录是 `.workshop/`，不是 `studio/`。
 
-- `workshop-pbl` 负责 PBL 月度项目预案
-- `workshop-5step` 负责五步法单课时教案
-- `workshop-activity` 负责主题式课程中的区域活动、户外游戏、生活渗透与家园互动
-- `workshop-planner` 负责学期 / 月 / 周全局规划
-- `workshop-kb` 负责校本知识库导入、索引和检索
-- `workshop-pipelines` 负责教学法 pipeline 注册与选择
-- `workshop-format` 负责客户交付格式标准化与导出包准备
+## 插件组成
 
-系统的主工作对象是 **课程项目（project workspace）**，不是单个 plugin、skill 或文档类型。
+| 插件 | 职责 |
+|------|------|
+| `workshop-core` | `.workshop/` 初始化、状态、审批、发布 |
+| `workshop-pipelines` | 方法论 pipeline 选择 |
+| `workshop-insight` | 主题分析、主题解读、主题网络 |
+| `workshop-pbl` | PBL 预案设计 |
+| `workshop-5step` | 五步法教学活动稿 |
+| `workshop-activity` | 区域 / 户外 / 生活 / 家园活动稿 |
+| `workshop-planner` | 学期 / 月 / 周规划 |
+| `workshop-quality` | 质量检查与评审 |
+| `workshop-resource` | 资源规划与核验 |
+| `workshop-kb` | 校本知识库 |
+| `workshop-format` | 格式整理与导出包准备 |
 
-一个 project workspace 对应一个具体课程主题，例如：
-- `spring-flowers`
-- `people-around-me`
-- `my-body`
+## 3 步开始
 
-同一 project 内可以并存多种产物：
-- PBL 预案 `proposal.md`
-- 五步法教案 `lesson-plan.md`
-- 资源规划与核验结果
-- 质量检查与专家评审结果
-- 与该主题相关的周计划引用
-
-## Project Workspace First
-
-当前仓库遵循以下实现原则：
-
-1. 用户先创建或进入一个 `project workspace`，再选择要产出什么。
-2. `workshop-*` 目录是唯一真实实现源。
-3. `.workshop/projects/*` 中的目录默认表示项目工作区；`.workshop/plans/*` 是全局计划资产，不等同于课程项目。
-4. 教学法 pipeline 是产物级选择，不锁定整个项目。
-5. 学期 / 月 / 周计划是全局可复用资产，project 只引用相关切片，不复制完整计划。
-6. 计划与课程设计是弱依赖：可以先做计划，也可以先做项目，后续再互相关联。
-7. 领域专家使用单一事实源 `experts/`；runtime 只允许 `.workshop/agents/custom` 覆盖，`workshop-*/agents` 仅保留 plugin-local 专家。
-8. 大阶段衔接点遵循 HIL（human-in-the-loop），不会默认无确认直通到 shipped。
-
-## 插件分层
-
-| 分层 | 插件 | 说明 |
-|------|------|------|
-| 平台底座 | `workshop-core` | 初始化 `.workshop/`、查看状态、归档交付物 |
-| 平台能力 | `workshop-kb`, `workshop-pipelines`, `workshop-format` | 提供知识上下文、教学法 pipeline 与导出格式层 |
-| 设计流水线 | `workshop-pbl`, `workshop-5step`, `workshop-activity`, `workshop-planner` | 生成 PBL 预案、五步法教案、主题活动和全局计划 |
-| 辅助能力 | `workshop-insight`, `workshop-quality`, `workshop-resource` | 前期分析、质量保障、资源规划 |
-
-## 插件一览
-
-| 插件 | 说明 | 技能 |
-|------|------|------|
-| **workshop-core** | 项目工作区管理 | `init`, `config`, `onboarding`, `status`, `link-plan`, `approve`, `promote` |
-| **workshop-insight** | 项目前期分析 | `theme-analysis`, `theme-narrative`, `theme-network`, `prior-knowledge`, `competency-mapping` |
-| **workshop-pbl** | PBL 项目预案设计 | `driving-question`, `network-map`, `inquiry-scaffold`, `activity-design`, `proposal-generate` |
-| **workshop-quality** | 质量检查与专家评审 | `standards-check`, `proposal-review` |
-| **workshop-resource** | 教学资源规划与核验 | `resource-planner`, `resource-check` |
-| **workshop-5step** | 五步法单课时教案 | `lesson-objective`, `lesson-scaffold`, `lesson-detail`, `lesson-generate` |
-| **workshop-activity** | 主题式课程活动 | `region-activity`, `outdoor-game`, `life-routine`, `home-school` |
-| **workshop-planner** | 学期 / 月 / 周规划 | `semester-plan`, `month-plan`, `week-plan` |
-| **workshop-kb** | 校本知识库 | `kb-import`, `kb-index`, `kb-query` |
-| **workshop-pipelines** | pipeline 注册与选择 | `pipeline-list`, `pipeline-select` |
-| **workshop-format** | 格式标准化与导出包 | `format-lesson`, `export-bundle` |
-
-## 快速开始
-
-### 前置条件
-
-- 任意支持 `SKILL.md` 插件规范的 AI 运行时
-- Git（推荐，用于版本管理 `.workshop/` 下的课程项目与计划资产）
-
-### 安装
-
-本地加载全部插件目录：
+1. 初始化运行时
 
 ```bash
-claude --plugin-dir ./workshop-core \
-       --plugin-dir ./workshop-pbl \
-       --plugin-dir ./workshop-insight \
-       --plugin-dir ./workshop-quality \
-       --plugin-dir ./workshop-resource \
-       --plugin-dir ./workshop-5step \
-       --plugin-dir ./workshop-activity \
-       --plugin-dir ./workshop-planner \
-       --plugin-dir ./workshop-kb \
-       --plugin-dir ./workshop-pipelines \
-       --plugin-dir ./workshop-format
+/workshop-core:init
 ```
 
-### 推荐使用顺序
+2. 查看推荐入口
+
+```bash
+/workshop-core:onboarding
+```
+
+3. 选择一条主路径
+
+- PBL 预案
+  - `/workshop-pipelines:pipeline-select pbl-huamei`
+- 五步法教学活动
+  - `/workshop-pipelines:pipeline-select five-step`
+- 主题式课程包
+  - `/workshop-pipelines:pipeline-select thematic-curriculum`
+
+## 文档入口
+
+- [docs/index.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/index.md)
+  - 完整文档导航
+- [docs/product/whitepaper.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/product/whitepaper.md)
+  - 产品全景
+- [docs/product/how-it-works.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/product/how-it-works.md)
+  - 用户视角工作机理
+- [docs/architecture/runtime-architecture.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/architecture/runtime-architecture.md)
+  - 当前生效的运行时规范
+- [docs/architecture/execution-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/architecture/execution-model.md)
+  - experts / roles / scripts / skills 边界
+
+## 仓库结构
 
 ```text
-1. /workshop-core:init
-2. /workshop-core:config show
-3. /workshop-core:onboarding
-4. 创建或进入一个 project workspace（一个课程主题）
-5. /workshop-pipelines:pipeline-list
-6. /workshop-pipelines:pipeline-select <id>
-7. 按需要继续：
-   - /workshop-pbl:design <theme>
-   - /workshop-5step:lesson <theme>
-   - /workshop-activity:region-activity <theme>
-   - /workshop-planner:semester-plan <semester>
-   - /workshop-kb:kb-import <path>
-   - /workshop-format:format-lesson <workspace>
+workshop-*/              # 插件实现
+.workshop/               # 课程运行时
+courses/                 # 最终 release bundles
+experts/                 # 共享领域专家
+studio/                  # Astra Studio 插件研发目录
+docs/                    # 产品、架构、交付、示例与历史文档
 ```
 
-### 典型项目路径
+## 开发说明
 
-PBL 项目：
-
-```text
-/workshop-insight:theme-analysis
-/workshop-insight:competency-mapping
-/workshop-pbl:driving-question
-/workshop-pbl:network-map
-/workshop-pbl:inquiry-scaffold
-/workshop-pbl:activity-design
-/workshop-pbl:proposal-generate
-/workshop-quality:standards-check
-/workshop-resource:resource-planner
-```
-
-主题式课程包：
-
-```text
-/workshop-insight:theme-analysis
-/workshop-insight:theme-narrative
-/workshop-insight:theme-network
-/workshop-planner:month-plan
-/workshop-planner:week-plan
-/workshop-5step:lesson-generate
-/workshop-activity:region-activity
-/workshop-activity:outdoor-game
-/workshop-activity:life-routine
-/workshop-activity:home-school
-```
-
-五步法教案：
-
-```text
-/workshop-5step:lesson-objective
-/workshop-5step:lesson-scaffold
-/workshop-5step:lesson-detail
-/workshop-5step:lesson-generate
-```
-
-主题式课程活动：
-
-```text
-/workshop-activity:region-activity
-/workshop-activity:outdoor-game
-/workshop-activity:life-routine
-/workshop-activity:home-school
-```
-
-## 项目结构
-
-```text
-├── workshop-core/          # 项目工作区与交付管理
-├── workshop-pbl/           # PBL 项目预案流水线
-├── workshop-insight/       # 项目前期分析
-├── workshop-quality/       # 质量检查与评审
-├── workshop-resource/      # 资源规划与核验
-├── workshop-5step/         # 五步法主题课程流水线
-├── workshop-activity/      # 主题式课程活动稿
-├── workshop-planner/       # 全局学期 / 月 / 周规划
-├── workshop-kb/            # 校本知识库
-├── workshop-pipelines/     # 教学法 pipeline 注册中心
-├── workshop-format/        # 格式标准化与导出层
-├── .workshop/
-│   ├── config.yaml         # 课程工作台运行配置
-│   ├── projects/           # 项目工作区
-│   ├── plans/              # 全局规划记录
-│   ├── agents/
-│   │   └── custom/         # 园所/项目自定义专家
-│   ├── kb/                 # 校本知识库内容
-│   └── archive/            # 已归档课程完整历史
-├── courses/                # 已发布课程 release bundles
-├── experts/                # 共享领域专家单一事实源
-├── studio/                 # Astra Studio 插件研发目录
-│   ├── roles/              # Astra Studio 专用流程角色
-│   └── ...                 # 其余 plugin 研发资产
-└── docs/                   # 白皮书、原则说明与参考文档
-```
-
-`studio/` 与 `.workshop/` 职责不同：
-- `studio/` 用于 Astra Studio 的 plugin / skill 研发
-- `.workshop/` 用于真实课程项目、计划、知识库与归档运行时
-- `courses/` 用于最终课程 release bundle，不保存完整设计过程
-- `.workshop/exports/` 用于 Word/PDF/客户版式的导出包准备
-
-agent 作用域也分层：
-- `experts/` 是共享领域专家的单一事实源
-- `.workshop/agents/custom/` 用于园所或项目自定义专家
-- `workshop-*/agents/` 仅用于单个 plugin 的私有专家
-- `studio/roles/` 用于 plugin 研发专用流程角色，如产品经理、架构师
-
-## 领域专家 Agent
-
-内置 3 位领域专家参与多角色协作评审：
-
-- **幼儿发展心理学家**：年龄适切性、认知发展阶段判断
-- **幼儿园课程专家**：课程标准、PBL 合规性、主题适配
-- **教学设计师**：活动编排、可执行性、学习体验设计
-
-## 方法论基础
-
-- **华美 PBL 五步路径图**
-- **三阶段九要素**
-- **驱动问题六原则**
-- **4C 能力框架**
-- **《3-6 岁儿童学习与发展指南》**
-- **五步教学法结构化教案方法**
-
-完整文档导航见 [docs/index.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/index.md)。
-运行时架构见 [runtime-architecture.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/architecture/runtime-architecture.md)。
-执行边界见 [execution-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/architecture/execution-model.md)。
-整体工作机理见 [how-it-works.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/product/how-it-works.md)。
+本仓库基于开放的 `SKILL.md` 插件规范构建，并使用 [Astra Studio](https://github.com/VanLengs/astra-studio-plugins) 工具链开发。
 
 ## 许可证
 
