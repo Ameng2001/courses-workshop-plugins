@@ -5,3 +5,5 @@ skill: template-list
 ---
 
 List all registered teaching methodology pipelines with their stages and target audience.
+
+Compatibility alias. Prefer `/workshop-templates:pipeline-list`.

@@ -429,9 +429,9 @@ def onboarding_summary(
     current_publishing = publishing or deep_get(config, "publishing.default_target.kind") or "local"
     next_steps: list[str] = []
     pipeline_step = (
-        f"/workshop-templates:template-select {current_methodology}"
+        f"/workshop-templates:pipeline-select {current_methodology}"
         if current_methodology and current_methodology != "mixed"
-        else "/workshop-templates:template-select <id>"
+        else "/workshop-templates:pipeline-select <id>"
     )
 
     if current_methodology in {None, "", "mixed"}:

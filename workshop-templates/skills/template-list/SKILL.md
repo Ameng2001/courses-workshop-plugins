@@ -7,6 +7,8 @@ user-invocable: true
 
 # Pipeline List
 
+`template-list` is kept as a compatibility alias. Prefer invoking `pipeline-list` in new documentation and user guidance.
+
 Display all available teaching methodology pipelines registered in the system. Each pipeline defines a complete design flow, output format, and coding convention for a single deliverable inside a project workspace.
 
 ## Step 1: Scan Registered Pipelines
@@ -55,10 +57,10 @@ Present as a formatted comparison table:
 After displaying the list, suggest:
 
 > **下一步 / Next steps:**
-> - 使用 `/workshop-templates:template-select {id}` 为当前项目中的下一个产物选择 pipeline
+> - 优先使用 `/workshop-templates:pipeline-select {id}` 为当前项目中的下一个产物选择 pipeline
 > - 选择后，系统会自动路由到对应的设计流水线
 
 ## Out of Scope
 
 - This skill does NOT create or modify pipelines
-- This skill does NOT set the active pipeline (use `template-select` for that)
+- This skill does NOT set the active pipeline (use `pipeline-select` for that)

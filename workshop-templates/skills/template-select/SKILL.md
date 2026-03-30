@@ -7,6 +7,8 @@ user-invocable: true
 
 # Pipeline Select
 
+`template-select` is kept as a compatibility alias. Prefer invoking `pipeline-select` in new documentation and user guidance.
+
 Set the active teaching methodology pipeline for the next deliverable in the current project workspace. The selected pipeline determines which design stages to use, what output format to generate, and which coding convention to follow. A single project may use different pipelines for different deliverables over time.
 
 ## Pre-check
@@ -21,7 +23,7 @@ Set the active teaching methodology pipeline for the next deliverable in the cur
 1. Read the user's requested pipeline ID from `$ARGUMENTS`
 2. Check if `workshop-templates/references/templates/{id}/manifest.yaml` exists
 3. If not found:
-   - Run template-list logic to show available pipeline options
+   - Run pipeline-list logic to show available pipeline options
    - Ask the user to pick one
 
 ## Step 2: Read Pipeline Manifest
