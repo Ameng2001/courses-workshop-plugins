@@ -25,6 +25,7 @@ Generate clear, observable learning objectives for a single lesson, aligned with
 3. Check knowledge base for related lesson plans:
    - Glob `.workshop/kb/lesson-plans/*.md` — read frontmatter for matching themes
    - If found, use past objectives as reference (not copy)
+4. If client goal-code references exist in KB or pipeline context, preserve them as `local_goal_system` + `goal_codes`
 
 ## Step 1: Gather Context
 
@@ -81,6 +82,17 @@ If the client or school uses a local coding system, also add:
 |------|----------------|
 | {objective_1} | {SE-8 / local-code / TBD} |
 
+When possible, also record:
+
+```yaml
+local_goal_system: HEPU-SE
+goal_codes:
+  - SE-4
+  - SE-8
+```
+
+If the customer only provides partial codes, preserve the known ones and mark the rest as `TBD` rather than inventing new codes.
+
 ## Step 4: Expert Review
 
 Invoke child development psychologist to validate:
@@ -99,6 +111,7 @@ The output should include:
 - 三维教学目标
 - 《指南》对应关系
 - 可选的核心发展目标编码
+- 可选的 `local_goal_system` / `goal_codes` 字段
 
 Update workspace status with:
 
