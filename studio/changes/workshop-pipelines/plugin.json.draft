@@ -1,5 +1,5 @@
 {
-  "name": "workshop-templates",
+  "name": "workshop-pipelines",
   "version": "0.2.0",
   "description": "Teaching methodology pipeline registry — manage pluggable pedagogy pipelines (PBL, Five-Step, etc.) that define design flows, output formats, and coding conventions",
   "author": {

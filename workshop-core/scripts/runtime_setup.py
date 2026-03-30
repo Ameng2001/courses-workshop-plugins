@@ -250,7 +250,7 @@ def write_json(path: Path, data: dict[str, Any]) -> None:
 
 
 def manifest_path(pipeline_id: str) -> Path:
-    return repo_root() / "workshop-templates" / "references" / "templates" / pipeline_id / "manifest.yaml"
+    return repo_root() / "workshop-pipelines" / "references" / "templates" / pipeline_id / "manifest.yaml"
 
 
 def load_manifest(pipeline_id: str) -> dict[str, Any]:
@@ -429,9 +429,9 @@ def onboarding_summary(
     current_publishing = publishing or deep_get(config, "publishing.default_target.kind") or "local"
     next_steps: list[str] = []
     pipeline_step = (
-        f"/workshop-templates:pipeline-select {current_methodology}"
+        f"/workshop-pipelines:pipeline-select {current_methodology}"
         if current_methodology and current_methodology != "mixed"
-        else "/workshop-templates:pipeline-select <id>"
+        else "/workshop-pipelines:pipeline-select <id>"
     )
 
     if current_methodology in {None, "", "mixed"}:

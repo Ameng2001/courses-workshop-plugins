@@ -22,7 +22,7 @@ Design the five-step teaching structure for a single lesson. Each step gets a ti
 1. Verify `.workshop/` exists
 2. Read `.workshop/projects/{workspace}/lesson-objective.md` — if present, use objectives as the design anchor
    - If not present, warn: "建议先运行 `/workshop-lesson:lesson-objective` 设定教学目标" but proceed if user insists
-3. Read the five-step methodology guide from `workshop-templates/references/templates/five-step/methodology-guide.md`
+3. Read the five-step methodology guide from `workshop-pipelines/references/templates/five-step/methodology-guide.md`
 4. Read age-appropriate time allocation from the methodology guide
 
 ## Step 1: Determine Parameters

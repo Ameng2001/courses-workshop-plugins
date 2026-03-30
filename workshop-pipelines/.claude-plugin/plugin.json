@@ -1,5 +1,5 @@
 {
-  "name": "workshop-templates",
+  "name": "workshop-pipelines",
   "version": "0.2.0",
   "description": "Teaching methodology pipeline registry — manage pluggable pedagogy pipelines (PBL, Five-Step, etc.) that define design flows, output formats, and coding conventions",
   "author": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/VanLengs"
   },
   "license": "Apache-2.0",
-  "keywords": ["workshop", "templates", "pipelines", "methodology", "pedagogy", "pbl", "five-step"],
+  "keywords": ["workshop", "pipelines", "methodology", "pedagogy", "pbl", "five-step"],
   "skills": "./skills/",
   "commands": "./commands/"
 }

@@ -16,7 +16,7 @@ Assemble lesson objectives, scaffold, and details into a complete, standard-form
    - `lesson-scaffold.md` — five-step structure
    - `lesson-detail.md` — detailed scripts and materials
    - If any missing, list what's missing and suggest running the corresponding skill
-2. Read the output format spec from `workshop-templates/references/templates/five-step/output-format.md`
+2. Read the output format spec from `workshop-pipelines/references/templates/five-step/output-format.md`
 
 ## Step 1: Assemble Basic Info
 

@@ -18,6 +18,6 @@
 
 ## Notes
 
-- 依赖 workshop-core（工作区管理）和 workshop-templates（五步法模板）
-- 五步法模板定义在 workshop-templates/references/templates/five-step/
+- 依赖 workshop-core（工作区管理）和 workshop-pipelines（五步法管线）
+- 五步法管线定义在 workshop-pipelines/references/templates/five-step/
 - 与 workshop-designer 的 PBL 流水线互补，面向不同教学方法论

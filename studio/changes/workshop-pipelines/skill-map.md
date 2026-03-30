@@ -1,4 +1,4 @@
-# Skill Map: workshop-templates
+# Skill Map: workshop-pipelines
 
 > Date: 2026-03-29
 

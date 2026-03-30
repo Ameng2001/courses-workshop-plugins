@@ -62,7 +62,7 @@ coding:
 
 ## 管线包的使用方式
 
-1. **选择 pipeline**：`/workshop-templates:pipeline-select {id}` 将 pipeline ID 写入工作区 config
+1. **选择 pipeline**：`/workshop-pipelines:pipeline-select {id}` 将 pipeline ID 写入工作区 config
 2. **读取管线**：下游技能在 Pre-check 阶段读取 `.workshop/projects/{workspace}/config.yaml` 中的 `methodology` 字段
 3. **加载规则**：技能根据 `methodology` 值定位 `references/templates/{id}/` 目录，读取对应的 pipeline 指南和编码规范
 4. **路由设计**：`pipeline.plugin` 字段告诉系统应该调用哪个插件的设计流水线

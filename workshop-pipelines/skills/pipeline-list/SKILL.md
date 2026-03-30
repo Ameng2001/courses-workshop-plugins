@@ -11,7 +11,7 @@ Display all available teaching methodology pipelines registered in the system. E
 
 ## Step 1: Scan Registered Pipelines
 
-1. Glob `workshop-templates/references/templates/*/manifest.yaml`
+1. Glob `workshop-pipelines/references/templates/*/manifest.yaml`
 2. For each manifest found, read and parse the YAML content
 
 ## Step 2: Build Pipeline Overview
@@ -55,7 +55,7 @@ Present as a formatted comparison table:
 After displaying the list, suggest:
 
 > **下一步 / Next steps:**
-> - 使用 `/workshop-templates:pipeline-select {id}` 为当前项目中的下一个产物选择 pipeline
+> - 使用 `/workshop-pipelines:pipeline-select {id}` 为当前项目中的下一个产物选择 pipeline
 > - 选择后，系统会自动路由到对应的设计流水线
 
 ## Out of Scope

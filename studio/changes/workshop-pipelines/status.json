@@ -1,6 +1,6 @@
 {
   "type": "plugin",
-  "plugin": "workshop-templates",
+  "plugin": "workshop-pipelines",
   "domain": "course-workshop",
   "target_collection": "courses",
   "phase": "designing",

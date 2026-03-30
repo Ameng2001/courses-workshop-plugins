@@ -28,7 +28,7 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 ├── workshop-lesson/       # Five-Step lesson plan pipeline (objective → scaffold → detail → generate) — 4 skills
 ├── workshop-planner/      # Hierarchical curriculum planning (semester → month → week) — 3 skills
 ├── workshop-kb/           # School knowledge base (import, index, query) — 3 skills
-├── workshop-templates/    # Teaching methodology template registry (list, select) — 2 skills
+├── workshop-pipelines/    # Teaching methodology pipeline registry (list, select) — 2 skills
 ├── experts/               # Shared domain experts
 ├── studio/                # Astra Studio plugin-development workspace
 └── .workshop/             # Course runtime workspaces (projects, plans, kb, archive)
@@ -40,11 +40,11 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 workshop-core       (zero deps)
 workshop-insight    (zero deps)
 workshop-quality    (zero deps)
-workshop-templates  (zero deps)
+workshop-pipelines  (zero deps)
 workshop-kb         (depends on workshop-core)
-workshop-designer   (depends on workshop-core, workshop-templates)
-workshop-lesson     (depends on workshop-core, workshop-templates)
-workshop-planner    (depends on workshop-core, workshop-templates)
+workshop-designer   (depends on workshop-core, workshop-pipelines)
+workshop-lesson     (depends on workshop-core, workshop-pipelines)
+workshop-planner    (depends on workshop-core, workshop-pipelines)
 workshop-resource   (depends on workshop-core)
 ```
 
@@ -53,7 +53,7 @@ workshop-resource   (depends on workshop-core)
 Users should enter through a project, not through a plugin list:
 
 1. Create or enter a course-theme project workspace
-2. Optionally choose a template for the next deliverable
+2. Optionally choose a pipeline for the next deliverable
 3. Produce one or more outputs inside that project:
    - PBL proposal
    - Five-Step lesson plan
@@ -77,8 +77,8 @@ driving-question → network-map → inquiry-scaffold → activity-design ×3 �
 ```
 lesson-objective → lesson-scaffold → lesson-detail → lesson-generate
       ↑                  ↑                                  ↑
-  (workshop-kb      (workshop-templates              (workshop-quality
-   optional)         five-step template)              optional check)
+  (workshop-kb      (workshop-pipelines              (workshop-quality
+   optional)         five-step pipeline)              optional check)
 ```
 
 ### Curriculum Planning Pipeline: `/workshop-planner:plan`
@@ -112,7 +112,7 @@ Shared runtime experts typically include:
 ## Development Workflow
 
 1. Edit SKILL.md files directly — changes take effect immediately
-2. Test with: `claude --plugin-dir ./workshop-core --plugin-dir ./workshop-designer --plugin-dir ./workshop-insight --plugin-dir ./workshop-quality --plugin-dir ./workshop-resource --plugin-dir ./workshop-lesson --plugin-dir ./workshop-planner --plugin-dir ./workshop-kb --plugin-dir ./workshop-templates`
+2. Test with: `claude --plugin-dir ./workshop-core --plugin-dir ./workshop-designer --plugin-dir ./workshop-insight --plugin-dir ./workshop-quality --plugin-dir ./workshop-resource --plugin-dir ./workshop-lesson --plugin-dir ./workshop-planner --plugin-dir ./workshop-kb --plugin-dir ./workshop-pipelines`
 3. Key test flows:
    - PBL: `/workshop-designer:design 我周围的人`
    - Five-Step: `/workshop-lesson:lesson 认识春天的花`
@@ -129,9 +129,9 @@ Shared runtime experts typically include:
 | age-ability-matrix.md | quality | 年龄×能力查询表 |
 | pbl-box-catalog.md | resource | PBL Box 物料目录 |
 | resource-categories.md | resource | 资源分类规则 + 决策树 |
-| methodology-guide.md | templates/five-step | 五步法方法论指南 |
-| coding-spec.md | templates/five-step | FS-Sx-yy 编码规范 |
-| output-format.md | templates/five-step | 五步法教案输出格式 |
+| methodology-guide.md | pipelines/five-step | 五步法方法论指南 |
+| coding-spec.md | pipelines/five-step | FS-Sx-yy 编码规范 |
+| output-format.md | pipelines/five-step | 五步法教案输出格式 |
 | semester-calendar-template.md | planner | 学期日历模板 |
 | weekly-schedule-template.md | planner | 周日程模板 |
 | kb-schema.md | kb | 知识库文档结构定义 |
