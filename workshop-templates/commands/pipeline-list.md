@@ -4,4 +4,4 @@ description: List available teaching methodology pipelines
 skill: pipeline-list
 ---
 
-Preferred command alias for `/workshop-templates:template-list`.
+List all registered teaching methodology pipelines with their stages and target audience.

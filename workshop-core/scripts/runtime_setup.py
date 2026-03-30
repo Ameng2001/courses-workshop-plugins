@@ -249,14 +249,14 @@ def write_json(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def manifest_path(template_id: str) -> Path:
-    return repo_root() / "workshop-templates" / "references" / "templates" / template_id / "manifest.yaml"
+def manifest_path(pipeline_id: str) -> Path:
+    return repo_root() / "workshop-templates" / "references" / "templates" / pipeline_id / "manifest.yaml"
 
 
-def load_manifest(template_id: str) -> dict[str, Any]:
-    path = manifest_path(template_id)
+def load_manifest(pipeline_id: str) -> dict[str, Any]:
+    path = manifest_path(pipeline_id)
     if not path.exists():
-        raise SystemExit(f"Unknown template id: {template_id}")
+        raise SystemExit(f"Unknown pipeline id: {pipeline_id}")
     text = path.read_text(encoding="utf-8")
 
     top_level: dict[str, str] = {}
@@ -484,8 +484,8 @@ def render_onboarding(summary: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def select_template(root: Path, template_id: str, workspace: str, theme: str | None) -> dict[str, Any]:
-    manifest = load_manifest(template_id)
+def select_pipeline(root: Path, pipeline_id: str, workspace: str, theme: str | None) -> dict[str, Any]:
+    manifest = load_manifest(pipeline_id)
     workspace_dir = project_workspace_dir(root, workspace)
     workspace_dir.mkdir(parents=True, exist_ok=True)
 
@@ -522,7 +522,7 @@ def select_template(root: Path, template_id: str, workspace: str, theme: str | N
     return {
         "workspace": workspace,
         "theme": status.get("theme"),
-        "template": {
+        "pipeline": {
             "id": manifest.get("id"),
             "name": manifest.get("name"),
             "pipeline_plugin": deep_get(manifest, "pipeline.plugin"),
@@ -618,9 +618,9 @@ def cmd_onboarding_summary(args: argparse.Namespace) -> None:
     print(render_onboarding(summary))
 
 
-def cmd_select_template(args: argparse.Namespace) -> None:
+def cmd_select_pipeline(args: argparse.Namespace) -> None:
     root = find_root(args.root)
-    result = select_template(root, args.template_id, args.workspace, args.theme)
+    result = select_pipeline(root, args.pipeline_id, args.workspace, args.theme)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
@@ -656,11 +656,11 @@ def build_parser() -> argparse.ArgumentParser:
     onboarding_cmd.add_argument("--json", action="store_true")
     onboarding_cmd.set_defaults(func=cmd_onboarding_summary)
 
-    select_template_cmd = sub.add_parser("select-template")
-    select_template_cmd.add_argument("template_id")
-    select_template_cmd.add_argument("workspace")
-    select_template_cmd.add_argument("--theme", default=None)
-    select_template_cmd.set_defaults(func=cmd_select_template)
+    select_pipeline_cmd = sub.add_parser("select-pipeline")
+    select_pipeline_cmd.add_argument("pipeline_id")
+    select_pipeline_cmd.add_argument("workspace")
+    select_pipeline_cmd.add_argument("--theme", default=None)
+    select_pipeline_cmd.set_defaults(func=cmd_select_pipeline)
 
     prepare_plan_cmd = sub.add_parser("prepare-plan")
     prepare_plan_cmd.add_argument("workspace")

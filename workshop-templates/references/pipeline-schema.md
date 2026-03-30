@@ -1,12 +1,12 @@
-# 教学法模板规范 / Template Pack Schema
+# 教学法管线规范 / Pipeline Pack Schema
 
-本文件定义教学法模板包的结构规范。每个模板包是一个目录，包含以下文件：
+本文件定义教学法管线包的结构规范。每个管线包是一个目录，包含以下文件：
 
 ## 目录结构
 
 ```
-templates/{template-id}/
-├── manifest.yaml          # 必需 — 模板元数据 + 流水线定义
+templates/{pipeline-id}/
+├── manifest.yaml          # 必需 — 管线元数据 + 流水线定义
 ├── methodology-guide.md   # 必需 — 方法论理论基础与操作指南
 ├── coding-spec.md         # 必需 — 活动/环节编码规范
 └── output-format.md       # 必需 — 最终输出文档的节结构定义
@@ -60,16 +60,16 @@ coding:
   unit_labels: [string]       # 各单元标签（如 ["线索一", "线索二", "线索三"]）
 ```
 
-## 模板包的使用方式
+## 管线包的使用方式
 
-1. **选择 pipeline**：`/workshop-templates:template-select {id}` 将 pipeline ID 写入工作区 config
-2. **读取模板**：下游技能在 Pre-check 阶段读取 `.workshop/projects/{workspace}/config.yaml` 中的 `methodology` 字段
+1. **选择 pipeline**：`/workshop-templates:pipeline-select {id}` 将 pipeline ID 写入工作区 config
+2. **读取管线**：下游技能在 Pre-check 阶段读取 `.workshop/projects/{workspace}/config.yaml` 中的 `methodology` 字段
 3. **加载规则**：技能根据 `methodology` 值定位 `references/templates/{id}/` 目录，读取对应的 pipeline 指南和编码规范
 4. **路由设计**：`pipeline.plugin` 字段告诉系统应该调用哪个插件的设计流水线
 
-## 扩展新模板
+## 扩展新管线
 
 添加新教学法只需：
 1. 在 `references/templates/` 下创建新目录
 2. 编写 manifest.yaml + 3 个配套文件
-3. 无需修改任何技能代码 — 技能通过读取模板动态适配
+3. 无需修改任何技能代码 — 技能通过读取管线动态适配
