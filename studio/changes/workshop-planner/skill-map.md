@@ -30,7 +30,7 @@
 ```
 semester-plan → month-plan → week-plan
      ↑               ↑            ↓
- (workshop-kb    (workshop-kb   (workshop-lesson
+ (workshop-kb    (workshop-kb   (workshop-5step
   calendars)      textbooks)     lesson pipeline)
 ```
 

@@ -14,7 +14,7 @@
 
 迭代一（2026-03-28）完成了核心 PBL 课程设计工具集的构建：
 
-- 5 个插件：workshop-core, workshop-designer, workshop-insight, workshop-quality, workshop-resource
+- 5 个插件：workshop-core, workshop-pbl, workshop-insight, workshop-quality, workshop-resource
 - 15 个技能：覆盖从工作区管理到 PBL 预案生成的完整流程
 - 7 个参考文件：PBL 方法论、编码规范、《指南》摘要、4C 框架、年龄矩阵、资源目录
 - 3 位领域专家：课程专家、心理学家、教学设计师
@@ -33,7 +33,7 @@
 
 | Plugin | Skills | 定位 | 面向用户 |
 |--------|--------|------|---------|
-| workshop-lesson | 4 | 五步法教案设计流水线 | 一线教师 |
+| workshop-5step | 4 | 五步法教案设计流水线 | 一线教师 |
 | workshop-planner | 3 | 分层课程规划 | 课研主任 |
 | workshop-kb | 3 | 园本知识库管理 | 课研主任 + 一线教师 |
 | workshop-pipelines | 2 | 教学方法论管线注册 | 所有用户 |
@@ -54,7 +54,7 @@ Read studio/changes/course-workshop/personas/classroom-teacher.md
 写入更新后的 persona：
 - 新增"直接使用 Course Workshop"能力（不再仅是预案消费者）
 - 新增痛点：教案编写耗时、教学目标不规范、缺乏分层指导
-- 新增场景：`/workshop-lesson:lesson` 全流程教案设计
+- 新增场景：`/workshop-5step:lesson` 全流程教案设计
 
 ### 1.2 新增 Classroom Teacher Journey Map
 
@@ -73,7 +73,7 @@ Write studio/changes/course-workshop/journeys/classroom-teacher-daily-lesson-pre
 | 材料准备 | 列写材料清单 | Excel/纸笔 | 繁琐 | 容易遗漏 |
 | 审核修改 | 提交教研组审核 | 打印稿 | 忐忑 | 返工率高 |
 
-**机会点：** 每个痛点都对应一个 workshop-lesson 技能。
+**机会点：** 每个痛点都对应一个 workshop-5step 技能。
 
 ---
 
@@ -86,11 +86,11 @@ Write studio/changes/course-workshop/journeys/classroom-teacher-daily-lesson-pre
 | 域 | 分类 | 迭代 | 插件 |
 |----|------|------|------|
 | 工作区管理 | 支撑 | v1 | workshop-core |
-| PBL 课程设计 | 核心 | v1 | workshop-designer |
+| PBL 课程设计 | 核心 | v1 | workshop-pbl |
 | 前期分析 | 核心 | v1 | workshop-insight |
 | 质量保障 | 核心 | v1 | workshop-quality |
 | 资源管理 | 支撑 | v1 | workshop-resource |
-| **五步法教案** | **核心** | **v2** | **workshop-lesson** |
+| **五步法教案** | **核心** | **v2** | **workshop-5step** |
 | **课程规划** | **核心** | **v2** | **workshop-planner** |
 | **知识库管理** | **支撑** | **v2** | **workshop-kb** |
 | **方法论管线** | **通用** | **v2** | **workshop-pipelines** |
@@ -103,8 +103,8 @@ workshop-insight    (零依赖)
 workshop-quality    (零依赖)
 workshop-pipelines  (零依赖)
 workshop-kb         → workshop-core
-workshop-designer   → workshop-core, workshop-pipelines
-workshop-lesson     → workshop-core, workshop-pipelines
+workshop-pbl   → workshop-core, workshop-pipelines
+workshop-5step     → workshop-core, workshop-pipelines
 workshop-planner    → workshop-core, workshop-pipelines
 workshop-resource   → workshop-core
 ```
@@ -113,10 +113,10 @@ workshop-resource   → workshop-core
 
 ## 3. 阶段三：技能设计（4 个新插件）
 
-### 3.1 workshop-lesson — Skill Map
+### 3.1 workshop-5step — Skill Map
 
 ```
-Read/Write studio/changes/workshop-lesson/skill-map.md
+Read/Write studio/changes/workshop-5step/skill-map.md
   → 4 skills designed
 ```
 
@@ -177,20 +177,20 @@ Read/Write studio/changes/workshop-pipelines/skill-map.md
 
 ## 4. 阶段四：规格生成
 
-### 4.1 workshop-lesson — SKILL.md + Commands + Agents + References
+### 4.1 workshop-5step — SKILL.md + Commands + Agents + References
 
 ```
-Write workshop-lesson/skills/lesson-objective/SKILL.md (97 lines)
-Write workshop-lesson/skills/lesson-scaffold/SKILL.md (~120 lines)
-Write workshop-lesson/skills/lesson-detail/SKILL.md (~130 lines)
-Write workshop-lesson/skills/lesson-generate/SKILL.md (~100 lines)
-Write workshop-lesson/commands/lesson-objective.md
-Write workshop-lesson/commands/lesson-scaffold.md
-Write workshop-lesson/commands/lesson-detail.md
-Write workshop-lesson/commands/lesson-generate.md
-Write workshop-lesson/commands/lesson.md (pipeline command)
-Copy  workshop-lesson/agents/ (3 files from workshop-designer)
-Copy  workshop-lesson/references/guidelines-3-6.md
+Write workshop-5step/skills/lesson-objective/SKILL.md (97 lines)
+Write workshop-5step/skills/lesson-scaffold/SKILL.md (~120 lines)
+Write workshop-5step/skills/lesson-detail/SKILL.md (~130 lines)
+Write workshop-5step/skills/lesson-generate/SKILL.md (~100 lines)
+Write workshop-5step/commands/lesson-objective.md
+Write workshop-5step/commands/lesson-scaffold.md
+Write workshop-5step/commands/lesson-detail.md
+Write workshop-5step/commands/lesson-generate.md
+Write workshop-5step/commands/lesson.md (pipeline command)
+Copy  workshop-5step/agents/ (3 files from workshop-pbl)
+Copy  workshop-5step/references/guidelines-3-6.md
 ```
 
 ### 4.2 workshop-planner — SKILL.md + Commands + Agents
@@ -203,7 +203,7 @@ Write workshop-planner/commands/semester-plan.md
 Write workshop-planner/commands/month-plan.md
 Write workshop-planner/commands/week-plan.md
 Write workshop-planner/commands/plan.md (pipeline command)
-Copy  workshop-planner/agents/ (3 files from workshop-designer)
+Copy  workshop-planner/agents/ (3 files from workshop-pbl)
 Pre-existing: references/semester-calendar-template.md, weekly-schedule-template.md
 ```
 
@@ -247,7 +247,7 @@ Edit workshop-core/skills/status/SKILL.md
 
 为每个新插件创建 studio/changes/ 记录：
 ```
-Write studio/changes/workshop-lesson/{brief.md, skill-map.md, status.json, plugin.json.draft}
+Write studio/changes/workshop-5step/{brief.md, skill-map.md, status.json, plugin.json.draft}
 Write studio/changes/workshop-kb/{brief.md, skill-map.md, status.json, plugin.json.draft}
 Write studio/changes/workshop-planner/{brief.md, skill-map.md, status.json, plugin.json.draft}
 Write studio/changes/workshop-pipelines/{brief.md, skill-map.md, status.json, plugin.json.draft}
@@ -333,10 +333,10 @@ Write docs/planning-pipeline-execution-log-iter2.md
 ### 三条设计流水线
 
 ```
-PBL 流水线: /workshop-designer:design <主题>
+PBL 流水线: /workshop-pbl:design <主题>
   driving-question → network-map → inquiry-scaffold → activity-design ×3 → proposal-generate
 
-五步法流水线: /workshop-lesson:lesson <课题>
+五步法流水线: /workshop-5step:lesson <课题>
   lesson-objective → lesson-scaffold → lesson-detail → lesson-generate
 
 规划流水线: /workshop-planner:plan <学期>
@@ -349,20 +349,20 @@ PBL 流水线: /workshop-designer:design <主题>
 cd /path/to/courses-workshop-plugins
 
 claude --plugin-dir ./workshop-core \
-       --plugin-dir ./workshop-designer \
+       --plugin-dir ./workshop-pbl \
        --plugin-dir ./workshop-insight \
        --plugin-dir ./workshop-quality \
        --plugin-dir ./workshop-resource \
-       --plugin-dir ./workshop-lesson \
+       --plugin-dir ./workshop-5step \
        --plugin-dir ./workshop-planner \
        --plugin-dir ./workshop-kb \
        --plugin-dir ./workshop-pipelines
 
 # PBL 预案设计：
-/workshop-designer:design 我周围的人
+/workshop-pbl:design 我周围的人
 
 # 五步法教案设计：
-/workshop-lesson:lesson 认识春天的花
+/workshop-5step:lesson 认识春天的花
 
 # 学期课程规划：
 /workshop-planner:plan 2026春季学期

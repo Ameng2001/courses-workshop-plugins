@@ -30,7 +30,7 @@
 ```
 kb-import → kb-index → kb-query
    ↑                      ↓
-(user files)     (workshop-lesson, workshop-designer, etc.)
+(user files)     (workshop-5step, workshop-pbl, etc.)
 ```
 
 ## Implementation Order

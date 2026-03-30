@@ -86,7 +86,7 @@ This directory is git-tracked — commit it to share with your team.
 - "Run `/workshop-pipelines:pipeline-list` to see available teaching pipelines"
 - "Run `/workshop-pipelines:pipeline-select <id>` to choose a methodology pipeline"
 - "Run `/workshop-kb:kb-import <path>` to import school-specific materials"
-- "Run `/workshop-designer:design <theme>` to start designing a PBL course"
+- "Run `/workshop-pbl:design <theme>` to start designing a PBL course"
 - "Run `/workshop-planner:semester-plan <semester>` to create a semester plan"
 
 ## Notes

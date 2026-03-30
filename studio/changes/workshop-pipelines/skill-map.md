@@ -23,8 +23,8 @@
 ```
 pipeline-list → (user picks) → pipeline-select → updates config
                                                        ↓
-                                               (workshop-designer or
-                                                workshop-lesson reads)
+                                               (workshop-pbl or
+                                                workshop-5step reads)
 ```
 
 ## Implementation Order

@@ -95,8 +95,8 @@ Suggest next steps:
 > **下一步:**
 > - `/workshop-planner:week-plan {周次}` — 细化某周的每日安排
 > - 为某个周主题创建或进入 project workspace
-> - `/workshop-designer:design {主题}` — 在项目中开始 PBL 周的设计
-> - `/workshop-lesson:lesson {主题}` — 在项目中开始五步法教案设计
+> - `/workshop-pbl:design {主题}` — 在项目中开始 PBL 周的设计
+> - `/workshop-5step:lesson {主题}` — 在项目中开始五步法教案设计
 
 ## Out of Scope
 

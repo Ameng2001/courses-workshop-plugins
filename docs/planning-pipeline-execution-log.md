@@ -104,7 +104,7 @@ Sheet1 Dimensions: A1:I20
 course-workshop-plugins/
 ├── workshop-core/          # 课研工作台（初始化、状态管理）
 ├── workshop-insight/       # 课程分析工具包
-├── workshop-designer/      # 课程设计流水线
+├── workshop-pbl/      # 课程设计流水线
 ├── workshop-quality/       # 质量保障
 └── workshop-resource/      # 资源管理
 ```
@@ -427,7 +427,7 @@ Write studio/changes/course-workshop/opportunity-brief.md
 
 | Plugin | Impact | Feasibility | Score | Priority |
 |--------|--------|-------------|-------|----------|
-| workshop-designer | 5 | 4 | **20** | 2 |
+| workshop-pbl | 5 | 4 | **20** | 2 |
 | workshop-quality | 4 | 5 | **20** | 4 |
 | workshop-insight | 4 | 4 | **16** | 3 |
 | workshop-resource | 5 | 3 | **15** | 5 |
@@ -435,7 +435,7 @@ Write studio/changes/course-workshop/opportunity-brief.md
 
 **Build Roadmap：**
 ```
-Phase 1 (MVP):   workshop-core + workshop-designer
+Phase 1 (MVP):   workshop-core + workshop-pbl
 Phase 2:         workshop-insight + workshop-quality
 Phase 3:         workshop-resource + network-map enhancement
 ```
@@ -452,7 +452,7 @@ Write studio/changes/course-workshop/domain-map.md
 | Plugin | Role | Description | Dependencies |
 |--------|------|-------------|-------------|
 | workshop-core | core | 工作区初始化、状态管理、预案归档 | — |
-| workshop-designer | core | 驱动问题→网络图→线索→活动→预案 | workshop-core |
+| workshop-pbl | core | 驱动问题→网络图→线索→活动→预案 | workshop-core |
 | workshop-insight | add-on | 主题分析、先前经验、4C映射 | — |
 | workshop-quality | add-on | 课标检查、预案审核 | — |
 | workshop-resource | add-on | 资源匹配、资源校验 | workshop-core |
@@ -461,7 +461,7 @@ Write studio/changes/course-workshop/domain-map.md
 ```
 workshop-core (zero deps)
     ↑
-    ├── workshop-designer (depends: core)
+    ├── workshop-pbl (depends: core)
     └── workshop-resource (depends: core)
 
 workshop-insight  (zero deps)
@@ -471,18 +471,18 @@ workshop-quality  (zero deps)
 **创建 Plugin Workspaces：**
 ```
 mkdir studio/changes/workshop-core/
-mkdir studio/changes/workshop-designer/
+mkdir studio/changes/workshop-pbl/
 mkdir studio/changes/workshop-insight/
 mkdir studio/changes/workshop-quality/
 mkdir studio/changes/workshop-resource/
 
 Write studio/changes/workshop-core/status.json        → { type: "plugin", phase: "planning", skills: {} }
-Write studio/changes/workshop-designer/status.json     → { type: "plugin", phase: "planning", skills: {} }
+Write studio/changes/workshop-pbl/status.json     → { type: "plugin", phase: "planning", skills: {} }
 Write studio/changes/workshop-insight/status.json      → { type: "plugin", phase: "planning", skills: {} }
 Write studio/changes/workshop-quality/status.json      → { type: "plugin", phase: "planning", skills: {} }
 Write studio/changes/workshop-resource/status.json     → { type: "plugin", phase: "planning", skills: {} }
 
-Write studio/changes/course-workshop/status.json       → plugins: ["workshop-core", "workshop-designer", "workshop-insight", "workshop-quality", "workshop-resource"]
+Write studio/changes/course-workshop/status.json       → plugins: ["workshop-core", "workshop-pbl", "workshop-insight", "workshop-quality", "workshop-resource"]
 ```
 
 ### 4.5 阶段二新增产出
@@ -495,7 +495,7 @@ studio/changes/course-workshop/
 ├── domain-map.md             ← 插件架构 + 依赖图
 
 studio/changes/workshop-core/status.json
-studio/changes/workshop-designer/status.json
+studio/changes/workshop-pbl/status.json
 studio/changes/workshop-insight/status.json
 studio/changes/workshop-quality/status.json
 studio/changes/workshop-resource/status.json
@@ -505,10 +505,10 @@ studio/changes/workshop-resource/status.json
 
 ## 5. 阶段三：Skill Design（技能设计）
 
-### 5.1 workshop-designer (5 skills)
+### 5.1 workshop-pbl (5 skills)
 
 ```
-Write studio/changes/workshop-designer/skill-map.md
+Write studio/changes/workshop-pbl/skill-map.md
   → File created successfully
 ```
 
@@ -580,7 +580,7 @@ Write studio/changes/workshop-resource/skill-map.md
 ### 5.6 更新所有 status.json（添加 skills）
 
 ```
-Write workshop-designer/status.json → skills: { driving-question: "draft", network-map: "draft", ... }
+Write workshop-pbl/status.json → skills: { driving-question: "draft", network-map: "draft", ... }
 Write workshop-core/status.json     → skills: { init: "draft", status: "draft", promote: "draft" }
 Write workshop-insight/status.json  → skills: { theme-analysis: "draft", prior-knowledge: "draft", competency-mapping: "draft" }
 Write workshop-quality/status.json  → skills: { standards-check: "draft", proposal-review: "draft" }
@@ -591,14 +591,14 @@ Write workshop-resource/status.json → skills: { resource-planner: "draft", res
 
 ## 6. 阶段四：Spec Generate（规格生成）
 
-### 6.1 workshop-designer — briefs + manifests + SKILL.md skeletons + commands
+### 6.1 workshop-pbl — briefs + manifests + SKILL.md skeletons + commands
 
 ```
-Write studio/changes/workshop-designer/brief.md           → File created
-Write studio/changes/workshop-designer/plugin.json.draft   → File created
+Write studio/changes/workshop-pbl/brief.md           → File created
+Write studio/changes/workshop-pbl/plugin.json.draft   → File created
 
-mkdir -p studio/changes/workshop-designer/skills/{driving-question,network-map,inquiry-scaffold,activity-design,proposal-generate}
-mkdir -p studio/changes/workshop-designer/commands/
+mkdir -p studio/changes/workshop-pbl/skills/{driving-question,network-map,inquiry-scaffold,activity-design,proposal-generate}
+mkdir -p studio/changes/workshop-pbl/commands/
 
 Write skills/driving-question/SKILL.md     → 46 lines (skeleton)
 Write skills/network-map/SKILL.md          → 46 lines (skeleton)
@@ -660,7 +660,7 @@ Output:
 === By plugin ===
 course-workshop:  12 files
 workshop-core:    10 files
-workshop-designer: 15 files
+workshop-pbl: 15 files
 workshop-insight: 10 files
 workshop-quality:  8 files
 workshop-resource: 8 files
@@ -680,7 +680,7 @@ git commit -m "feat: complete 4-phase planning pipeline for course-workshop-plug
 
 ## 7. SKILL.md 充实（从骨架到完整指令）
 
-### 7.1 workshop-designer（5 个 skills，手动充实）
+### 7.1 workshop-pbl（5 个 skills，手动充实）
 
 #### driving-question (46 → 245 lines)
 ```
@@ -814,11 +814,11 @@ Results:
   74 workshop-core/skills/status/SKILL.md
   92 workshop-core/skills/init/SKILL.md
   93 workshop-core/skills/promote/SKILL.md
- 135 workshop-designer/skills/proposal-generate/SKILL.md
- 166 workshop-designer/skills/network-map/SKILL.md
- 174 workshop-designer/skills/inquiry-scaffold/SKILL.md
- 220 workshop-designer/skills/activity-design/SKILL.md
- 245 workshop-designer/skills/driving-question/SKILL.md
+ 135 workshop-pbl/skills/proposal-generate/SKILL.md
+ 166 workshop-pbl/skills/network-map/SKILL.md
+ 174 workshop-pbl/skills/inquiry-scaffold/SKILL.md
+ 220 workshop-pbl/skills/activity-design/SKILL.md
+ 245 workshop-pbl/skills/driving-question/SKILL.md
  267 workshop-resource/skills/resource-check/SKILL.md
  268 workshop-resource/skills/resource-planner/SKILL.md
  317 workshop-insight/skills/theme-analysis/SKILL.md
@@ -834,7 +834,7 @@ Results:
 
 ## 8. References 编写（7 个领域知识文件）
 
-### 8.1 workshop-designer references（via background Agent）
+### 8.1 workshop-pbl references（via background Agent）
 
 ```
 Agent "Write designer references" launched
@@ -913,7 +913,7 @@ Write .claude-plugin/plugin.json
 
 ```
 Write workshop-core/.claude-plugin/plugin.json        → name, version, description, keywords
-Write workshop-designer/.claude-plugin/plugin.json     → + dependencies: ["workshop-core"]
+Write workshop-pbl/.claude-plugin/plugin.json     → + dependencies: ["workshop-core"]
 Write workshop-insight/.claude-plugin/plugin.json      → no deps
 Write workshop-quality/.claude-plugin/plugin.json      → no deps
 Write workshop-resource/.claude-plugin/plugin.json     → + dependencies: ["workshop-core"]
@@ -928,7 +928,7 @@ cp -r studio/changes/$plugin/commands/*   → $plugin/commands/
 cp -r studio/changes/$plugin/references/* → $plugin/references/
 
 # Agents to plugins that use expert discovery
-cp studio/agents/*.md → workshop-designer/agents/
+cp studio/agents/*.md → workshop-pbl/agents/
 cp studio/agents/*.md → workshop-insight/agents/
 cp studio/agents/*.md → workshop-quality/agents/
 
@@ -955,7 +955,7 @@ commands/init.md, promote.md, status.md
 skills/init/SKILL.md, promote/SKILL.md, status/SKILL.md
 templates/config.yaml
 
---- workshop-designer ---
+--- workshop-pbl ---
 .claude-plugin/plugin.json
 agents/child-development-psychologist.md, early-childhood-curriculum-expert.md, instructional-designer.md
 commands/activity-design.md, design.md, driving-question.md, inquiry-scaffold.md, network-map.md, proposal-generate.md
@@ -988,7 +988,7 @@ skills/resource-check/SKILL.md, resource-planner/SKILL.md
 ### 9.7 Promote Git Commit
 
 ```
-git add .claude-plugin/ workshop-core/ workshop-designer/ workshop-insight/ workshop-quality/ workshop-resource/ CLAUDE.md
+git add .claude-plugin/ workshop-core/ workshop-pbl/ workshop-insight/ workshop-quality/ workshop-resource/ CLAUDE.md
 git commit -m "feat: promote plugins to production directory structure"
   → [main 9dd76f6] 57 files changed, 5590 insertions(+)
 ```
@@ -1040,11 +1040,11 @@ bb54fe1  feat: complete 4-phase planning pipeline for course-workshop-plugins
 cd /Users/liuyameng/Codes/Plugins/courses-workshop-plugins
 
 claude --plugin-dir ./workshop-core \
-       --plugin-dir ./workshop-designer \
+       --plugin-dir ./workshop-pbl \
        --plugin-dir ./workshop-insight \
        --plugin-dir ./workshop-quality \
        --plugin-dir ./workshop-resource
 
 # 然后输入：
-/workshop-designer:design 我周围的人
+/workshop-pbl:design 我周围的人
 ```

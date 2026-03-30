@@ -21,11 +21,11 @@ Multi-methodology course design toolkit for kindergarten curriculum directors (�
 
 ```
 ├── workshop-core/         # Workspace management (init, config, onboarding, status, link-plan, approve, promote) — 7 skills
-├── workshop-designer/     # PBL course design pipeline (driving-question → proposal) — 5 skills
+├── workshop-pbl/     # PBL course design pipeline (driving-question → proposal) — 5 skills
 ├── workshop-insight/      # Pre-analysis toolkit (theme, prior-knowledge, 4C) — 3 skills
 ├── workshop-quality/      # Quality assurance (standards-check, proposal-review) — 2 skills
 ├── workshop-resource/     # Resource management (resource-planner, resource-check) — 2 skills
-├── workshop-lesson/       # Five-Step lesson plan pipeline (objective → scaffold → detail → generate) — 4 skills
+├── workshop-5step/       # Five-Step lesson plan pipeline (objective → scaffold → detail → generate) — 4 skills
 ├── workshop-planner/      # Hierarchical curriculum planning (semester → month → week) — 3 skills
 ├── workshop-kb/           # School knowledge base (import, index, query) — 3 skills
 ├── workshop-pipelines/    # Teaching methodology pipeline registry (list, select) — 2 skills
@@ -42,8 +42,8 @@ workshop-insight    (zero deps)
 workshop-quality    (zero deps)
 workshop-pipelines  (zero deps)
 workshop-kb         (depends on workshop-core)
-workshop-designer   (depends on workshop-core, workshop-pipelines)
-workshop-lesson     (depends on workshop-core, workshop-pipelines)
+workshop-pbl   (depends on workshop-core, workshop-pipelines)
+workshop-5step     (depends on workshop-core, workshop-pipelines)
 workshop-planner    (depends on workshop-core, workshop-pipelines)
 workshop-resource   (depends on workshop-core)
 ```
@@ -63,7 +63,7 @@ Users should enter through a project, not through a plugin list:
 
 ## Design Pipelines
 
-### PBL Pipeline: `/workshop-designer:design`
+### PBL Pipeline: `/workshop-pbl:design`
 
 ```
 driving-question → network-map → inquiry-scaffold → activity-design ×3 → proposal-generate
@@ -72,7 +72,7 @@ driving-question → network-map → inquiry-scaffold → activity-design ×3 �
    optional input)                                     optional input)       optional input)
 ```
 
-### Five-Step Lesson Pipeline: `/workshop-lesson:lesson`
+### Five-Step Lesson Pipeline: `/workshop-5step:lesson`
 
 ```
 lesson-objective → lesson-scaffold → lesson-detail → lesson-generate
@@ -86,8 +86,8 @@ lesson-objective → lesson-scaffold → lesson-detail → lesson-generate
 ```
 semester-plan → month-plan → week-plan
      ↑              ↑            ↓
- (workshop-kb   (workshop-kb   (feeds into workshop-lesson
-  calendars)     textbooks)     or workshop-designer)
+ (workshop-kb   (workshop-kb   (feeds into workshop-5step
+  calendars)     textbooks)     or workshop-pbl)
 ```
 
 ## Domain Experts
@@ -112,10 +112,10 @@ Shared runtime experts typically include:
 ## Development Workflow
 
 1. Edit SKILL.md files directly — changes take effect immediately
-2. Test with: `claude --plugin-dir ./workshop-core --plugin-dir ./workshop-designer --plugin-dir ./workshop-insight --plugin-dir ./workshop-quality --plugin-dir ./workshop-resource --plugin-dir ./workshop-lesson --plugin-dir ./workshop-planner --plugin-dir ./workshop-kb --plugin-dir ./workshop-pipelines`
+2. Test with: `claude --plugin-dir ./workshop-core --plugin-dir ./workshop-pbl --plugin-dir ./workshop-insight --plugin-dir ./workshop-quality --plugin-dir ./workshop-resource --plugin-dir ./workshop-5step --plugin-dir ./workshop-planner --plugin-dir ./workshop-kb --plugin-dir ./workshop-pipelines`
 3. Key test flows:
-   - PBL: `/workshop-designer:design 我周围的人`
-   - Five-Step: `/workshop-lesson:lesson 认识春天的花`
+   - PBL: `/workshop-pbl:design 我周围的人`
+   - Five-Step: `/workshop-5step:lesson 认识春天的花`
    - Planning: `/workshop-planner:plan 2026春季学期`
 
 ## Key References

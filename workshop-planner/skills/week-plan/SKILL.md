@@ -98,10 +98,10 @@ python3 workshop-core/scripts/workspace_status.py complete-planning \
 Suggest next steps:
 > **下一步:**
 > - 为某天或某个主题创建 / 进入 project workspace
-> - `/workshop-lesson:lesson {主题}` — 在项目中为某天的集体教学编写教案
+> - `/workshop-5step:lesson {主题}` — 在项目中为某天的集体教学编写教案
 > - `/workshop-resource:resource-planner` — 在项目中统一规划本周资源
 
 ## Out of Scope
 
-- This skill does NOT write individual lesson plans (use workshop-lesson)
-- This skill does NOT design PBL activities (use workshop-designer)
+- This skill does NOT write individual lesson plans (use workshop-5step)
+- This skill does NOT design PBL activities (use workshop-pbl)

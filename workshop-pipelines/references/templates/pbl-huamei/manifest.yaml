@@ -14,7 +14,7 @@ target_age_groups:
 time_scope: month
 
 pipeline:
-  plugin: workshop-designer
+  plugin: workshop-pbl
   stages:
     - id: driving-question
       name: "驱动性问题设计"

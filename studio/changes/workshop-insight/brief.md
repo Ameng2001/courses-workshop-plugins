@@ -20,4 +20,4 @@
 
 - 需要内置《3-6岁儿童学习与发展指南》作为 references
 - 需要内置年龄段×4C能力发展矩阵
-- 所有产出供 workshop-designer 可选消费
+- 所有产出供 workshop-pbl 可选消费

@@ -318,7 +318,7 @@ Before finalizing output, verify:
 
 ## Out of Scope
 
-- Does NOT design driving questions (workshop-designer's responsibility)
+- Does NOT design driving questions (workshop-pbl's responsibility)
 - Does NOT assess prior knowledge (prior-knowledge's responsibility)
 - Does NOT map 4C competencies (competency-mapping's responsibility)
 - Does NOT generate the full proposal (proposal-generate's responsibility)

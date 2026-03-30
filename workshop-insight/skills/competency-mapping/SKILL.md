@@ -355,7 +355,7 @@ If other insight skills are already marked "done" in status.json, preserve them:
 }
 ```
 
-Tell the user: "4C能力映射和学习目标设计完成。所有 workshop-insight 分析已完成。建议接下来运行 `/workshop-designer:driving-question {workspace}` 设计驱动性问题。"
+Tell the user: "4C能力映射和学习目标设计完成。所有 workshop-insight 分析已完成。建议接下来运行 `/workshop-pbl:driving-question {workspace}` 设计驱动性问题。"
 
 ## Validation Rules
 
@@ -374,7 +374,7 @@ Before finalizing output, verify:
 
 ## Out of Scope
 
-- Does NOT design driving questions (workshop-designer's responsibility)
+- Does NOT design driving questions (workshop-pbl's responsibility)
 - Does NOT design activities (activity-design's responsibility)
 - Does NOT validate resource availability (workshop-resource's responsibility)
 - Does NOT check overall proposal quality (workshop-quality's responsibility)
