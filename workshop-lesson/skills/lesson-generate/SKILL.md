@@ -128,20 +128,14 @@ python3 workshop-core/scripts/workspace_status.py request-hil \
   --notes "lesson plan draft ready for review"
 ```
 
-Present the compiled lesson plan summary and wait for approval. After approval:
+Present the compiled lesson plan summary and wait for approval. After approval, complete the stage review:
 
 ```bash
-python3 workshop-core/scripts/workspace_status.py approve-hil \
-  {workspace} deliverable-draft \
-  --approved-by curriculum-director
-```
-
-Update workspace status with:
-
-```bash
-python3 workshop-core/scripts/workspace_status.py complete-project-skill \
-  {workspace} lesson-generate \
-  --phase reviewing
+python3 workshop-core/scripts/workspace_status.py complete-stage-review \
+  {workspace} deliverable-draft lesson-generate \
+  --phase reviewing \
+  --approved-by curriculum-director \
+  --notes "lesson plan draft ready for review"
 ```
 
 Present a summary to the user:
