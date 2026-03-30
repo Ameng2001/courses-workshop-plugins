@@ -21,6 +21,7 @@ Break a monthly theme from the semester calendar into weekly sub-themes, methodo
 1. Verify `.workshop/` exists
 2. Look for `.workshop/plans/{workspace}/semester-plan.md` — if present, read it to get the month's theme, age group, and allocated methodology
 3. Check knowledge base for related materials: `.workshop/kb/lesson-plans/*.md` with matching theme tags
+4. Read `references/monthly-activity-matrix-template.md` as the preferred output shape when designing a thematic curriculum package
 
 ## Step 1: Gather Context
 
@@ -58,7 +59,7 @@ Week {N}: {子主题名称}
 
 ## Step 3: Build Monthly Activity Matrix
 
-Generate a month-level matrix:
+Generate a month-level matrix following `references/monthly-activity-matrix-template.md`:
 
 | 周次 | 教学活动 | 区域活动 | 户外游戏 | 生活渗透 | 家园互动 |
 |------|---------|---------|---------|---------|---------|
@@ -106,6 +107,8 @@ The output should now include:
 - 周次递进结构
 - 月度主题活动矩阵
 - 每周材料预览
+
+When the pipeline is `thematic-curriculum`, prefer the matrix template over a generic weekly summary.
 
 Update `.workshop/plans/{workspace}/config.yaml` with the month's methodology setting if the user specifies a preference.
 Update planning status with:

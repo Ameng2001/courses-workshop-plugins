@@ -20,6 +20,7 @@ Generate a detailed weekly arrangement for one week, mixing teaching activities,
 
 1. Verify `.workshop/` exists
 2. Look for `.workshop/plans/{workspace}/month-plan.md` — read the target week's sub-theme and methodology
+3. Read `references/weekly-arrangement-template.md` as the preferred output shape
 3. Look for existing activity files:
    - PBL activities: `.workshop/projects/{workspace}/activities/clue-*.md`
    - Lesson plans: `.workshop/projects/{workspace}/lesson-plan*.md`
@@ -39,7 +40,7 @@ Auto-populate from month-plan if available. Otherwise ask:
 
 ## Step 2: Generate Weekly Arrangement
 
-Following the format in `references/weekly-schedule-template.md`, generate:
+Following `references/weekly-arrangement-template.md`, generate:
 
 ### 一周活动安排表
 
@@ -61,6 +62,8 @@ Prefer a linear weekly arrangement that can hold 15-17 items:
 - 家园互动保持简短可执行
 - 如为主题式课程场景，总项数优先控制在 15-17 项
 - 活动编码优先使用所选 pipeline 的编码约定
+
+If the user explicitly asks for a classic day-slot table, you may append a compact daily grid as a secondary view, but the primary output should remain the linear arrangement.
 
 ## Step 3: Material Preparation List
 
