@@ -7,7 +7,7 @@ user-invocable: true
 
 # Workshop Init
 
-Initialize `.workshop/` in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable templates. This directory is git-tracked — it holds runtime project workspaces, planning records, custom experts, and knowledge assets. `studio/` remains reserved for Astra Studio plugin development.
+Initialize `.workshop/` in the current project for kindergarten course development. Supports multiple teaching methodologies (PBL, Five-Step, etc.) through pluggable pipelines. This directory is git-tracked — it holds runtime project workspaces, planning records, custom experts, and knowledge assets. `studio/` remains reserved for Astra Studio plugin development.
 
 `init` is a bootstrap command only. It creates the runtime skeleton and the minimal config file. It does not replace `config` or `onboarding`.
 
@@ -83,8 +83,8 @@ This directory is git-tracked — commit it to share with your team.
 
 - "Run `/workshop-core:config show` to inspect runtime settings"
 - "Run `/workshop-core:onboarding` for first-use guidance"
-- "Run `/workshop-templates:template-list` to see available teaching methodologies"
-- "Run `/workshop-templates:template-select <id>` to choose a methodology"
+- "Run `/workshop-templates:template-list` to see available teaching pipelines"
+- "Run `/workshop-templates:template-select <id>` to choose a methodology pipeline"
 - "Run `/workshop-kb:kb-import <path>` to import school-specific materials"
 - "Run `/workshop-designer:design <theme>` to start designing a PBL course"
 - "Run `/workshop-planner:semester-plan <semester>` to create a semester plan"

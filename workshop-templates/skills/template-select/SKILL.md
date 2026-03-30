@@ -1,30 +1,30 @@
 ---
 name: template-select
-description: Set the active teaching methodology template for the next deliverable in the current project workspace. Use when a user wants to choose a methodology (PBL, Five-Step, etc.) before starting course design, or when someone says "I want to use five-step method" or "switch to PBL".
+description: Set the active teaching methodology pipeline for the next deliverable in the current project workspace. Use when a user wants to choose a methodology (PBL, Five-Step, etc.) before starting course design, or when someone says "I want to use five-step method" or "switch to PBL".
 allowed-tools: Read, Write, Glob
 user-invocable: true
 ---
 
-# Template Select
+# Pipeline Select
 
-Set the active teaching methodology template for the next deliverable in the current project workspace. The selected template determines which design pipeline to use, what output format to generate, and which coding convention to follow. A single project may use different templates for different deliverables over time.
+Set the active teaching methodology pipeline for the next deliverable in the current project workspace. The selected pipeline determines which design stages to use, what output format to generate, and which coding convention to follow. A single project may use different pipelines for different deliverables over time.
 
 ## Pre-check
 
 1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
 2. Determine the workspace path:
-   - If `$ARGUMENTS` contains a recognized template ID, use it directly
-   - Otherwise, list available templates and ask the user to choose
+   - If `$ARGUMENTS` contains a recognized pipeline ID, use it directly
+   - Otherwise, list available pipelines and ask the user to choose
 
-## Step 1: Validate Template ID
+## Step 1: Validate Pipeline ID
 
-1. Read the user's requested template ID from `$ARGUMENTS`
+1. Read the user's requested pipeline ID from `$ARGUMENTS`
 2. Check if `workshop-templates/references/templates/{id}/manifest.yaml` exists
 3. If not found:
-   - Run template-list logic to show available options
+   - Run template-list logic to show available pipeline options
    - Ask the user to pick one
 
-## Step 2: Read Template Manifest
+## Step 2: Read Pipeline Manifest
 
 Run:
 
@@ -64,7 +64,7 @@ Clarify to the user that this sets the current default for the next deliverable,
 Display confirmation:
 
 ```
-✅ 已选择模板: {name} ({id})
+✅ 已选择 pipeline: {name} ({id})
 
 设计流水线: {pipeline.plugin}
   {stage-1-name} → {stage-2-name} → ... → {final-stage-name}
@@ -83,6 +83,6 @@ HIL:
 
 ## Out of Scope
 
-- This skill does NOT run the design pipeline — it only sets the default template for the next deliverable
-- This skill does NOT create templates — it selects from existing ones
-- This skill does NOT modify template content
+- This skill does NOT run the design pipeline — it only sets the default pipeline for the next deliverable
+- This skill does NOT create pipelines — it selects from existing registered pipelines
+- This skill does NOT modify pipeline content

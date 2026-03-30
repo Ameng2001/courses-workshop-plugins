@@ -1,6 +1,6 @@
 ---
 name: lesson-objective
-description: Generate observable learning objectives for a single lesson aligned with Guidelines 3-6 and the active methodology template. Use when a teacher starts planning a lesson, when someone says "help me write objectives for a lesson about spring flowers", or when starting the five-step design pipeline.
+description: Generate observable learning objectives for a single lesson aligned with Guidelines 3-6 and the active methodology pipeline. Use when a teacher starts planning a lesson, when someone says "help me write objectives for a lesson about spring flowers", or when starting the five-step design pipeline.
 allowed-tools: Read, Write, Glob, Agent
 user-invocable: true
 ---
@@ -20,8 +20,8 @@ Generate clear, observable learning objectives for a single lesson, aligned with
 ## Pre-check
 
 1. Verify `.workshop/` exists
-2. Read active template from workspace config (`.workshop/projects/{workspace}/config.yaml`)
-   - If no template set, default to `five-step`
+2. Read active pipeline from workspace config (`.workshop/projects/{workspace}/config.yaml`)
+   - If no pipeline set, default to `five-step`
 3. Check knowledge base for related lesson plans:
    - Glob `.workshop/kb/lesson-plans/*.md` — read frontmatter for matching themes
    - If found, use past objectives as reference (not copy)

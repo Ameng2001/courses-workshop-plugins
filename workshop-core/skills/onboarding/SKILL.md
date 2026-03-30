@@ -81,14 +81,14 @@ Based on answers, recommend the next step:
 - If the team starts from planning:
   - suggest `/workshop-planner:semester-plan <semester>`
 - If the team starts from a concrete course:
-  - suggest `/workshop-templates:template-select <id>`
+  - suggest `/workshop-templates:template-select <id>` to choose the first pipeline
 - If the team is unsure:
   - suggest creating one pilot project first
 
 Also explain the first human review gate:
 
 - planning-first teams usually hit `project-framing` after the first project is created and linked to a plan
-- project-first teams usually hit `project-framing` right after template selection and basic project setup
+- project-first teams usually hit `project-framing` right after pipeline selection and basic project setup
 
 ## Step 4: Print Next-Step Guide
 

@@ -428,7 +428,7 @@ def onboarding_summary(
     current_methodology = methodology or deep_get(config, "defaults.methodology")
     current_publishing = publishing or deep_get(config, "publishing.default_target.kind") or "local"
     next_steps: list[str] = []
-    template_step = (
+    pipeline_step = (
         f"/workshop-templates:template-select {current_methodology}"
         if current_methodology and current_methodology != "mixed"
         else "/workshop-templates:template-select <id>"
@@ -440,13 +440,13 @@ def onboarding_summary(
         next_steps.append("/workshop-kb:kb-import <path>")
     if (starting_mode or "planning-first") == "planning-first":
         next_steps.append("/workshop-planner:semester-plan <semester>")
-        next_steps.append(template_step)
+        next_steps.append(pipeline_step)
         first_hil = "project-framing after the first project is created and linked to a plan"
     elif starting_mode == "project-first":
-        next_steps.append(template_step)
-        first_hil = "project-framing right after template selection and basic project setup"
+        next_steps.append(pipeline_step)
+        first_hil = "project-framing right after pipeline selection and basic project setup"
     else:
-        next_steps.append(template_step)
+        next_steps.append(pipeline_step)
         next_steps.append("/workshop-planner:semester-plan <semester>")
         first_hil = "project-framing once the pilot project scope is set"
 
@@ -515,7 +515,7 @@ def select_template(root: Path, template_id: str, workspace: str, theme: str | N
         hil["requested_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
         hil["approved_at"] = None
         hil["approved_by"] = None
-        hil["notes"] = "template selected; confirm theme, methodology, and starting scope"
+        hil["notes"] = "pipeline selected; confirm theme, methodology, and starting scope"
     write_json(project_status_path(root, workspace), status)
 
     stages = [stage.get("id") for stage in deep_get(manifest, "pipeline.stages") or []]
@@ -553,7 +553,7 @@ def prepare_plan(root: Path, workspace: str, plan_level: str, methodology: str |
     selected_methodology = methodology or config.get("methodology")
     if selected_methodology:
         if not manifest_path(selected_methodology).exists():
-            raise SystemExit(f"Unknown methodology template: {selected_methodology}")
+            raise SystemExit(f"Unknown methodology pipeline: {selected_methodology}")
         config["methodology"] = selected_methodology
         manifest = load_manifest(selected_methodology)
         config["methodology_name"] = manifest.get("name")
