@@ -155,7 +155,7 @@
 
 为了接住客户的双栏模板和 Word/PDF 交付需求，新增了独立导出层模型：
 
-- [export-layer-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/export-layer-model.md)
+- [runtime-architecture.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/architecture/runtime-architecture.md)
 
 原则是：
 
