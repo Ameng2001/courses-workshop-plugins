@@ -27,6 +27,8 @@ themes: [string]        # 涉及的教学主题关键词
 age_groups: [enum]      # prek-3 | prek-4 | k
 domains: [enum]         # 健康 | 语言 | 社会 | 科学 | 艺术
 methodology: enum       # pbl | five-step | thematic-curriculum | mixed | other
+local_goal_system: string # 客户/园所本地目标编码体系（如 "HEPU-SE"）
+goal_codes: [string]    # 文档中出现的本地目标编码（如 ["SE-4", "SE-8"]）
 term: string            # 所属学期（如 "2025-春季"）
 author: string          # 作者
 tags: [string]          # 额外关键词/标签
@@ -70,3 +72,18 @@ related_media: [string] # 关联的媒体文件路径（图片/视频）
 2. **documents** — 所有文档的元数据列表（不含正文内容）
 
 索引用于快速过滤，实际内容读取时按需加载文档文件。
+
+## 本地目标编码接入原则
+
+当客户或园所使用自定义发展目标编码时：
+
+1. 将编码体系名称记录在 `local_goal_system`
+2. 将文档中出现的编码记录在 `goal_codes`
+3. 这些字段用于：
+   - 过滤样例
+   - few-shot 参考
+   - 输出时保留客户编码
+
+注意：
+- 本地目标编码不替代平台活动编码
+- 本地目标编码也不替代《指南》对齐关系

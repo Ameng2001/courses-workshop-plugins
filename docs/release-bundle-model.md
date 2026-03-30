@@ -53,3 +53,17 @@ This separation keeps the shipped output small and clear:
 - `.workshop/archive/` serves governance, traceability, and future revision
 
 If the project later publishes to COS, S3, or another MCP-backed target, the remote target should receive the same release bundle semantics by default.
+
+## Relationship to Export Layer
+
+`courses/` is still the shipped release bundle, but it is not the same thing as a client-specific export package.
+
+- `courses/` keeps the final canonical deliverables
+- `.workshop/exports/` can prepare:
+  - Word-ready bundles
+  - PDF-ready bundles
+  - client-specific layout packages
+
+This keeps:
+- release semantics stable
+- export styling customizable

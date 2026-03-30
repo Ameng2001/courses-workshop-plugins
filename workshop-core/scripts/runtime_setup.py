@@ -35,6 +35,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "plans_dir": ".workshop/plans",
         "kb_dir": ".workshop/kb",
         "archive_dir": ".workshop/archive",
+        "exports_dir": ".workshop/exports",
     },
     "experts": {
         "custom_dir": ".workshop/agents/custom",
@@ -381,6 +382,7 @@ def init_runtime(root: Path) -> dict[str, Any]:
     dirs = [
         rt / "projects",
         rt / "plans",
+        rt / "exports",
         rt / "agents" / "custom",
         rt / "kb" / "textbooks",
         rt / "kb" / "philosophy",

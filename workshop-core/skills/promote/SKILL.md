@@ -77,6 +77,9 @@ Print:
 - What was promoted and where (e.g., "Promoted `spring-flowers` to `courses/spring-flowers/`")
 - Archive location (e.g., "Development records archived to `.workshop/archive/2026-03-28-seasons-pbl/`")
 - Remind user to review and commit: "Review the promoted deliverables, then commit when ready."
+- If client-specific formatting is needed, suggest:
+  - `/workshop-format:format-lesson`
+  - `/workshop-format:export-bundle`
 
 ## Does NOT
 

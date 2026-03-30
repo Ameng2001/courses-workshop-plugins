@@ -127,6 +127,8 @@
 - 新增 4 类非教学活动技能
 - 新增主题解读 / 主题网络图专属生成技能
 
+> 当前进度：上述两类专属技能已补充为 `theme-narrative` 与 `theme-network`。
+
 ### P2（后续迭代）
 
 - 接入客户发展目标编码体系
@@ -137,3 +139,43 @@
 - `workshop-5step` 仅对应客户体系中的“教学活动”子能力
 - 客户的主方法论应被建模为 `thematic-curriculum`
 - 月主题与周编排是客户交付的核心层，不应只被视为 planning 备注
+
+## 客户编码体系接入
+
+本轮进一步明确了客户本地发展目标编码的接入方式：
+
+- 平台活动编码继续使用 `FS-*` 或 `TC-*`
+- 客户编码作为并列字段接入：
+  - `local_goal_system`
+  - `goal_codes`
+
+当前先支持“编码保留 + 文本说明 + 与《指南》并列”，暂不假定客户已提供完整编码手册。
+
+## 导出层设计
+
+为了接住客户的双栏模板和 Word/PDF 交付需求，新增了独立导出层模型：
+
+- [export-layer-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/export-layer-model.md)
+
+原则是：
+
+- 运行时仍以 Markdown 语义源为准
+- `courses/` 仍是 release bundle
+- 客户特定版式和 Word/PDF 输入统一进入 `.workshop/exports/`
+
+## 端到端样例
+
+为了避免只停留在规范层，仓库内补充了一组可审阅的示例项目产物：
+
+- [docs/examples/thematic-curriculum-hepu-clothing/README.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/examples/thematic-curriculum-hepu-clothing/README.md)
+
+这组样例串起了：
+
+- 主题分析
+- 月度活动矩阵
+- 周活动安排
+- 教学活动
+- 区域活动
+- 户外游戏
+- 生活渗透
+- 家园互动
