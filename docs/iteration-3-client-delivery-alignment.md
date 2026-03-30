@@ -149,6 +149,18 @@
 
 当前先支持“编码保留 + 文本说明 + 与《指南》并列”，暂不假定客户已提供完整编码手册。
 
+## 导出层设计
+
+为了接住客户的双栏模板和 Word/PDF 交付需求，新增了独立导出层模型：
+
+- [export-layer-model.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/export-layer-model.md)
+
+原则是：
+
+- 运行时仍以 Markdown 语义源为准
+- `courses/` 仍是 release bundle
+- 客户特定版式和 Word/PDF 输入统一进入 `.workshop/exports/`
+
 ## 端到端样例
 
 为了避免只停留在规范层，仓库内补充了一组可审阅的示例项目产物：
