@@ -149,6 +149,11 @@ def export_profile(target: str, layout_profile: str) -> dict[str, Any]:
     profile: dict[str, Any] = {
         "layout_profile": layout_profile,
         "include_assets_dir": target in {"word-ready-bundle", "pdf-ready-bundle", "remote-bundle-placeholder"},
+        "naming": {
+            "bundle_dir": "{workspace}/{target}",
+            "primary_lesson_file": "lesson-plan.formatted.md",
+            "primary_proposal_file": "proposal.md",
+        },
     }
     if target == "word-ready-bundle":
         profile["renderer"] = "docx-placeholder"
@@ -157,9 +162,23 @@ def export_profile(target: str, layout_profile: str) -> dict[str, Any]:
             "orientation": "portrait",
             "margin": "normal",
         }
+        profile["cover"] = {
+            "enabled": True,
+            "title_source": "document-title",
+            "subtitle_source": "workspace-and-methodology",
+        }
+        profile["header_footer"] = {
+            "enabled": True,
+            "header": "course-workshop client delivery",
+            "footer": "page-number",
+        }
         profile["typography"] = {
             "body_font": "Noto Serif SC",
             "heading_font": "Noto Sans SC",
+        }
+        profile["table_mapping"] = {
+            "teaching_activity_process": "table-with-support-column",
+            "allow_cell_linebreaks": True,
         }
     elif target == "pdf-ready-bundle":
         profile["renderer"] = "pdf-placeholder"
@@ -168,9 +187,21 @@ def export_profile(target: str, layout_profile: str) -> dict[str, Any]:
             "orientation": "portrait",
             "margin": "normal",
         }
+        profile["cover"] = {
+            "enabled": True,
+            "title_source": "document-title",
+            "subtitle_source": "workspace-and-methodology",
+        }
+        profile["header_footer"] = {
+            "enabled": True,
+            "header": "course-workshop client delivery",
+            "footer": "page-number",
+        }
         profile["layout"] = {
             "teaching_activity_process": "dual-column-ready" if layout_profile == "teaching-activity-dual-column" else "single-column",
             "header_footer": True,
+            "support_notes_column": layout_profile == "teaching-activity-dual-column",
+            "allow_page_break_inside_process_table": False,
         }
     elif target == "remote-bundle-placeholder":
         profile["renderer"] = "remote-placeholder"
@@ -201,6 +232,12 @@ def manifest_data(
         },
         "deliverables": files,
         "profile": export_profile(target, layout_profile),
+        "render_order": [
+            "cover",
+            "main-deliverable",
+            "supporting-deliverables",
+            "assets",
+        ],
     }
 
 

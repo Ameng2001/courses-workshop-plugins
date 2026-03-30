@@ -25,7 +25,11 @@ manifest 至少应包含：
 - `profile.layout_profile`
 - `profile.renderer = docx-placeholder`
 - `profile.page`
+- `profile.cover`
+- `profile.header_footer`
 - `profile.typography`
+- `profile.table_mapping`
+- `profile.naming`
 
 ## pdf-ready-bundle
 
@@ -40,7 +44,10 @@ manifest 至少应包含：
 - `profile.layout_profile`
 - `profile.renderer = pdf-placeholder`
 - `profile.page`
+- `profile.cover`
+- `profile.header_footer`
 - `profile.layout`
+- `profile.naming`
 
 ## remote-bundle-placeholder
 
@@ -54,3 +61,15 @@ manifest 至少应包含：
 manifest 至少应包含：
 - `profile.renderer = remote-placeholder`
 - `profile.remote_hint`
+- `profile.naming`
+
+## 命名约定
+
+所有 export target 建议统一使用：
+
+- 目录：`.workshop/exports/{workspace}/{target}/`
+- 主教案源：`lesson-plan.formatted.md`
+- 主预案源：`proposal.md`
+- 说明文件：
+  - `manifest.yaml`
+  - `manifest.json`

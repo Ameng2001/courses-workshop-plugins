@@ -36,6 +36,7 @@
 - 面向格式化交付
 - 准备 Word/PDF/远端发布输入
 - 不替代 runtime source 或 release bundle
+- 通过 `manifest.yaml` / `manifest.json` 显式声明版式参数
 
 ## Why
 
@@ -56,3 +57,22 @@
 2. 再用 `format-lesson` 选择布局 profile
 3. 再用 `export-bundle` 准备 Word/PDF/远端输入目录
 4. 真正的 `.docx` / `.pdf` 二进制导出后续再补
+
+## 导出协议最小字段
+
+为了让后续渲染器稳定接入，export bundle 的 manifest 至少应包含：
+
+- `workspace`
+- `export_target`
+- `source`
+- `deliverables`
+- `profile.layout_profile`
+- `profile.renderer`
+- `profile.naming`
+
+其中 Word/PDF 目标还应补充：
+
+- `profile.page`
+- `profile.cover`
+- `profile.header_footer`
+- `profile.table_mapping` 或 `profile.layout`
