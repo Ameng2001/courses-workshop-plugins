@@ -54,6 +54,14 @@ For `teaching-activity-dual-column`:
 
 ## Step 4: Write Formatted Source
 
+Run:
+
+```bash
+python3 workshop-format/scripts/export_tools.py format-lesson \
+  {workspace} \
+  --profile teaching-activity-dual-column
+```
+
 Write to:
 
 - `.workshop/projects/{workspace}/lesson-plan.formatted.md`

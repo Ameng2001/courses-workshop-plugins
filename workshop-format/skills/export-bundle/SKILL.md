@@ -44,6 +44,14 @@ Default:
 
 ## Step 3: Prepare Export Directory
 
+Run:
+
+```bash
+python3 workshop-format/scripts/export_tools.py export-bundle \
+  {workspace} \
+  --target local-markdown-bundle
+```
+
 Write into a delivery-oriented directory under:
 
 - `.workshop/exports/{workspace}/`
