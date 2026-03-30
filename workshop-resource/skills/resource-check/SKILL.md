@@ -37,9 +37,10 @@ Also update `status.json` in the same workspace when present.
 After writing `resource-check-report.md`, update workspace status with:
 
 ```bash
-python3 workshop-core/scripts/workspace_status.py complete-project-skill \
+python3 workshop-core/scripts/workspace_status.py record-project-artifact \
   {workspace} resource-check \
-  --phase reviewing
+  --phase reviewing \
+  --notes "resource-check-report.md generated"
 ```
 
 ## Step 1: Read All Inputs

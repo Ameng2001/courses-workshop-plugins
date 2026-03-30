@@ -688,6 +688,34 @@ def complete_stage_review(
     return data
 
 
+def record_project_artifact(
+    root: Path,
+    name: str,
+    skill: str,
+    phase: str | None,
+    notes: str | None,
+    value: str,
+) -> dict[str, Any]:
+    path = project_status_path(root, name)
+    data = load_status(path)
+    if not data:
+        raise SystemExit(f"Missing status.json for workspace: {name}")
+    if data.get("type") != "project":
+        raise SystemExit(f"Workspace '{name}' is not a project.")
+
+    data.setdefault("skills", {})
+    data["skills"][skill] = value
+    if phase:
+        data["phase"] = phase
+
+    if notes:
+        artifact_notes = data.setdefault("artifact_notes", {})
+        artifact_notes[skill] = notes
+
+    write_status(path, data)
+    return data
+
+
 def cmd_ensure_project(args: argparse.Namespace) -> None:
     root = find_runtime_root(args.root, create=True)
     data = ensure_project_status(root, args.workspace, args.theme)
@@ -761,6 +789,19 @@ def cmd_complete_stage_review(args: argparse.Namespace) -> None:
         args.skill,
         args.phase,
         args.approved_by,
+        args.notes,
+        args.value,
+    )
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+
+
+def cmd_record_project_artifact(args: argparse.Namespace) -> None:
+    root = find_runtime_root(args.root)
+    data = record_project_artifact(
+        root,
+        args.workspace,
+        args.skill,
+        args.phase,
         args.notes,
         args.value,
     )
@@ -924,6 +965,18 @@ def build_parser() -> argparse.ArgumentParser:
     complete_stage_review_cmd.add_argument("--notes", default=None)
     complete_stage_review_cmd.add_argument("--value", default="done")
     complete_stage_review_cmd.set_defaults(func=cmd_complete_stage_review)
+
+    record_project_artifact_cmd = sub.add_parser("record-project-artifact")
+    record_project_artifact_cmd.add_argument("workspace")
+    record_project_artifact_cmd.add_argument("skill")
+    record_project_artifact_cmd.add_argument(
+        "--phase",
+        choices=["planning", "designing", "reviewing", "approved", "shipped"],
+        default=None,
+    )
+    record_project_artifact_cmd.add_argument("--notes", default=None)
+    record_project_artifact_cmd.add_argument("--value", default="done")
+    record_project_artifact_cmd.set_defaults(func=cmd_record_project_artifact)
 
     complete_project_skill = sub.add_parser("complete-project-skill")
     complete_project_skill.add_argument("workspace")
