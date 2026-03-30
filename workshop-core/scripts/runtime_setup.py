@@ -494,6 +494,8 @@ def select_template(root: Path, template_id: str, workspace: str, theme: str | N
     if config_file.exists():
         config = parse_yaml_subset(config_file.read_text(encoding="utf-8"))
 
+    existing_status = load_json(project_status_path(root, workspace))
+
     config["methodology"] = manifest["id"]
     config["methodology_name"] = manifest.get("name")
     config["pipeline_plugin"] = deep_get(manifest, "pipeline.plugin")
@@ -501,15 +503,19 @@ def select_template(root: Path, template_id: str, workspace: str, theme: str | N
     write_config_file(config_file, config)
 
     status = ensure_project_status(root, workspace, theme)
-    hil = status["hil"]
-    hil["checkpoint"] = "project-framing"
-    hil["status"] = "awaiting_review"
-    from datetime import datetime
+    should_request_project_framing = not existing_status or (
+        existing_status.get("phase") == "planning" and not existing_status.get("skills")
+    )
+    if should_request_project_framing:
+        hil = status["hil"]
+        hil["checkpoint"] = "project-framing"
+        hil["status"] = "awaiting_review"
+        from datetime import datetime
 
-    hil["requested_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
-    hil["approved_at"] = None
-    hil["approved_by"] = None
-    hil["notes"] = "template selected; confirm theme, methodology, and starting scope"
+        hil["requested_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+        hil["approved_at"] = None
+        hil["approved_by"] = None
+        hil["notes"] = "template selected; confirm theme, methodology, and starting scope"
     write_json(project_status_path(root, workspace), status)
 
     stages = [stage.get("id") for stage in deep_get(manifest, "pipeline.stages") or []]
@@ -524,6 +530,7 @@ def select_template(root: Path, template_id: str, workspace: str, theme: str | N
             "stages": stages,
         },
         "hil": status.get("hil"),
+        "project_framing_requested": should_request_project_framing,
         "project_config": str(config_file.relative_to(root)),
     }
 
@@ -545,12 +552,13 @@ def prepare_plan(root: Path, workspace: str, plan_level: str, methodology: str |
 
     selected_methodology = methodology or config.get("methodology")
     if selected_methodology:
+        if not manifest_path(selected_methodology).exists():
+            raise SystemExit(f"Unknown methodology template: {selected_methodology}")
         config["methodology"] = selected_methodology
-        manifest = load_manifest(selected_methodology) if manifest_path(selected_methodology).exists() else None
-        if manifest:
-            config["methodology_name"] = manifest.get("name")
-            config["pipeline_plugin"] = deep_get(manifest, "pipeline.plugin")
-            config["document_type"] = deep_get(manifest, "output.document_type")
+        manifest = load_manifest(selected_methodology)
+        config["methodology_name"] = manifest.get("name")
+        config["pipeline_plugin"] = deep_get(manifest, "pipeline.plugin")
+        config["document_type"] = deep_get(manifest, "output.document_type")
         write_config_file(config_file, config)
 
     return {
