@@ -1,6 +1,6 @@
 ---
-name: template-list
-description: List all available teaching methodology pipelines with their stages and target audience. Use when a teacher or curriculum director wants to see what methodologies are supported, or when someone asks "what pipelines are available" or "what teaching methods can I use".
+name: pipeline-list
+description: List all available teaching methodology pipelines with their stages and target audience. Preferred entrypoint for seeing what course design pipelines are available.
 allowed-tools: Read, Glob
 user-invocable: true
 ---
@@ -45,7 +45,7 @@ Present as a formatted comparison table:
 │      角色: 一线教师 | 周期: 单课时 | 4 个设计阶段         │
 │      产出: 标准教案 (lesson-plan)                       │
 │                                                         │
-│  ... (additional templates as registered)               │
+│  ... (additional pipelines as registered)               │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -55,10 +55,10 @@ Present as a formatted comparison table:
 After displaying the list, suggest:
 
 > **下一步 / Next steps:**
-> - 使用 `/workshop-templates:template-select {id}` 为当前项目中的下一个产物选择 pipeline
+> - 使用 `/workshop-templates:pipeline-select {id}` 为当前项目中的下一个产物选择 pipeline
 > - 选择后，系统会自动路由到对应的设计流水线
 
 ## Out of Scope
 
 - This skill does NOT create or modify pipelines
-- This skill does NOT set the active pipeline (use `template-select` for that)
+- This skill does NOT set the active pipeline (use `pipeline-select` for that)

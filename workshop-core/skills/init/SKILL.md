@@ -83,8 +83,8 @@ This directory is git-tracked — commit it to share with your team.
 
 - "Run `/workshop-core:config show` to inspect runtime settings"
 - "Run `/workshop-core:onboarding` for first-use guidance"
-- "Run `/workshop-templates:template-list` to see available teaching pipelines"
-- "Run `/workshop-templates:template-select <id>` to choose a methodology pipeline"
+- "Run `/workshop-templates:pipeline-list` to see available teaching pipelines"
+- "Run `/workshop-templates:pipeline-select <id>` to choose a methodology pipeline"
 - "Run `/workshop-kb:kb-import <path>` to import school-specific materials"
 - "Run `/workshop-designer:design <theme>` to start designing a PBL course"
 - "Run `/workshop-planner:semester-plan <semester>` to create a semester plan"

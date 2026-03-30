@@ -18,6 +18,6 @@
 
 ## Notes
 
-- 依赖 workshop-core（工作区管理）和 workshop-templates（方法论模板）
+- 依赖 workshop-core（工作区管理）和 workshop-templates（方法论管线）
 - 可引用 workshop-kb 中的历年学期日历作为参考
 - 规划产出物存储在 studio/changes/{workspace}/ 中

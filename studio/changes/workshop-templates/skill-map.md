@@ -4,16 +4,16 @@
 
 ## Skills
 
-### template-list
-- **Description**: List all available teaching methodology templates with pipeline info
+### pipeline-list
+- **Description**: List all available teaching methodology pipelines with pipeline info
 - **Inputs**: (none)
-- **Outputs**: Terminal summary of all registered templates
+- **Outputs**: Terminal summary of all registered pipelines
 - **Complexity**: Simple
 - **allowed-tools**: Read, Glob
 
-### template-select
-- **Description**: Select and activate a methodology template for the current workspace
-- **Inputs**: template ID
+### pipeline-select
+- **Description**: Select and activate a methodology pipeline for the current workspace
+- **Inputs**: pipeline ID
 - **Outputs**: Updates workspace config.yaml with selected methodology
 - **Complexity**: Simple
 - **allowed-tools**: Read, Write, Glob
@@ -21,7 +21,7 @@
 ## Data Flow
 
 ```
-template-list → (user picks) → template-select → updates config
+pipeline-list → (user picks) → pipeline-select → updates config
                                                        ↓
                                                (workshop-designer or
                                                 workshop-lesson reads)
@@ -29,5 +29,5 @@ template-list → (user picks) → template-select → updates config
 
 ## Implementation Order
 
-1. **template-list** — discovery
-2. **template-select** — activation
+1. **pipeline-list** — discovery
+2. **pipeline-select** — activation

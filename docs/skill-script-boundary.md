@@ -113,12 +113,12 @@ Skills remain responsible for:
 ### 3.2 `workshop-templates`
 
 Should script:
-- template selection writeback
+- pipeline selection writeback
 - project config initialization
 - project-framing HIL request
 
 Should remain flexible:
-- recommendation of which template is best for a given context
+- recommendation of which pipeline is best for a given context
 
 ### 3.3 `workshop-planner`
 

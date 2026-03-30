@@ -1,7 +1,7 @@
 ---
-name: template-list
+name: pipeline-list
 description: List available teaching methodology pipelines
-skill: template-list
+skill: pipeline-list
 ---
 
 List all registered teaching methodology pipelines with their stages and target audience.
