@@ -54,7 +54,7 @@ python3 workshop-format/scripts/export_tools.py export-bundle \
 
 Write into a delivery-oriented directory under:
 
-- `.workshop/exports/{workspace}/`
+- `.workshop/exports/{workspace}/{target}/`
 
 Include:
 - `manifest.yaml`

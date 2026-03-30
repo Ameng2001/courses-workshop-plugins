@@ -7,7 +7,7 @@
 - release bundle 二次整理
 
 输出：
-- `.workshop/exports/{workspace}/`
+- `.workshop/exports/{workspace}/local-markdown-bundle/`
 - 保留 Markdown 源文件
 
 ## word-ready-bundle
@@ -17,8 +17,15 @@
 
 输出建议：
 - `manifest.yaml`
+- `manifest.json`
 - `lesson-plan.formatted.md`
 - `assets/`
+
+manifest 至少应包含：
+- `profile.layout_profile`
+- `profile.renderer = docx-placeholder`
+- `profile.page`
+- `profile.typography`
 
 ## pdf-ready-bundle
 
@@ -29,6 +36,12 @@
 - 与 `word-ready-bundle` 相同
 - 可附加页眉页脚和版式参数占位
 
+manifest 至少应包含：
+- `profile.layout_profile`
+- `profile.renderer = pdf-placeholder`
+- `profile.page`
+- `profile.layout`
+
 ## remote-bundle-placeholder
 
 用途：
@@ -37,3 +50,7 @@
 注意：
 - 当前阶段只定义目录与 manifest 结构
 - 不直接接远端发布能力
+
+manifest 至少应包含：
+- `profile.renderer = remote-placeholder`
+- `profile.remote_hint`

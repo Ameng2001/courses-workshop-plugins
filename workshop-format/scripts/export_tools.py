@@ -65,8 +65,50 @@ def write_json(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def dump_yaml_like(data: Any, indent: int = 0) -> list[str]:
+    lines: list[str] = []
+    prefix = " " * indent
+    if isinstance(data, dict):
+        for key, value in data.items():
+            if isinstance(value, (dict, list)):
+                lines.append(f"{prefix}{key}:")
+                lines.extend(dump_yaml_like(value, indent + 2))
+            else:
+                if isinstance(value, bool):
+                    rendered = "true" if value else "false"
+                elif value is None:
+                    rendered = '""'
+                else:
+                    rendered = str(value)
+                lines.append(f"{prefix}{key}: {rendered}")
+    elif isinstance(data, list):
+        for value in data:
+            if isinstance(value, (dict, list)):
+                lines.append(f"{prefix}-")
+                lines.extend(dump_yaml_like(value, indent + 2))
+            else:
+                if isinstance(value, bool):
+                    rendered = "true" if value else "false"
+                elif value is None:
+                    rendered = '""'
+                else:
+                    rendered = str(value)
+                lines.append(f"{prefix}- {rendered}")
+    return lines
+
+
 def parse_layout_profile(profile: str | None) -> str:
     return profile or "teaching-activity-dual-column"
+
+
+def infer_layout_profile(source_dir: Path) -> str:
+    formatted = source_dir / "lesson-plan.formatted.md"
+    if formatted.exists():
+        for line in formatted.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if stripped.startswith("layout_profile:"):
+                return stripped.split(":", 1)[1].strip()
+    return "standard-markdown"
 
 
 def normalize_content(profile: str, content: str) -> str:
@@ -103,16 +145,63 @@ def format_lesson(root: Path, workspace: str, profile: str | None) -> dict[str, 
     }
 
 
-def manifest_text(name: str, target: str, files: list[str], source_status: dict[str, Any]) -> str:
-    lines = [
-        f"workspace: {name}",
-        f"export_target: {target}",
-        f"source_phase: {source_status.get('phase', 'unknown')}",
-        "files:",
-    ]
-    for item in files:
-        lines.append(f"  - {item}")
-    return "\n".join(lines) + "\n"
+def export_profile(target: str, layout_profile: str) -> dict[str, Any]:
+    profile: dict[str, Any] = {
+        "layout_profile": layout_profile,
+        "include_assets_dir": target in {"word-ready-bundle", "pdf-ready-bundle", "remote-bundle-placeholder"},
+    }
+    if target == "word-ready-bundle":
+        profile["renderer"] = "docx-placeholder"
+        profile["page"] = {
+            "size": "A4",
+            "orientation": "portrait",
+            "margin": "normal",
+        }
+        profile["typography"] = {
+            "body_font": "Noto Serif SC",
+            "heading_font": "Noto Sans SC",
+        }
+    elif target == "pdf-ready-bundle":
+        profile["renderer"] = "pdf-placeholder"
+        profile["page"] = {
+            "size": "A4",
+            "orientation": "portrait",
+            "margin": "normal",
+        }
+        profile["layout"] = {
+            "teaching_activity_process": "dual-column-ready" if layout_profile == "teaching-activity-dual-column" else "single-column",
+            "header_footer": True,
+        }
+    elif target == "remote-bundle-placeholder":
+        profile["renderer"] = "remote-placeholder"
+        profile["remote_hint"] = {
+            "packaging": "bundle-manifest-plus-assets",
+            "binary_exports_included": False,
+        }
+    else:
+        profile["renderer"] = "markdown-only"
+    return profile
+
+
+def manifest_data(
+    name: str,
+    target: str,
+    files: list[str],
+    source_dir: Path,
+    source_status: dict[str, Any],
+) -> dict[str, Any]:
+    layout_profile = infer_layout_profile(source_dir)
+    return {
+        "workspace": name,
+        "export_target": target,
+        "source": {
+            "path": str(source_dir),
+            "phase": source_status.get("phase", "unknown"),
+            "type": source_status.get("type", "project"),
+        },
+        "deliverables": files,
+        "profile": export_profile(target, layout_profile),
+    }
 
 
 def export_bundle(root: Path, workspace: str, target: str | None) -> dict[str, Any]:
@@ -126,7 +215,7 @@ def export_bundle(root: Path, workspace: str, target: str | None) -> dict[str, A
         raise SystemExit(f"Could not find active or archived workspace: {workspace}")
 
     export_target = target or "local-markdown-bundle"
-    export_root = runtime_dir(root) / "exports" / workspace
+    export_root = runtime_dir(root) / "exports" / workspace / export_target
     if export_root.exists():
         shutil.rmtree(export_root)
     export_root.mkdir(parents=True, exist_ok=True)
@@ -148,13 +237,21 @@ def export_bundle(root: Path, workspace: str, target: str | None) -> dict[str, A
         shutil.copy2(src, export_root / filename)
         copied.append(filename)
 
+    profile = export_profile(export_target, infer_layout_profile(source_dir))
     assets_dir = export_root / "assets"
-    if export_target in {"word-ready-bundle", "pdf-ready-bundle", "remote-bundle-placeholder"}:
+    if profile["include_assets_dir"]:
         assets_dir.mkdir(parents=True, exist_ok=True)
         (assets_dir / ".gitkeep").write_text("", encoding="utf-8")
 
     source_status = load_json(source_dir / "status.json")
-    write_text(export_root / "manifest.yaml", manifest_text(workspace, export_target, copied, source_status))
+    write_json(
+        export_root / "manifest.json",
+        manifest_data(workspace, export_target, copied, source_dir, source_status),
+    )
+    write_text(
+        export_root / "manifest.yaml",
+        "\n".join(dump_yaml_like(manifest_data(workspace, export_target, copied, source_dir, source_status))) + "\n",
+    )
 
     return {
         "workspace": workspace,
@@ -162,6 +259,7 @@ def export_bundle(root: Path, workspace: str, target: str | None) -> dict[str, A
         "export_target": export_target,
         "output": str(export_root.relative_to(root)),
         "files": copied,
+        "layout_profile": profile["layout_profile"],
     }
 
 
