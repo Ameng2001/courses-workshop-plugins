@@ -137,3 +137,20 @@
 - `workshop-5step` 仅对应客户体系中的“教学活动”子能力
 - 客户的主方法论应被建模为 `thematic-curriculum`
 - 月主题与周编排是客户交付的核心层，不应只被视为 planning 备注
+
+## 端到端样例
+
+为了避免只停留在规范层，仓库内补充了一组可审阅的示例项目产物：
+
+- [docs/examples/thematic-curriculum-hepu-clothing/README.md](/Users/liuyameng/.codex/worktrees/8a4e/courses-workshop-plugins/docs/examples/thematic-curriculum-hepu-clothing/README.md)
+
+这组样例串起了：
+
+- 主题分析
+- 月度活动矩阵
+- 周活动安排
+- 教学活动
+- 区域活动
+- 户外游戏
+- 生活渗透
+- 家园互动
