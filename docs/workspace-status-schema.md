@@ -305,6 +305,17 @@ promote 前必须满足：
 }
 ```
 
+并且：
+
+```json
+{
+  "hil": {
+    "checkpoint": "approval-gate",
+    "status": "approved"
+  }
+}
+```
+
 `promote` 成功后，归档目录中的 `status.json` 应更新为：
 
 ```json

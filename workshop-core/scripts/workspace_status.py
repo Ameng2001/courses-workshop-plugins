@@ -444,22 +444,31 @@ def validate_project(root: Path, name: str, required_phase: str | None) -> dict[
     skills = data.get("skills", {})
     required_skills = required_skills_for(deliverables)
     missing_skills = [skill for skill in required_skills if skills.get(skill) not in {"done", "approved"}]
+    hil = data.get("hil") or {}
+    approval_gate_ready = True
+    approval_gate_issue = None
+    if required_phase == "approved":
+        approval_gate_ready = hil.get("checkpoint") == "approval-gate" and hil.get("status") == "approved"
+        if not approval_gate_ready:
+            approval_gate_issue = "approval-gate is not approved"
 
     return {
         "workspace": name,
         "type": data.get("type", "unknown"),
         "phase": data.get("phase"),
-        "hil": data.get("hil"),
+        "hil": hil or None,
         "deliverables": deliverables,
         "required_skills": required_skills,
         "missing_skills": missing_skills,
+        "approval_gate_ready": approval_gate_ready,
+        "approval_gate_issue": approval_gate_issue,
         "optional_reviews": {
             "quality_report": deliverables["quality_report"],
             "review_comments": deliverables["review_comments"],
             "resource_plan": deliverables["resource_plan"],
             "resource_check_report": deliverables["resource_check_report"],
         },
-        "ready": len(missing_skills) == 0,
+        "ready": len(missing_skills) == 0 and approval_gate_ready,
     }
 
 
