@@ -41,7 +41,7 @@ If knowledge base has relevant past lessons, present them:
 
 ## Step 2: Generate Objectives
 
-Generate **3-4 learning objectives** in three dimensions:
+Generate **3-4 learning objectives** in three dimensions, and optionally map them to client-defined core development goals.
 
 ### 认知目标 (Cognitive)
 - What knowledge or understanding will children gain?
@@ -75,6 +75,12 @@ For each objective, identify the matching《指南》development goal:
 | {objective_1} | 科学 | "在探究中认识周围事物和现象" | 4-5岁: 能对事物进行观察比较 |
 | ... | ... | ... | ... |
 
+If the client or school uses a local coding system, also add:
+
+| 目标 | 客户发展目标编码 |
+|------|----------------|
+| {objective_1} | {SE-8 / local-code / TBD} |
+
 ## Step 4: Expert Review
 
 Invoke child development psychologist to validate:
@@ -87,6 +93,12 @@ Invoke child development psychologist to validate:
 Present the objectives. Wait for approval.
 
 Write to `.workshop/projects/{workspace}/lesson-objective.md`.
+
+The output should include:
+
+- 三维教学目标
+- 《指南》对应关系
+- 可选的核心发展目标编码
 
 Update workspace status with:
 

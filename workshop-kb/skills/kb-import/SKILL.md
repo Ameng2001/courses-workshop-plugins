@@ -7,26 +7,28 @@ user-invocable: true
 
 # Knowledge Base Import
 
-Import documents into the school-specific knowledge base (`studio/kb/`). Extracts structured metadata and writes each document as a tagged markdown file for downstream skills to query.
+Import documents into the school-specific knowledge base (`.workshop/kb/`). Extracts structured metadata and writes each document as a tagged markdown file for downstream skills to query.
 
 ## Expert Discovery
 
 This skill uses **dynamic expert loading**. On every run:
 
-1. **Primary role**: Load `early-childhood-curriculum-expert.md` (validates curriculum relevance)
-2. **Scan project experts**: Glob `studio/agents/*.md` — load all custom experts
-3. **Skip template**: Do not load `_domain-expert-template.md`
+1. **Primary role**: Resolve `early-childhood-curriculum-expert.md` using runtime scope order: `.workshop/agents/custom/` → `experts/` → `workshop-kb/agents/`
+2. **Optional custom experts**: Glob `.workshop/agents/custom/*.md`
+3. **Optional shared experts**: Glob `experts/*.md`
+4. **Optional plugin-local experts**: Glob `workshop-kb/agents/*.md`
+5. **Skip template**: Do not load `_domain-expert-template.md`
 
 ## Pre-check
 
-1. Verify `studio/` exists. If not, tell the user to run `/workshop-core:init` first.
-2. Verify `studio/kb/` directory exists. If not, create the directory structure:
+1. Verify `.workshop/` exists. If not, tell the user to run `/workshop-core:init` first.
+2. Verify `.workshop/kb/` directory exists. If not, create the directory structure:
    ```
-   studio/kb/textbooks/
-   studio/kb/philosophy/
-   studio/kb/lesson-plans/
-   studio/kb/research-records/
-   studio/kb/calendars/
+   .workshop/kb/textbooks/
+   .workshop/kb/philosophy/
+   .workshop/kb/lesson-plans/
+   .workshop/kb/research-records/
+   .workshop/kb/calendars/
    ```
 
 ## Step 1: Identify Source
@@ -50,11 +52,11 @@ For each document, determine its category by analyzing content:
 
 | 关键特征 | 分类 | 目标目录 |
 |---------|------|---------|
-| 包含课程标准、教学大纲、单元主题规划 | textbook | `studio/kb/textbooks/` |
-| 包含办园理念、课程哲学、园本特色描述 | philosophy | `studio/kb/philosophy/` |
-| 包含教学目标、教学过程、活动步骤 | lesson-plan | `studio/kb/lesson-plans/` |
-| 包含教研讨论记录、教师反思、观察笔记 | research-record | `studio/kb/research-records/` |
-| 包含月/周/学期的主题安排表 | calendar | `studio/kb/calendars/` |
+| 包含课程标准、教学大纲、单元主题规划 | textbook | `.workshop/kb/textbooks/` |
+| 包含办园理念、课程哲学、园本特色描述 | philosophy | `.workshop/kb/philosophy/` |
+| 包含教学目标、教学过程、活动步骤 | lesson-plan | `.workshop/kb/lesson-plans/` |
+| 包含教研讨论记录、教师反思、观察笔记 | research-record | `.workshop/kb/research-records/` |
+| 包含月/周/学期的主题安排表 | calendar | `.workshop/kb/calendars/` |
 
 If classification is uncertain, ask the user to confirm.
 
@@ -72,7 +74,7 @@ import_date: "YYYY-MM-DD"
 themes: ["主题1", "主题2"]         # 涉及的教学主题
 age_groups: ["prek-3", "prek-4", "k"]  # 适用年龄段
 domains: ["健康", "语言", "社会", "科学", "艺术"]  # 涉及的五大领域
-methodology: "pbl | five-step | mixed"  # 使用的教学法
+methodology: "pbl | five-step | thematic-curriculum | mixed"  # 使用的教学法
 term: "2025-春季"                  # 所属学期（如可识别）
 author: "作者姓名"                 # 如可识别
 tags: ["关键词1", "关键词2"]       # 额外关键词
@@ -84,6 +86,12 @@ tags: ["关键词1", "关键词2"]       # 额外关键词
 1. Generate a file name: `{category}/{date}-{sanitized-title}.md`
 2. Write the file with YAML frontmatter + 原始内容（或结构化摘要）
 3. For long documents (>500 行), write a summary version with key sections extracted, and note the original file path in metadata
+4. For client delivery PDFs with weak text extraction, prefer a structured exemplar summary instead of dumping noisy OCR text. Extract reusable shapes such as:
+   - theme narrative sample
+   - theme network sample
+   - monthly matrix sample
+   - weekly arrangement sample
+   - representative activity-type structures
 
 ## Step 5: Confirm Import
 

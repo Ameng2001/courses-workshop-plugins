@@ -4,11 +4,11 @@
 
 | 分类 ID | 中文名称 | 目录 | 典型内容 |
 |---------|---------|------|---------|
-| `textbook` | 区编教材 | `studio/kb/textbooks/` | 课程标准摘要、单元主题大纲、教学建议 |
-| `philosophy` | 园本理念 | `studio/kb/philosophy/` | 办园理念、课程哲学、园本特色课程描述 |
-| `lesson-plan` | 历年教案 | `studio/kb/lesson-plans/` | 完整教案、活动方案、PBL 预案 |
-| `research-record` | 教研记录 | `studio/kb/research-records/` | 集体教研记录、个人教学反思、观察笔记 |
-| `calendar` | 学期日历 | `studio/kb/calendars/` | 学期主题安排表、月度/周度计划 |
+| `textbook` | 区编教材 | `.workshop/kb/textbooks/` | 课程标准摘要、单元主题大纲、教学建议 |
+| `philosophy` | 园本理念 | `.workshop/kb/philosophy/` | 办园理念、课程哲学、园本特色课程描述 |
+| `lesson-plan` | 历年教案 | `.workshop/kb/lesson-plans/` | 完整教案、活动方案、PBL 预案、主题课程包样例 |
+| `research-record` | 教研记录 | `.workshop/kb/research-records/` | 集体教研记录、个人教学反思、观察笔记 |
+| `calendar` | 学期日历 | `.workshop/kb/calendars/` | 学期主题安排表、月度/周度计划 |
 
 ## 文档 Frontmatter 规范
 
@@ -26,7 +26,7 @@ import_date: date       # 导入日期 (YYYY-MM-DD)
 themes: [string]        # 涉及的教学主题关键词
 age_groups: [enum]      # prek-3 | prek-4 | k
 domains: [enum]         # 健康 | 语言 | 社会 | 科学 | 艺术
-methodology: enum       # pbl | five-step | mixed | other
+methodology: enum       # pbl | five-step | thematic-curriculum | mixed | other
 term: string            # 所属学期（如 "2025-春季"）
 author: string          # 作者
 tags: [string]          # 额外关键词/标签

@@ -11,9 +11,9 @@ Search the school-specific knowledge base by theme, age group, domain, methodolo
 
 ## Pre-check
 
-1. Verify `studio/kb/index.yaml` exists. If not, tell the user:
+1. Verify `.workshop/kb/index.yaml` exists. If not, tell the user:
    "知识库索引不存在。请先运行 `/workshop-kb:kb-index` 构建索引。"
-2. Read `studio/kb/index.yaml`
+2. Read `.workshop/kb/index.yaml`
 
 ## Step 1: Parse Query
 
@@ -23,7 +23,7 @@ Read `$ARGUMENTS` and extract search criteria:
 - **年龄段** (age_group): prek-3 / prek-4 / k
 - **领域** (domain): 健康/语言/社会/科学/艺术
 - **分类** (category): textbook / lesson-plan / research-record / philosophy / calendar
-- **教学法** (methodology): pbl / five-step / mixed
+- **教学法** (methodology): pbl / five-step / thematic-curriculum / mixed
 - **学期** (term): e.g., "2025-春季"
 
 If `$ARGUMENTS` is a simple string (e.g., "春天"), treat it as a theme keyword search.

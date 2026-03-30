@@ -977,16 +977,16 @@ driving-question → network-map → inquiry-scaffold → activity-design × 3 �
 
 | Skill | Description | Inputs | Outputs | Complexity |
 |-------|-------------|--------|---------|------------|
-| **kb-import** | 文档导入 + 元数据提取 | 文件路径 | studio/kb/{category}/*.md | Medium |
-| **kb-index** | 知识库索引构建/刷新 | studio/kb/**/*.md | studio/kb/index.yaml | Medium |
+| **kb-import** | 文档导入 + 元数据提取 | 文件路径 | .workshop/kb/{category}/*.md | Medium |
+| **kb-index** | 知识库索引构建/刷新 | .workshop/kb/**/*.md | .workshop/kb/index.yaml | Medium |
 | **kb-query** | 知识库检索 | 查询条件 | 匹配文档列表 | Simple |
 
 **数据流：**
 
 ```
-[kb-import] → studio/kb/ documents
+[kb-import] → .workshop/kb/ documents
     ▼
-[kb-index] → studio/kb/index.yaml
+[kb-index] → .workshop/kb/index.yaml
     ▼
 [kb-query] → search results
     └── consumed by → workshop-5step, workshop-pbl, workshop-planner

@@ -45,6 +45,10 @@ Present as a formatted comparison table:
 │      角色: 一线教师 | 周期: 单课时 | 4 个设计阶段         │
 │      产出: 标准教案 (lesson-plan)                       │
 │                                                         │
+│  [3] thematic-curriculum — 幼儿园主题式课程             │
+│      角色: 课研主任/教师 | 周期: 月度 | 4 个设计阶段      │
+│      产出: 主题课程包 (thematic-package)                │
+│                                                         │
 │  ... (additional pipelines as registered)               │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
