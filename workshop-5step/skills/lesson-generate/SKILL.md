@@ -7,7 +7,7 @@ user-invocable: true
 
 # Lesson Generate
 
-Assemble lesson objectives, scaffold, and details into a complete, standard-format lesson plan document ready for submission or classroom use.
+Assemble lesson objectives, scaffold, and details into a complete teaching activity document ready for submission or classroom use. The final output should read like a client-facing single activity plan, not just an internal assembly dump.
 
 ## Pre-check
 
@@ -23,7 +23,7 @@ Assemble lesson objectives, scaffold, and details into a complete, standard-form
 Extract and compile the header section:
 
 ```markdown
-# 教案: {活动名称}
+# 主题教学活动: {活动名称}
 
 | 项目 | 内容 |
 |------|------|
@@ -32,11 +32,21 @@ Extract and compile the header section:
 | 活动领域 | {primary_domain} + {secondary_domains} |
 | 活动时长 | {duration} 分钟 |
 | 活动类型 | {type} |
+| 所属主题/子主题 | {theme} / {subtheme} |
 | 设计教师 | {teacher_name} |
 | 设计日期 | {date} |
 ```
 
-## Step 2: Compile Teaching Objectives
+If no theme/subtheme exists, omit that row rather than fabricating one.
+
+## Step 2: Compile Core Goals and Teaching Objectives
+
+If core development goal codes exist, place them before the teaching objectives, because that matches the client-facing teaching activity template:
+
+```markdown
+## 核心发展目标
+- {SE-code}: {goal note}
+```
 
 From `lesson-objective.md`, format as:
 
@@ -52,13 +62,6 @@ From `lesson-objective.md`, format as:
 
 ### 情感目标
 1. {affective_1}
-```
-
-If core development goal codes exist, add:
-
-```markdown
-### 核心发展目标
-- {SE-code}: {goal note}
 ```
 
 ## Step 3: Compile Preparation Section
@@ -89,6 +92,8 @@ Also compile:
 - **活动难点**: {difficulty_point}
 ```
 
+If `lesson-detail.md` contains explicit prior experience or media notes, preserve them under the same preparation block instead of dropping them.
+
 ## Step 4: Compile Teaching Process
 
 From `lesson-scaffold.md` and `lesson-detail.md`, generate the main teaching table:
@@ -105,7 +110,14 @@ From `lesson-scaffold.md` and `lesson-detail.md`, generate the main teaching tab
 | **S5 延伸** | {min} min | {teacher_actions} | {child_responses} | {materials} | {intent} | {observe_and_support} |
 ```
 
-For each step, include the full teacher scripts from lesson-detail, formatted for readability.
+For each step:
+
+- Keep teacher actions close to classroom-usable wording
+- Keep child behaviors concise and observable
+- Keep observation/support notes action-oriented rather than evaluative
+- Preserve the distinction between scaffold-level intent and detail-level scripts
+
+If the final row content becomes too dense, allow short bullet-style line breaks inside cells rather than collapsing everything into one sentence.
 
 ## Step 5: Add Differentiation Section (if present)
 
@@ -119,7 +131,19 @@ For each step, include the full teacher scripts from lesson-detail, formatted fo
 | 提高层 | {description} | {strategy} |
 ```
 
-## Step 6: Add Reflection Template
+## Step 6: Add Activity Extension and Reflection Template
+
+If S5 already contains only a short prompt, add a separate extension block:
+
+```markdown
+## 活动延伸
+
+- 区角延伸: {extension_1}
+- 家园延伸: {extension_2}
+- 日常生活延伸: {extension_3}
+```
+
+Then add the reflection template:
 
 ```markdown
 ## 教学反思
@@ -132,7 +156,17 @@ For each step, include the full teacher scripts from lesson-detail, formatted fo
 - **后续跟进计划**:
 ```
 
-## Step 7: Write Output and Request HIL
+## Step 7: Final Format Check
+
+Before writing, verify:
+
+- The section order is client-readable
+- `核心发展目标` appears before `教学目标` when present
+- `活动重点 / 活动难点` are explicit
+- `教师观察与支持要点` remains visible in the main process table
+- The output reads as one coherent activity plan rather than three stitched source files
+
+## Step 8: Write Output and Request HIL
 
 Write the complete lesson plan to `.workshop/projects/{workspace}/lesson-plan.md`.
 
