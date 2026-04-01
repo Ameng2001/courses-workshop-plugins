@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>教研工坊 V3 · Export Bundle</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="export">
+    <div class="studio-shell">
+      <aside class="sidebar">
+        <div class="brand"><div class="studio-mark"></div><div><div class="brand-title">教研工坊</div><div class="brand-subtitle">Structure-first Copilot Studio</div></div></div>
+        <section class="sidebar-section">
+          <div class="sidebar-label">Projects</div>
+          <a class="project-card active" href="./export-bundle.html"><div class="project-title">多样的服饰</div><div class="project-meta">当前项目</div></a>
+        </section>
+        <section class="sidebar-section">
+          <div class="sidebar-label">Threads</div>
+          <div class="thread-list">
+            <a class="thread-link" href="./hil-confirm.html">确认 thread</a>
+            <a class="thread-link active" href="./export-bundle.html">导出 thread</a>
+          </div>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <section class="topbar">
+          <div>
+            <div class="eyebrow">Export Bundle</div>
+            <h1 class="title">导出仍然依附于课程结构，而不是黑盒后台</h1>
+            <p class="muted">导出页的主对象不是文件树本身，而是“本次交付如何从现有结构中抽出 release bundle”。</p>
+          </div>
+          <div class="head-actions">
+            <span class="chip">delivery</span>
+            <span class="chip">word-ready</span>
+          </div>
+        </section>
+
+        <section class="context-bar">
+          <div class="stage-flow">
+            <span class="stage-node">Theme Framing</span>
+            <span class="stage-arrow">→</span>
+            <span class="stage-node">Month Matrix</span>
+            <span class="stage-arrow">→</span>
+            <span class="stage-node">Week Arrangement</span>
+            <span class="stage-arrow">→</span>
+            <span class="stage-node">Activities (N)</span>
+            <span class="stage-arrow">→</span>
+            <span class="stage-node gate">Ready to Confirm</span>
+            <span class="stage-arrow">→</span>
+            <span class="stage-node active">Export</span>
+          </div>
+          <div class="context-grid">
+            <div class="context-note">当前导出不会改课程结构，只决定：哪些产物进入正式包，哪些留在内部 review / archive 层。</div>
+            <div class="stage-actions"><span class="ghost-link">target: word-ready-bundle</span></div>
+          </div>
+        </section>
+
+        <section class="canvas-shell">
+          <section class="main-canvas">
+            <section class="canvas-card">
+              <div class="section-head"><h2>Bundle 结构</h2><span class="chip">release bundle</span></div>
+              <div class="bundle-tree">
+                <div class="tree-item"><strong>lesson-plan.md</strong><div class="muted">最终教学活动稿</div></div>
+                <div class="tree-item"><strong>resource-plan.md</strong><div class="muted">资源准备说明</div></div>
+                <div class="tree-item"><strong>export-note.txt</strong><div class="muted">交付说明</div></div>
+              </div>
+            </section>
+            <section class="canvas-card">
+              <div class="section-head"><h2>Manifest 预览</h2><span class="chip">word-ready</span></div>
+              <div class="section-list">
+                <div class="section-item"><strong>layout</strong><div class="muted">client teaching format with support notes column</div></div>
+                <div class="section-item"><strong>exclude</strong><div class="muted">review-comments.md 不进入正式交付包</div></div>
+                <div class="section-item"><strong>source</strong><div class="muted">基于已确认的结构成果导出，不再回写主工程。</div></div>
+              </div>
+            </section>
+          </section>
+
+          <aside class="copilot-drawer">
+            <section class="drawer-header">
+              <h2>Copilot Drawer</h2>
+              <p>这里的对话重点不是继续创作，而是决定导出边界与客户可见内容。</p>
+            </section>
+            <section class="drawer-block">
+              <h3>导出提醒</h3>
+              <div class="drawer-list">
+                <div class="drawer-item"><strong>正式包</strong><div class="muted">保留 lesson-plan 与 resource-plan。</div></div>
+                <div class="drawer-item"><strong>内部资产</strong><div class="muted">review comments 与过程稿继续留在内部。</div></div>
+              </div>
+            </section>
+            <section class="drawer-chat">
+              <div class="message user"><h4>你</h4><div>这次只导出客户要看的版本，不带 review comments。</div></div>
+              <div class="message ai"><h4>教研 Copilot</h4><div>可以。我会把 comments 留在内部层，不写进 release bundle。</div></div>
+            </section>
+            <section class="drawer-block">
+              <h3>可直接执行</h3>
+              <div class="drawer-actions">
+                <span class="drawer-action">准备 Word-ready bundle</span>
+                <span class="drawer-action">生成交付说明</span>
+              </div>
+            </section>
+            <div class="drawer-composer">
+              <input placeholder="例如：再准备一个 PDF-ready，但仍排除 review comments" />
+              <button class="button button-primary">发送</button>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>
